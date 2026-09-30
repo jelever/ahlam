@@ -20,10 +20,12 @@ the store features removed and the new identity, products and content in.
 
 - Languages: Arabic default (RTL) at `/`, English at `/en/`
 - Stack: static HTML from `build.py` (Jinja2, Pillow, PyYAML); vanilla CSS/JS
-- Hosting: GitHub Pages, no Railway project
-- Domain: none yet; https://jelever.github.io/ahlam/
-- GitHub: `jelever/ahlam` (public; free Pages needs it). The account
-  `MBajily` has only pull access; pushing needs a collaborator invite
+- Hosting: GitHub Pages (deployed by `.github/workflows/pages.yml` on every
+  push to `main`), no Railway project
+- Live at https://jelever.github.io/ahlam/; no custom domain yet
+- GitHub: `jelever/ahlam` (public; free Pages needs it). `MBajily` is a
+  collaborator with push access but not admin: repository settings (Pages,
+  Dependabot alerts, branch protection) need the owner, `jelever`
 
 ---
 
@@ -36,20 +38,28 @@ the store features removed and the new identity, products and content in.
   each check was shown to catch a planted fault.
 - Checked in Chrome at desktop, 768px and 390px, Arabic and English: no
   horizontal overflow, drawer menu with focus and Escape, gallery
-  thumbnails, language switch keeps the page, no console errors.
+  thumbnails, quick view (thumbnails, Escape, phone layout), language
+  switch keeps the page, no console errors.
+- **Live since 2026-10-01** at https://jelever.github.io/ahlam/. The CI run
+  for 45c0323 built, checked and deployed. Smoke-tested live:
+  - `/`, `/en/`, a product page, `data.ar.js` and a product photo return 200
+  - `/products/` has all 9 quick-view buttons
+  - a missing path returns 404 with the bilingual page
 
 **Open work, in priority order**
 
-1. Push access to `jelever/ahlam`, set Pages source to GitHub Actions, first
-   deploy, then smoke-test the live URL.
-2. Real contact details from the client (`content/site.yml`).
-3. Photos for the six coming-soon collections: chairs, event chairs,
+1. Real contact details from the client (`content/site.yml`). The live site
+   shows "سيُضاف قريبًا" until then; `build.py --release` blocks them.
+2. Photos for the six coming-soon collections: chairs, event chairs,
    blankets, pillows, tablecloths, ready-packed bedding.
-4. Client to confirm: the camp-bag dimension photos (filed in each other's
+3. Client to confirm: the camp-bag dimension photos (filed in each other's
    folders, reassigned by material); the "صناعة وطنية" label, taken from
    the folder names; the meaning of "صفت" in the heavy-mesh bed's folder.
-5. Clean photos without the CROWN logo (4 bed photos). The user chose to use
+4. Clean photos without the CROWN logo (4 bed photos). The user chose to use
    them as they are for now.
+5. Owner's repository settings: protect `main`, and turn on Dependabot
+   alerts and security updates. An uptime monitor, and a custom domain if
+   the client wants one (see README).
 
 ---
 
