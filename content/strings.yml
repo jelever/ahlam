@@ -1,0 +1,116 @@
+# Interface text in both languages. Every key must exist in both; the
+# build fails otherwise. Wording of the Arabic follows the client's brief.
+
+nav_primary: {ar: القائمة الرئيسية, en: Main menu}
+nav_home: {ar: الرئيسية, en: Home}
+nav_products: {ar: المنتجات, en: Products}
+nav_collections: {ar: المجموعات, en: Collections}
+nav_about: {ar: من نحن, en: About us}
+nav_contact: {ar: تواصل معنا, en: Contact us}
+menu_open: {ar: فتح القائمة, en: Open menu}
+menu_close: {ar: إغلاق القائمة, en: Close menu}
+mega_collections: {ar: المجموعات, en: Collections}
+mega_featured: {ar: من الكتالوج, en: From the catalogue}
+all_products: {ar: جميع المنتجات, en: All products}
+skip: {ar: تخطَّ إلى المحتوى, en: Skip to content}
+lang_switch: {ar: English, en: العربية}
+lang_switch_short: {ar: EN, en: ع}
+
+browse_products: {ar: استعرض المنتجات, en: Browse products}
+browse_collection: {ar: استعرض المجموعة, en: View collection}
+contact_us: {ar: تواصل معنا, en: Contact us}
+enquire: {ar: تواصل معنا للاستفسار, en: Contact us to enquire}
+enquire_short: {ar: استفسار, en: Enquire}
+view_product: {ar: عرض المنتج, en: View product}
+view_all: {ar: عرض الكل, en: View all}
+prev: {ar: السابق, en: Previous}
+next: {ar: التالي, en: Next}
+
+hero_title_1: {ar: مستلزمات منزلية وتجارية, en: Household and commercial supplies}
+hero_title_2: {ar: للجملة والشركاء, en: for wholesale and partners}
+hero_lead:
+  ar: تشكيلة متنوعة من المستلزمات المنزلية والتجارية، مقدمة للشركاء وعملاء الجملة.
+  en: A varied range of household and commercial supplies, offered to partners and wholesale customers.
+hero_card_small: {ar: للشركاء وعملاء الجملة, en: For partners and wholesale customers}
+hero_ranges: {ar: "تشمل تشكيلتنا", en: "Our range includes"}
+
+collections_eyebrow: {ar: تشكيلة متكاملة تلبي احتياجات أعمالكم, en: A complete range for your business needs}
+collections_title: {ar: مجموعاتنا, en: our collections}
+collections_lead:
+  ar: صورة واحدة تمثل كل مجموعة، والتشكيلة الكاملة داخلها.
+  en: One image stands for each collection; the full range is inside.
+soon_title: {ar: مجموعات قادمة, en: Coming soon}
+soon_tag: {ar: قريبًا, en: Soon}
+
+catalogue_eyebrow: {ar: من كتالوجنا, en: From our catalogue}
+catalogue_title: {ar: تشكيلتنا, en: the range}
+set_info_title: {ar: المعلومات المتوفرة, en: Details available}
+set_enquiry_t: {ar: للاستفسار والتوريد, en: Enquiries and supply}
+set_enquiry_d:
+  ar: نتعامل مع الشركاء وعملاء الجملة مباشرة؛ تواصلوا معنا للاستفسار عن هذا الصنف.
+  en: We deal with partners and wholesale customers directly; contact us about this item.
+
+partners_eyebrow: {ar: شركة أحلام القمر للتجارة, en: Ahlam Alqamar Trading Company}
+partners_title: {ar: للشركاء وعملاء الجملة, en: For partners and wholesale customers}
+partners_text:
+  ar: نقدم تشكيلة متنوعة من المستلزمات المنزلية والتجارية، لتلبية احتياجات الشركاء وعملاء الجملة.
+  en: We offer a varied range of household and commercial supplies to meet the needs of partners and wholesale customers.
+
+products_eyebrow: {ar: الكتالوج, en: Catalogue}
+products_title: {ar: المنتجات, en: Products}
+products_lead:
+  ar: صورة واحدة لكل صنف. ادخل إلى المنتج لمعرفة التفاصيل المتوفرة.
+  en: One image per item. Open a product to see the details available.
+models: {ar: موديلات, en: models}
+model_one: {ar: موديل واحد, en: 1 model}
+more_in_collection: {ar: منتجات أخرى من المجموعة, en: More from this collection}
+other_collections: {ar: مجموعات أخرى, en: Other collections}
+images_shown: {ar: صور المنتج, en: Product photos}
+specs_title: {ar: المواصفات, en: Specifications}
+enquire_note:
+  ar: الموقع لعرض المنتجات فقط. للاستفسار عن هذا المنتج والتوريد بالجملة، تواصلوا معنا.
+  en: This site is a product showcase only. To ask about this product or wholesale supply, contact us.
+
+field_model: {ar: الموديل, en: Model}
+field_type: {ar: نوع المنتج, en: Product type}
+field_size: {ar: المقاس, en: Size}
+field_contents: {ar: المحتوى, en: Contents}
+field_origin: {ar: المنشأ, en: Origin}
+field_code: {ar: الكود, en: Code}
+
+about_eyebrow: {ar: من نحن, en: About us}
+about_title: {ar: أحلام القمر, en: Ahlam Alqamar}
+about_lead:
+  ar: شركة أحلام القمر للتجارة. نقدم تشكيلة متنوعة من المستلزمات المنزلية والتجارية، لتلبية احتياجات الشركاء وعملاء الجملة.
+  en: Ahlam Alqamar Trading Company. We offer a varied range of household and commercial supplies to meet the needs of partners and wholesale customers.
+about_how_title: {ar: كيف نتعامل, en: How we work}
+about_how_text:
+  ar: هذا الموقع معرض رقمي لمنتجاتنا وليس متجرًا إلكترونيًا؛ لا بيع مباشر عبر الموقع. نتعامل مع الشركاء وعملاء الجملة مباشرة، فتواصلوا معنا للاستفسار عن أي منتج.
+  en: This site is a digital showcase of our products, not an online shop; nothing is sold through it. We deal with partners and wholesale customers directly, so contact us about any product.
+about_what_title: {ar: ماذا نقدم, en: what we offer}
+
+contact_eyebrow: {ar: تواصل معنا, en: Contact us}
+contact_title: {ar: تواصل معنا, en: Contact us}
+contact_lead:
+  ar: للاستفسار عن المنتجات والتعامل بالجملة والشراكة التجارية.
+  en: For product enquiries, wholesale orders and trade partnerships.
+contact_whatsapp: {ar: واتساب, en: WhatsApp}
+contact_phone: {ar: الهاتف, en: Phone}
+contact_email: {ar: البريد الإلكتروني, en: Email}
+contact_city: {ar: الموقع, en: Location}
+to_be_added: {ar: سيُضاف قريبًا, en: To be added}
+whatsapp_message: {ar: "مرحبًا، أود الاستفسار عن: ", en: "Hello, I would like to ask about: "}
+whatsapp_general: {ar: مرحبًا، أود الاستفسار عن منتجاتكم., en: "Hello, I would like to ask about your products."}
+
+footer_links: {ar: روابط, en: Explore}
+footer_collections: {ar: المجموعات, en: Collections}
+footer_rights: {ar: جميع الحقوق محفوظة., en: All rights reserved.}
+breadcrumb: {ar: مسار التنقل, en: Breadcrumb}
+
+not_found_title: {ar: الصفحة غير موجودة, en: Page not found}
+not_found_text: {ar: الصفحة التي تبحث عنها غير موجودة أو تم نقلها., en: "The page you are looking for does not exist or has moved."}
+back_home: {ar: العودة إلى الرئيسية, en: Back to home}
+
+meta_description:
+  ar: أحلام القمر — شركة أحلام القمر للتجارة. معرض رقمي لمستلزمات منزلية وتجارية للشركاء وعملاء الجملة.
+  en: Ahlam Alqamar Trading Company — a digital showcase of household and commercial supplies for partners and wholesale customers.

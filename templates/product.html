@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}{{ L(p.name) }} — {{ site.name[lang] }}{% endblock %}
+{% block description %}{{ L(p.name) }} — {{ L(p.coll.summary) }}{% endblock %}
+{% block main %}
+{% set col = p.coll %}
+<section class="section-flush">
+  <div class="container">
+    {{ m.crumbs([(t.nav_collections, url('/collections/')), (L(col.name), url('/collections/' ~ col.slug ~ '/')), (L(p.name), None)]) }}
+    <div class="pd">
+      <div class="pd-gallery load-scale" data-gallery>
+        <div class="pd-main panel">
+          {% for g in p.images %}
+          <figure class="pd-slide{% if loop.first %} is-active{% endif %}" data-slide="{{ loop.index0 }}"{% if not loop.first %} hidden{% endif %}>
+            {{ m.picture(g.src, L(p.name) ~ ((' — ' ~ L(g.label)) if g.label else ''), sizes='(max-width: 1024px) 100vw, 55vw', lazy=not loop.first) }}
+            {% if g.label %}<figcaption>{{ L(g.label) }}</figcaption>{% endif %}
+          </figure>
+          {% endfor %}
+          {% if p.images | length > 1 %}
+          <div class="pd-nav">
+            <button type="button" class="icon-btn" data-gallery-prev aria-label="{{ t.prev }}">{{ m.icon('i-chev-l') }}</button>
+            <button type="button" class="icon-btn" data-gallery-next aria-label="{{ t.next }}">{{ m.icon('i-chev-r') }}</button>
+          </div>
+          {% endif %}
+        </div>
+        {% if p.images | length > 1 %}
+        <div class="pd-thumbs" role="group" aria-label="{{ t.images_shown }}">
+          {% for g in p.images %}
+          <button type="button" class="pd-thumb{% if loop.first %} is-active{% endif %}" data-thumb="{{ loop.index0 }}" aria-pressed="{{ 'true' if loop.first else 'false' }}" aria-label="{{ L(g.label) if g.label else (loop.index ~ ' / ' ~ p.images | length) }}">{{ m.picture(g.src, '', sizes='160px') }}</button>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="pd-info">
+        <p class="eyebrow load-in" style="--d:.05s"><a href="{{ url('/collections/' ~ col.slug ~ '/') }}">{{ L(col.name) }}</a></p>
+        <h1 class="pd-title load-in" style="--d:.1s">{{ L(p.name) }}</h1>
+        <p class="pd-short load-in" style="--d:.2s">{{ L(col.summary) }}</p>
+        <dl class="pd-specs load-in" style="--d:.28s">
+          {% for key, value in p.fields %}<div><dt>{{ t['field_' ~ key] }}</dt><dd><bdi>{{ L(value) }}</bdi></dd></div>{% endfor %}
+        </dl>
+        <div class="pd-cta load-in" style="--d:.36s">
+          <a class="btn btn-dark" href="{{ m.enquire_href(p) }}"{% if whatsapp_number %} target="_blank" rel="noopener"{% endif %}><span class="btn-dot"></span>{{ t.enquire }}</a>
+          <p class="pd-note">{{ t.enquire_note }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% set others = col.products | reject('equalto', p) | list %}
+<section class="section">
+  <div class="container">
+    {% if others %}
+    {{ m.section_head(L(col.name), t.more_in_collection, '', url('/collections/' ~ col.slug ~ '/'), t.browse_collection) }}
+    {{ m.product_grid(others) }}
+    {% else %}
+    {{ m.section_head(t.nav_collections, t.other_collections, '', url('/collections/'), t.view_all) }}
+    <div class="tile-grid tile-grid-3" data-reveal-group>
+      {% for o in collections if o.slug != col.slug %}{% if loop.index <= 3 %}{{ m.tile(o) }}{% endif %}{% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{{ m.partners() }}
+{% endblock %}

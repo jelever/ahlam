@@ -1,0 +1,168 @@
+{% macro icon(name, cls='') -%}
+<svg class="icon {{ cls }}" aria-hidden="true"><use href="#{{ name }}"/></svg>
+{%- endmacro %}
+
+{% macro picture(src, alt='', sizes='100vw', lazy=True) -%}
+{{ img(src, alt, sizes=sizes, eager=not lazy) }}
+{%- endmacro %}
+
+{% macro logo() -%}
+<a href="{{ url('/') }}" class="logo" aria-label="{{ site.name[lang] }} — {{ t.nav_home }}">
+  {{ icon('i-logo', 'logo-mark') }}
+  <span class="logo-text"><span class="logo-name">{{ site.name[lang] }}</span><span class="logo-legal">{{ site.legal_name[lang] }}</span></span>
+</a>
+{%- endmacro %}
+
+{# "View ●↗" — label followed by a small black circle with a diagonal arrow #}
+{% macro arrow_link(text, href, cls='') -%}
+<a href="{{ href }}" class="arrow-link {{ cls }}"><span>{{ text }}</span><span class="arrow-dot">{{ icon('i-arrow-up') }}</span></a>
+{%- endmacro %}
+
+{% macro count(c) -%}
+{% if c.products | length == 1 %}{{ t.model_one }}{% else %}{{ c.products | length }} {{ t.models }}{% endif %}
+{%- endmacro %}
+
+{# The first detail worth showing in a card: size, else model. #}
+{% macro key_detail(p) -%}
+{%- for key, value in p.fields if key in ('size', 'model') -%}
+{%- if loop.first %}<bdi>{{ L(value) }}</bdi>{% endif -%}
+{%- endfor -%}
+{%- endmacro %}
+
+{% macro enquire_href(p=None) -%}
+{%- if whatsapp_number -%}
+https://wa.me/{{ whatsapp_number }}?text={{ ((t.whatsapp_message ~ L(p.name) ~ ' (' ~ p.slug ~ ')') if p else t.whatsapp_general) | urlencode }}
+{%- else -%}
+{{ url('/contact/') }}
+{%- endif -%}
+{%- endmacro %}
+
+{% macro product_card(p, i=0) -%}
+<article class="product-card" data-reveal>
+  <div class="pc-media">
+    <a href="{{ url('/products/' ~ p.slug ~ '/') }}" class="pc-img" tabindex="-1" aria-hidden="true">{{ picture(p.images[0].src, '', sizes='(max-width: 760px) 50vw, 25vw') }}</a>
+    <div class="pc-actions">
+      <a class="pc-action" href="{{ url('/products/' ~ p.slug ~ '/') }}">{{ icon('i-eye') }}<span>{{ t.view_product }}</span></a>
+      <a class="pc-action pc-action-dark" href="{{ enquire_href(p) }}"{% if whatsapp_number %} target="_blank" rel="noopener"{% endif %} aria-label="{{ t.enquire }}: {{ L(p.name) }}">{{ icon('i-chat') }}<span>{{ t.enquire_short }}</span></a>
+    </div>
+  </div>
+  <div class="pc-body">
+    <h3 class="pc-name"><a href="{{ url('/products/' ~ p.slug ~ '/') }}">{{ L(p.name) }}</a></h3>
+    <p class="pc-meta">{{ L(p.coll.name) }}{% set d = key_detail(p) %}{% if d %} · {{ d }}{% endif %}</p>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro product_grid(items, cls='') -%}
+<div class="product-grid {{ cls }}" data-reveal-group>
+  {% for p in items %}{{ product_card(p, loop.index0) }}{% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro crumbs(items) -%}
+<nav class="crumbs" aria-label="{{ t.breadcrumb }}">
+  <a href="{{ url('/') }}">{{ t.nav_home }}</a>
+  {%- for label, href in items %}
+  <span class="crumb-sep" aria-hidden="true">/</span>
+  {%- if href %}<a href="{{ href }}">{{ label }}</a>{% else %}<span aria-current="page">{{ label }}</span>{% endif %}
+  {%- endfor %}
+</nav>
+{%- endmacro %}
+
+{# Inner-page hero: soft grey panel like the home hero, optional image on the side #}
+{% macro page_hero(eyebrow_text, title, lead='', image=None, crumb_items=[], cls='', alt='') -%}
+<section class="section-flush">
+  <div class="container">
+    <div class="page-hero panel {{ cls }}{% if image %} has-image{% endif %}">
+      <div class="page-hero-copy">
+        {{ crumbs(crumb_items) }}
+        <p class="eyebrow load-in" style="--d:.05s">{{ eyebrow_text }}</p>
+        <h1 class="page-title load-in" style="--d:.12s">{{ title }}</h1>
+        {% if lead %}<p class="page-lead load-in" style="--d:.2s">{{ lead }}</p>{% endif %}
+        {% if caller is defined %}{{ caller() }}{% endif %}
+      </div>
+      {% if image %}
+      <div class="page-hero-media img-zoom load-scale">{{ picture(image, alt, sizes='(max-width: 1024px) 100vw, 52vw', lazy=False) }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{% macro section_head(eyebrow_text, title, cls='', href=None, link_text='') -%}
+<div class="section-head {{ cls }}" data-reveal>
+  <div>
+    <p class="eyebrow">{{ eyebrow_text }}</p>
+    <h2 class="h-display">{{ title }}</h2>
+  </div>
+  {% if href %}{{ arrow_link(link_text, href) }}{% endif %}
+</div>
+{%- endmacro %}
+
+{# The newsletter panel of the old site, now the partners panel #}
+{% macro partners(image='bedding/flint-comforter/main.jpg') -%}
+<section class="section" id="partners">
+  <div class="container">
+    <div class="newsletter panel" data-reveal>
+      <div class="nl-copy">
+        <p class="eyebrow">{{ t.partners_eyebrow }}</p>
+        <h2 class="h2">{{ t.partners_title }}</h2>
+        <p class="muted">{{ t.partners_text }}</p>
+        <div class="btn-row">
+          <a href="{{ url('/contact/') }}" class="btn btn-dark"><span class="btn-dot"></span>{{ t.contact_us }}</a>
+          <a href="{{ url('/products/') }}" class="btn btn-light">{{ t.browse_products }}</a>
+        </div>
+      </div>
+      <div class="nl-media img-zoom">{{ picture(image, '', sizes='(max-width: 1024px) 100vw, 45vw') }}</div>
+    </div>
+  </div>
+</section>
+{%- endmacro %}
+
+{# One row of the catalogue tabs, cloned from the old site's set rows #}
+{% macro set_row(p) -%}
+<article class="set-row panel" data-reveal>
+  <a href="{{ url('/products/' ~ p.slug ~ '/') }}" class="set-media img-zoom" aria-label="{{ L(p.name) }}">
+    {{ picture(p.images[0].src, '', sizes='(max-width: 760px) 100vw, 25vw') }}
+  </a>
+  <div class="set-copy">
+    <p class="eyebrow">{{ L(p.coll.name) }}</p>
+    <h3 class="set-title"><a href="{{ url('/products/' ~ p.slug ~ '/') }}">{{ L(p.name) }}</a></h3>
+    <p class="set-summary">{{ L(p.coll.summary) }}</p>
+    {{ arrow_link(t.view_product, url('/products/' ~ p.slug ~ '/'), 'set-link') }}
+  </div>
+  <div class="set-card set-price">
+    <p class="set-info-title">{{ t.set_info_title }}</p>
+    <dl class="set-info">
+      {% for key, value in p.fields %}<div><dt>{{ t['field_' ~ key] }}</dt><dd><bdi>{{ L(value) }}</bdi></dd></div>{% endfor %}
+    </dl>
+  </div>
+  <div class="set-card set-features">
+    <div class="set-feature">{{ icon('i-hand') }}<div><h4>{{ t.set_enquiry_t }}</h4><p>{{ t.set_enquiry_d }}</p></div></div>
+    <a class="btn btn-dark btn-block" href="{{ enquire_href(p) }}"{% if whatsapp_number %} target="_blank" rel="noopener"{% endif %}>{{ t.enquire }}</a>
+  </div>
+</article>
+{%- endmacro %}
+
+{# Large image tile used for collections #}
+{% macro tile(c, cls='') -%}
+<a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="tile {{ cls }}" data-reveal>
+  <span class="tile-img img-zoom">{{ picture(c.cover, '', sizes='(max-width: 760px) 100vw, 50vw') }}</span>
+  <span class="tile-body">
+    <span><strong>{{ L(c.name) }}</strong><small>{{ L(c.summary) }}</small></span>
+    <span class="tile-cta">{{ t.browse_collection }}<span class="arrow-dot">{{ icon('i-arrow-up') }}</span></span>
+  </span>
+  <span class="tile-count">{{ count(c) }}</span>
+</a>
+{%- endmacro %}
+
+{% macro soon_list() -%}
+{% if soon %}
+<div class="soon" data-reveal>
+  <p class="eyebrow">{{ t.soon_title }}</p>
+  <ul class="soon-list">
+    {% for c in soon %}<li><span>{{ L(c.name) }}</span><span class="soon-tag">{{ t.soon_tag }}</span></li>{% endfor %}
+  </ul>
+</div>
+{% endif %}
+{%- endmacro %}

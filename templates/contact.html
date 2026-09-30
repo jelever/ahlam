@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{{ t.contact_title }} — {{ site.name[lang] }}{% endblock %}
+{% block description %}{{ t.contact_lead }}{% endblock %}
+{% block main %}
+{{ m.page_hero(t.contact_eyebrow, t.contact_title, t.contact_lead, 'plastic-tables/round-table/beige.jpg', [(t.nav_contact, None)], alt=L(products['round-plastic-table'].name)) }}
+<section class="section-sm">
+  <div class="container">
+    <div class="contact-cards" data-reveal-group>
+      {% for key, label, value, href, icon in contact_items %}
+      {% set pending = is_placeholder(value) %}
+      <div class="service-tile panel{% if pending %} is-pending{% endif %}" data-reveal>
+        <span class="service-icon">{{ m.icon(icon) }}</span>
+        <div>
+          <h3>{{ label }}</h3>
+          {% if pending %}<p>{{ t.to_be_added }}</p>
+          {% elif href %}<p><a href="{{ href }}"{% if key == 'whatsapp' %} target="_blank" rel="noopener"{% endif %}><bdi>{{ value }}</bdi></a></p>
+          {% else %}<p>{{ value }}</p>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="section-sm">
+  <div class="container">
+    <div class="cta-band" data-reveal>
+      <div><h2 class="h2">{{ t.partners_title }}</h2><p>{{ t.about_how_text }}</p></div>
+      <a href="{{ url('/products/') }}" class="btn btn-white"><span class="btn-dot"></span>{{ t.browse_products }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

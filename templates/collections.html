@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}{{ t.nav_collections }} — {{ site.name[lang] }}{% endblock %}
+{% block description %}{{ t.collections_eyebrow }}{% endblock %}
+{% block main %}
+{{ m.page_hero(t.collections_eyebrow, t.nav_collections, t.collections_lead, None, [(t.nav_collections, None)]) }}
+<section class="section-sm">
+  <div class="container">
+    <div class="tile-grid" data-reveal-group>
+      {% for c in collections %}{{ m.tile(c) }}{% endfor %}
+    </div>
+    {{ m.soon_list() }}
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    {{ m.section_head(t.catalogue_eyebrow, t.products_title, '', url('/products/'), t.view_all) }}
+    {{ m.product_grid(featured) }}
+  </div>
+</section>
+{{ m.partners() }}
+{% endblock %}

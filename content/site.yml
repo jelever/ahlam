@@ -1,0 +1,28 @@
+# Site-wide settings. Everything the client may change lives here or in
+# catalog.yml; templates hold no business data.
+
+# Public address of the site. base_path is the folder GitHub Pages serves
+# the site from ("/ahlam" on jelever.github.io/ahlam). Set it to "" when a
+# custom domain points at the site, and change base_url with it.
+base_url: https://jelever.github.io
+base_path: /ahlam
+
+name:
+  ar: أحلام القمر
+  en: AHLAM ALQAMAR
+legal_name:
+  ar: شركة أحلام القمر للتجارة
+  en: Ahlam Alqamar Trading Company
+
+# Contact details. Anything wrapped in [square brackets] is a placeholder:
+# pages show it as "to be added", and `build.py --release` refuses to build
+# while any remains.
+#   whatsapp: international digits only, no + or spaces (e.g. 9665XXXXXXXX)
+#   phone:    as it should be displayed and dialled (e.g. +966 5X XXX XXXX)
+contact:
+  whatsapp: "[whatsapp]"
+  phone: "[phone]"
+  email: "[email]"
+  city:
+    ar: "[المدينة]"
+    en: "[City]"

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ t.about_eyebrow }} — {{ site.name[lang] }}{% endblock %}
+{% block main %}
+{{ m.page_hero(t.about_eyebrow, t.about_title, t.about_lead, 'bunk-beds/iron-bunk-bed/main.jpg', [(t.nav_about, None)], alt=L(products['iron-bunk-bed'].name)) }}
+<section class="section-sm">
+  <div class="container">
+    <div class="split">
+      <div class="split-media img-zoom" data-reveal>{{ m.picture('bedding/flint-comforter/main.jpg', L(products['flint-comforter'].name), sizes='(max-width: 1024px) 100vw, 50vw') }}</div>
+      <div class="split-copy" data-reveal>
+        <p class="eyebrow">{{ t.about_eyebrow }}</p>
+        <h2 class="h2">{{ t.about_how_title }}</h2>
+        <p class="muted">{{ t.about_how_text }}</p>
+        <div>{{ m.arrow_link(t.browse_products, url('/products/')) }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    {{ m.section_head(t.nav_collections, t.about_what_title, '', url('/collections/'), t.view_all) }}
+    <div class="tile-grid tile-grid-3" data-reveal-group>
+      {% for c in collections %}{{ m.tile(c) }}{% endfor %}
+    </div>
+    {{ m.soon_list() }}
+  </div>
+</section>
+<section class="section-sm">
+  <div class="container">
+    <div class="cta-band" data-reveal>
+      <div><h2 class="h2">{{ t.partners_title }}</h2><p>{{ t.partners_text }}</p></div>
+      <a href="{{ url('/contact/') }}" class="btn btn-white"><span class="btn-dot"></span>{{ t.contact_us }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

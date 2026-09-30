@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>404 · {{ site.name.ar }}</title>
+  <link rel="icon" href="{{ asset('static/brand/favicon/favicon.svg') }}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;700&family=Figtree:wght@400;500;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('static/css/site.css') }}">
+</head>
+<body class="picker-page">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-logo" viewBox="48 48 189.2 193.5">{{ mark_g }}</symbol></defs></svg>
+  <main class="picker panel notfound">
+    <a href="{{ home_ar }}" class="logo"><svg class="icon logo-mark" aria-hidden="true"><use href="#i-logo"/></svg><span class="logo-text"><span class="logo-name">{{ site.name.ar }}</span><span class="logo-legal">{{ site.legal_name.ar }}</span></span></a>
+    <p class="nf-code">404</p>
+    <div class="nf-cols">
+      <div>
+        <h1 class="h2">{{ t_ar.not_found_title }}</h1>
+        <p class="muted">{{ t_ar.not_found_text }}</p>
+        <a href="{{ home_ar }}" class="btn btn-dark"><span class="btn-dot"></span>{{ t_ar.back_home }}</a>
+      </div>
+      <div lang="en" dir="ltr">
+        <h2 class="h2">{{ t_en.not_found_title }}</h2>
+        <p class="muted">{{ t_en.not_found_text }}</p>
+        <a href="{{ home_en }}" class="btn btn-dark"><span class="btn-dot"></span>{{ t_en.back_home }}</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

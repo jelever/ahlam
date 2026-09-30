@@ -1,0 +1,163 @@
+{% import 'partials/macros.html' as m with context -%}
+<!doctype html>
+<html lang="{{ lang }}" dir="{{ dir }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.name[lang] }} — {{ site.legal_name[lang] }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ t.meta_description }}{% endblock %}">
+  <link rel="canonical" href="{{ canonical }}">
+  {% for l, href in alternates.items() %}
+  <link rel="alternate" hreflang="{{ l }}" href="{{ href }}">
+  {% endfor %}
+  <link rel="alternate" hreflang="x-default" href="{{ alternates['ar'] }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site.name[lang] }}">
+  <meta property="og:title" content="{{ self.title() }}">
+  <meta property="og:description" content="{{ self.description() }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:image" content="{{ og_image }}">
+  <meta property="og:locale" content="{{ 'ar_SA' if lang == 'ar' else 'en_US' }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#ffffff">
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="icon" href="{{ asset('static/brand/favicon/favicon.ico') }}" sizes="any">
+  <link rel="icon" href="{{ asset('static/brand/favicon/favicon.svg') }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ asset('static/brand/favicon/apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ asset('static/brand/favicon/site.webmanifest') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {% if lang == 'ar' -%}
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  {%- else -%}
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Alexandria:wght@500&display=swap" rel="stylesheet">
+  {%- endif %}
+  <link rel="stylesheet" href="{{ asset('static/css/site.css') }}">
+</head>
+<body class="page-{{ page }}">
+<a class="skip-link" href="#main">{{ t.skip }}</a>
+{% include 'partials/sprite.html' %}
+
+<header class="site-header">
+  <div class="container header-inner">
+    {{ m.logo() }}
+
+    <nav class="main-nav" aria-label="{{ t.nav_primary }}">
+      <a href="{{ url('/') }}" class="nav-link{% if page == 'home' %} is-active{% endif %}"{% if page == 'home' %} aria-current="page"{% endif %}>{{ t.nav_home }}</a>
+
+      <div class="nav-item has-drop has-mega">
+        <a href="{{ url('/products/') }}" class="nav-link{% if page == 'products' %} is-active{% endif %}"{% if page == 'products' %} aria-current="page"{% endif %}>{{ t.nav_products }}</a>
+        <button class="nav-caret" type="button" aria-expanded="false" aria-label="{{ t.nav_products }}">{{ m.icon('i-chev-d') }}</button>
+        <div class="mega">
+          <div class="mega-inner">
+            <div class="mega-col">
+              <p class="mega-title">{{ t.mega_collections }}</p>
+              {% for c in collections %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}
+            </div>
+            <div class="mega-col">
+              <p class="mega-title">{{ t.nav_products }}</p>
+              {% for p in products.values() %}<a href="{{ url('/products/' ~ p.slug ~ '/') }}">{{ L(p.name) }}</a>{% endfor %}
+            </div>
+            {% for fp in mega_featured %}
+            <a href="{{ url('/products/' ~ fp.slug ~ '/') }}" class="mega-feature">
+              <span class="mega-feature-img img-zoom">{{ m.picture(fp.images[0].src, '', sizes='320px') }}</span>
+              <span class="mega-feature-copy">
+                <span class="eyebrow">{{ t.mega_featured }}</span>
+                <strong>{{ L(fp.name) }}</strong>
+                <span class="muted">{{ L(fp.coll.name) }}</span>
+              </span>
+            </a>
+            {% endfor %}
+          </div>
+          <div class="mega-foot">{{ m.arrow_link(t.all_products, url('/products/')) }}</div>
+        </div>
+      </div>
+
+      <a href="{{ url('/collections/') }}" class="nav-link{% if page == 'collections' %} is-active{% endif %}"{% if page == 'collections' %} aria-current="page"{% endif %}>{{ t.nav_collections }}</a>
+      <a href="{{ url('/about/') }}" class="nav-link{% if page == 'about' %} is-active{% endif %}"{% if page == 'about' %} aria-current="page"{% endif %}>{{ t.nav_about }}</a>
+      <a href="{{ url('/contact/') }}" class="nav-link{% if page == 'contact' %} is-active{% endif %}"{% if page == 'contact' %} aria-current="page"{% endif %}>{{ t.nav_contact }}</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="lang-switch" href="{{ other_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}" aria-label="{{ t.lang_switch }}">{{ t.lang_switch_short }}</a>
+      <a href="{{ url('/products/') }}" class="btn btn-dark btn-xs hide-md">{{ t.browse_products }}</a>
+      <button class="icon-btn menu-toggle" type="button" aria-label="{{ t.menu_open }}" aria-expanded="false">{{ m.icon('i-menu') }}</button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" aria-hidden="true">
+  <div class="drawer-panel" role="dialog" aria-label="{{ t.nav_primary }}">
+    <div class="drawer-top">
+      {{ m.logo() }}
+      <button class="icon-btn drawer-close" type="button" aria-label="{{ t.menu_close }}">{{ m.icon('i-close') }}</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="{{ url('/') }}">{{ t.nav_home }}</a>
+      <details>
+        <summary>{{ t.nav_products }} {{ m.icon('i-chev-d') }}</summary>
+        <div class="drawer-sub">
+          <a href="{{ url('/products/') }}">{{ t.all_products }}</a>
+          {% for c in collections %}<a href="{{ url('/products/#' ~ c.slug) }}">{{ L(c.name) }}</a>{% endfor %}
+        </div>
+      </details>
+      <a href="{{ url('/collections/') }}">{{ t.nav_collections }}</a>
+      <a href="{{ url('/about/') }}">{{ t.nav_about }}</a>
+      <a href="{{ url('/contact/') }}">{{ t.nav_contact }}</a>
+    </nav>
+    <div class="drawer-foot">
+      <a href="{{ other_url }}" class="drawer-lang" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{{ m.icon('i-globe') }} {{ t.lang_switch }}</a>
+      <div class="drawer-btns">
+        <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
+        <a href="{{ url('/products/') }}" class="btn btn-dark">{{ t.browse_products }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+{% block main %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-panel panel">
+      <div class="footer-grid" data-reveal-group>
+        <div class="footer-brand" data-reveal>
+          {{ m.logo() }}
+          <p class="muted">{{ t.partners_text }}</p>
+          <div><a href="{{ url('/contact/') }}" class="btn btn-dark btn-sm"><span class="btn-dot"></span>{{ t.contact_us }}</a></div>
+        </div>
+        <div class="footer-col" data-reveal>
+          <h4>{{ t.footer_links }}</h4>
+          <a href="{{ url('/products/') }}">{{ t.nav_products }}</a>
+          <a href="{{ url('/collections/') }}">{{ t.nav_collections }}</a>
+          <a href="{{ url('/about/') }}">{{ t.nav_about }}</a>
+          <a href="{{ url('/contact/') }}">{{ t.nav_contact }}</a>
+        </div>
+        <div class="footer-col" data-reveal>
+          <h4>{{ t.footer_collections }}</h4>
+          {% for c in collections %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}
+        </div>
+        <div class="footer-col" data-reveal>
+          <h4>{{ t.contact_title }}</h4>
+          {% for key, label, value, href, icon in contact_items %}
+          {% if is_placeholder(value) %}<span class="muted">{{ label }}: {{ t.to_be_added }}</span>
+          {% elif href %}<a href="{{ href }}"{% if key == 'whatsapp' %} target="_blank" rel="noopener"{% endif %}>{{ label }}: <bdi>{{ value }}</bdi></a>
+          {% else %}<span>{{ label }}: {{ value }}</span>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span data-year>{{ year }}</span> {{ site.legal_name[lang] }}. {{ t.footer_rights }}</p>
+        <div class="footer-legal">
+          <a href="{{ other_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{{ t.lang_switch }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="{{ asset('static/js/site.js') }}" defer></script>
+</body>
+</html>

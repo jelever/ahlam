@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block main %}
+<section class="section-flush">
+  <div class="container">
+    <div class="hero panel">
+      <div class="hero-copy">
+        <div class="company-card load-in" style="--d:.05s">
+          {{ m.icon('i-logo', 'logo-mark') }}
+          <div><strong>{{ site.legal_name[lang] }}</strong><small>{{ t.hero_card_small }}</small></div>
+        </div>
+        <h1 class="hero-title">
+          <span class="line"><span style="--d:.15s">{{ t.hero_title_1 }}</span></span>
+          <span class="line"><span style="--d:.27s">{{ t.hero_title_2 }}</span></span>
+        </h1>
+        <p class="hero-lead load-in" style="--d:.4s">{{ t.hero_lead }}</p>
+        <div class="hero-btns load-in" style="--d:.5s">
+          <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
+          <a href="{{ url('/products/') }}" class="btn btn-dark"><span class="btn-dot"></span>{{ t.browse_products }}</a>
+        </div>
+        <div class="trusted load-in" style="--d:.6s">
+          <p>{{ t.hero_ranges }}</p>
+          <div class="trusted-track">
+            <div class="trusted-logos">
+              {% for c in collections %}<a class="tl" href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}
+            </div>
+            <div class="trusted-logos is-clone" aria-hidden="true">
+              {% for c in collections %}<a class="tl" href="{{ url('/collections/' ~ c.slug ~ '/') }}" tabindex="-1">{{ L(c.name) }}</a>{% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-media load-scale">
+        <div class="hero-img img-zoom" data-parallax>{{ m.picture(hero.images[0].src, L(hero.name), sizes='(max-width: 1024px) 100vw, 56vw', lazy=False) }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="card-row" data-reveal-group>
+      {% for c in collections[:2] %}
+      <a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="stay-card" data-reveal>
+        <span class="stay-img img-zoom">{{ m.picture(c.cover, '', sizes='(max-width: 1024px) 50vw, 25vw') }}<span class="star-dot">{{ m.icon('i-arrow-up') }}</span></span>
+        <span class="stay-meta"><strong>{{ L(c.name) }}</strong><span>{{ m.count(c) }}</span></span>
+      </a>
+      {% endfor %}
+      <div class="feature-panel panel" data-reveal>
+        <div class="fp-copy">
+          <p class="eyebrow">{{ t.partners_title }}</p>
+          <h2 class="fp-title">{{ t.partners_text }}</h2>
+          {{ m.arrow_link(t.contact_us, url('/contact/')) }}
+        </div>
+        <a href="{{ url('/collections/bedding/') }}" class="fp-img img-zoom" tabindex="-1" aria-hidden="true">{{ m.picture('bedding/flint-comforter/main.jpg', '', sizes='(max-width: 1024px) 50vw, 25vw') }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="collections">
+  <div class="container">
+    <div class="big-head" data-reveal>
+      <p class="eyebrow">{{ t.collections_eyebrow }}</p>
+      <h2 class="h-giant">{{ t.collections_title }}</h2>
+    </div>
+    <div class="tile-grid" data-reveal-group>
+      {% for c in collections %}{{ m.tile(c) }}{% endfor %}
+    </div>
+    {{ m.soon_list() }}
+  </div>
+</section>
+
+<section class="section" id="catalogue">
+  <div class="container">
+    {{ m.section_head(t.catalogue_eyebrow, t.catalogue_title, '', url('/products/'), t.all_products) }}
+    <div class="tabs" data-tabs data-reveal>
+      <div class="tab-list" role="tablist" aria-label="{{ t.nav_collections }}">
+        <span class="tab-pill" aria-hidden="true"></span>
+        {% for c in collections %}
+        <button class="tab-btn" type="button" role="tab" id="tab-{{ c.slug }}" aria-controls="panel-{{ c.slug }}" aria-selected="{{ 'true' if loop.first else 'false' }}"{% if not loop.first %} tabindex="-1"{% endif %}>{{ L(c.name) }}</button>
+        {% endfor %}
+      </div>
+      {% for c in collections %}
+      <div class="tab-panel{% if loop.first %} is-active{% endif %}" role="tabpanel" id="panel-{{ c.slug }}" aria-labelledby="tab-{{ c.slug }}"{% if not loop.first %} hidden{% endif %}>
+        {% for p in c.products %}{{ m.set_row(p) }}{% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{{ m.partners() }}
+{% endblock %}

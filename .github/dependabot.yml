@@ -1,0 +1,19 @@
+# Dependabot opens pull requests for dependency and security updates. The
+# build runs on each one; merge during the monthly routine
+# (railway/README.md). Adapted from railway/templates/dependabot.yml for a
+# static site: Python build tools and GitHub Actions only.
+
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      build-tools:
+        patterns: ["*"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"

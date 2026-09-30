@@ -1,0 +1,176 @@
+# The catalogue. One entry per collection and per product model.
+#
+# Rules from the client's brief:
+# - One image represents a product in every listing; other colours and
+#   real-life photos appear only on the product's own page.
+# - Show only information that was supplied. A product lists just the
+#   fields it has; leave a field out rather than guess it.
+# - No prices, no stock, no ratings.
+#
+# Images are paths under content/images/. The first image of a product is
+# its main image. `label` names what the image shows (a colour or a view).
+#
+# A collection with `soon: true` has no products or photos yet: it shows
+# as a "coming soon" card and gets no page. To launch it, add its photos,
+# a `cover`, products, and remove `soon`.
+
+collections:
+  - slug: metal-beds
+    name: {ar: الأسرّة المعدنية, en: Metal beds}
+    summary:
+      ar: أسرّة حديد مفردة وقابلة للطي للاستخدام المنزلي والتجاري.
+      en: Single and folding iron beds for home and commercial use.
+    cover: metal-beds/rt-m101/black.jpg
+
+  - slug: bunk-beds
+    name: {ar: الأسرّة المعدنية بطابقين, en: Metal bunk beds}
+    summary:
+      ar: أسرّة حديد بطابقين للاستخدام المنزلي والتجاري.
+      en: Two-tier iron beds for home and commercial use.
+    cover: bunk-beds/iron-bunk-bed/main.jpg
+
+  - slug: bedding
+    name: {ar: المفروشات, en: Bedding}
+    summary:
+      ar: تشكيلة من اللحافات للاستخدام المنزلي والتجاري.
+      en: A range of comforters for home and commercial use.
+    cover: bedding/flint-comforter/main.jpg
+
+  - slug: plastic-tables
+    name: {ar: الطاولات البلاستيكية, en: Plastic tables}
+    summary:
+      ar: طاولات بلاستيك دائرية ومربعة، صناعة وطنية.
+      en: Round and square plastic tables, made in Saudi Arabia.
+    cover: plastic-tables/round-table/beige.jpg
+
+  - slug: camp-bags
+    name: {ar: شنط العزبة, en: Camp bags}
+    summary:
+      ar: أطقم شنط تخزين متداخلة للرحلات والعزب.
+      en: Nesting storage bag sets for trips and camps.
+    cover: camp-bags/chinese/main.jpg
+
+  - slug: chairs
+    name: {ar: الكراسي, en: Chairs}
+    soon: true
+  - slug: event-chairs
+    name: {ar: كراسي المناسبات, en: Event chairs}
+    soon: true
+  - slug: blankets
+    name: {ar: البطانيات, en: Blankets}
+    soon: true
+  - slug: pillows
+    name: {ar: الوسائد, en: Pillows}
+    soon: true
+  - slug: tablecloths
+    name: {ar: مفارش الطاولات, en: Tablecloths}
+    soon: true
+  - slug: ready-packed-bedding
+    name: {ar: المفارش الجاهزة للتعبئة, en: Ready-packed bedding}
+    soon: true
+
+products:
+  - slug: rt-m101-folding-bed
+    collection: metal-beds
+    name: {ar: سرير قابل للطي بعجلات, en: Folding bed on castors}
+    fields:
+      model: RT-M101
+      type: {ar: سرير قابل للطي بعجلات, en: Folding bed on castors}
+    images:
+      - {src: metal-beds/rt-m101/black.jpg, label: {ar: أسود, en: Black}}
+      - {src: metal-beds/rt-m101/grey.jpg, label: {ar: رمادي, en: Grey}}
+      - {src: metal-beds/rt-m101/cream.jpg, label: {ar: كريمي, en: Cream}}
+      - {src: metal-beds/rt-m101/blue.jpg, label: {ar: أزرق, en: Blue}}
+
+  - slug: single-iron-bed
+    collection: metal-beds
+    name: {ar: سرير حديد مفرد, en: Single iron bed}
+    fields:
+      type: {ar: سرير حديد مفرد, en: Single iron bed}
+      origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
+    images:
+      - {src: metal-beds/single-iron-bed/main.jpg}
+
+  - slug: heavy-mesh-folding-bed
+    collection: metal-beds
+    name: {ar: سرير حديد قابل للطي بشبك ثقيل, en: Heavy-mesh folding iron bed}
+    fields:
+      type: {ar: سرير حديد قابل للطي، شبك ثقيل, en: Folding iron bed, heavy mesh}
+      origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
+    images:
+      - {src: metal-beds/heavy-mesh-folding-bed/unfolded.jpg, label: {ar: مفتوح, en: Unfolded}}
+      - {src: metal-beds/heavy-mesh-folding-bed/folded.jpg, label: {ar: مطوي, en: Folded}}
+
+  - slug: iron-bunk-bed
+    collection: bunk-beds
+    name: {ar: سرير حديد بطابقين, en: Iron bunk bed}
+    fields:
+      type: {ar: سرير حديد بطابقين, en: Two-tier iron bed}
+      origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
+    images:
+      - {src: bunk-beds/iron-bunk-bed/main.jpg}
+
+  - slug: flint-comforter
+    collection: bedding
+    name: {ar: لحاف FLINT, en: FLINT comforter}
+    fields:
+      model: FLINT
+      type: {ar: لحاف, en: Comforter}
+    images:
+      - {src: bedding/flint-comforter/main.jpg}
+
+  - slug: round-plastic-table
+    collection: plastic-tables
+    name: {ar: طاولة بلاستيك دائرية, en: Round plastic table}
+    fields:
+      size: {ar: 90 × 90 سم, en: 90 × 90 cm}
+      type: {ar: طاولة بلاستيك, en: Plastic table}
+      origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
+    images:
+      - {src: plastic-tables/round-table/beige.jpg, label: {ar: بيج, en: Beige}}
+      - {src: plastic-tables/round-table/white.jpg, label: {ar: أبيض, en: White}}
+
+  - slug: square-plastic-table
+    collection: plastic-tables
+    name: {ar: طاولة بلاستيك مربعة, en: Square plastic table}
+    fields:
+      size: {ar: 80 × 80 سم, en: 80 × 80 cm}
+      type: {ar: طاولة بلاستيك, en: Plastic table}
+      origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
+    images:
+      - {src: plastic-tables/square-table/beige.jpg, label: {ar: بيج, en: Beige}}
+      - {src: plastic-tables/square-table/white.jpg, label: {ar: أبيض, en: White}}
+
+  # The two dimension photos were filed in each other's folders; they are
+  # assigned here by the material they show. Confirm with the client.
+  - slug: camp-bag-chinese
+    collection: camp-bags
+    name: {ar: شنطة عزبة — صيني, en: Camp bag — Chinese}
+    fields:
+      model: {ar: صيني, en: Chinese}
+      contents: {ar: طقم من 3 شنط متداخلة, en: Set of 3 nesting bags}
+      size: {ar: "70 × 45 · 59 × 38 · 50 × 35 سم", en: "70 × 45 · 59 × 38 · 50 × 35 cm"}
+    images:
+      - {src: camp-bags/chinese/main.jpg}
+      - {src: camp-bags/chinese/open.jpg, label: {ar: الطقم مفتوح, en: Set, open}}
+      - {src: camp-bags/chinese/dimensions.jpg, label: {ar: المقاسات, en: Dimensions}}
+      - {src: camp-bags/chinese/detail.jpg, label: {ar: تفاصيل, en: Detail}}
+
+  - slug: camp-bag-tanzanian
+    collection: camp-bags
+    name: {ar: شنطة عزبة — تنزاني, en: Camp bag — Tanzanian}
+    fields:
+      model: {ar: تنزاني, en: Tanzanian}
+      contents: {ar: طقم من 3 شنط متداخلة, en: Set of 3 nesting bags}
+      size: {ar: "70 × 45 · 59 × 38 · 50 × 35 سم", en: "70 × 45 · 59 × 38 · 50 × 35 cm"}
+    images:
+      - {src: camp-bags/tanzanian/main.jpg}
+      - {src: camp-bags/tanzanian/dimensions.jpg, label: {ar: المقاسات, en: Dimensions}}
+      - {src: camp-bags/tanzanian/detail.jpg, label: {ar: تفاصيل, en: Detail}}
+
+# Home page: the hero product (its main image is used) and the editorial
+# rows, in order. The hero needs a product shown whole: the RT-M101 photos
+# are cropped at the edges.
+home:
+  hero: iron-bunk-bed
+  featured: [rt-m101-folding-bed, iron-bunk-bed, flint-comforter, round-plastic-table]

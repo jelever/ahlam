@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ t.products_title }} — {{ site.name[lang] }}{% endblock %}
+{% block description %}{{ t.hero_lead }}{% endblock %}
+{% block main %}
+{% call m.page_hero(t.products_eyebrow, t.products_title, t.products_lead, 'metal-beds/single-iron-bed/main.jpg', [(t.nav_products, None)], alt=L(products['single-iron-bed'].name)) %}
+<div class="chip-list load-in" style="--d:.28s; margin-top: 26px">
+  {% for c in collections %}<a class="chip" href="#{{ c.slug }}">{{ L(c.name) }}</a>{% endfor %}
+</div>
+{% endcall %}
+{% for c in collections %}
+<section class="{{ 'section-sm' if loop.first else 'section' }} group" id="{{ c.slug }}">
+  <div class="container">
+    {{ m.section_head(m.count(c), L(c.name), '', url('/collections/' ~ c.slug ~ '/'), t.browse_collection) }}
+    {{ m.product_grid(c.products) }}
+  </div>
+</section>
+{% endfor %}
+<section class="section-sm">
+  <div class="container">{{ m.soon_list() }}</div>
+</section>
+{{ m.partners() }}
+{% endblock %}

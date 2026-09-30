@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}{{ L(c.name) }} — {{ site.name[lang] }}{% endblock %}
+{% block description %}{{ L(c.summary) }}{% endblock %}
+{% block main %}
+{% call m.page_hero(t.nav_collections, L(c.name), L(c.summary), c.cover, [(t.nav_collections, url('/collections/')), (L(c.name), None)], alt=L(c.name)) %}
+<div class="hero-btns load-in" style="--d:.28s">
+  <a href="#products" class="btn btn-dark"><span class="btn-dot"></span>{{ t.browse_products }}</a>
+  <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
+</div>
+{% endcall %}
+<section class="section-sm">
+  <div class="container">
+    <div class="story panel" data-reveal>
+      <p class="eyebrow">{{ m.count(c) }}</p>
+      <p class="story-text">{{ L(c.summary) }} {{ t.enquire_note }}</p>
+    </div>
+  </div>
+</section>
+<section class="section" id="products">
+  <div class="container">
+    {{ m.section_head(L(c.name), t.products_title, '', url('/products/'), t.all_products) }}
+    {{ m.product_grid(c.products) }}
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    {{ m.section_head(t.nav_collections, t.other_collections, '', url('/collections/'), t.view_all) }}
+    <div class="tile-grid tile-grid-3" data-reveal-group>
+      {% for o in collections if o.slug != c.slug %}{% if loop.index <= 3 %}{{ m.tile(o) }}{% endif %}{% endfor %}
+    </div>
+  </div>
+</section>
+{{ m.partners() }}
+{% endblock %}
