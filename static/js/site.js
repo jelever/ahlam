@@ -64,10 +64,72 @@
   drawer?.addEventListener("click", (e) => {
     if (e.target === drawer || e.target.closest(".drawer-close") || e.target.closest("a")) setDrawer(false);
   });
+  /* ---------- Modals ---------- */
+  let lastFocus;
+  const setModal = (modal, open) => {
+    if (open) lastFocus = document.activeElement;
+    modal.classList.toggle("is-open", open);
+    modal.setAttribute("aria-hidden", String(!open));
+    lock(open);
+    if (open) setTimeout(() => $(".modal-close", modal)?.focus(), 60);
+    else lastFocus?.focus?.();
+  };
+  $$(".modal").forEach((modal) => modal.addEventListener("click", (e) => {
+    if (e.target === modal || e.target.closest(".modal-close")) setModal(modal, false);
+  }));
+
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
+    $$(".modal.is-open").forEach((mo) => setModal(mo, false));
     if (drawer?.classList.contains("is-open")) setDrawer(false);
     closeAll();
+  });
+
+  /* ---------- Quick view (product cards) ---------- */
+  const data = window.AHLAM || { products: {}, strings: {} };
+  const S = data.strings;
+  const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#${id}"/></svg>`;
+  const pic = (im, alt, sizes) => `<img src="${im.src}" srcset="${im.srcset}" sizes="${sizes}" width="${im.w}" height="${im.h}" alt="${esc(alt)}" class="${im.cutout ? "is-cutout" : "is-photo"}" decoding="async">`;
+  const qvModal = $('[data-modal="quick-view"]');
+  const quickView = (slug) => {
+    const p = data.products[slug];
+    const body = $("[data-qv-body]");
+    if (!p || !body || !qvModal) return;
+    const main = (i) => pic(p.images[i], p.name + (p.images[i].label ? " — " + p.images[i].label : ""), "(max-width: 1024px) 92vw, 450px");
+    const thumbs = p.images.length > 1
+      ? `<div class="qv-thumbs" role="group" aria-label="${esc(S.images_shown)}">${p.images.map((im, i) =>
+          `<button type="button" class="qv-thumb${i ? "" : " is-active"}" data-qv-thumb="${i}" aria-pressed="${!i}" aria-label="${esc(im.label || `${i + 1} / ${p.images.length}`)}">${pic(im, "", "110px")}</button>`).join("")}</div>`
+      : "";
+    const fields = p.fields.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd><bdi>${esc(v)}</bdi></dd></div>`).join("");
+    const ext = p.external ? ' target="_blank" rel="noopener"' : "";
+    body.innerHTML = `<div class="qv">
+      <div class="qv-media">
+        <div class="qv-img img-zoom" data-qv-main>${main(0)}</div>
+        ${thumbs}
+        <p class="qv-label" data-qv-label>${esc(p.images[0].label)}</p>
+      </div>
+      <div class="qv-info">
+        <p class="eyebrow">${esc(p.collection)}</p>
+        <h2 class="qv-title">${esc(p.name)}</h2>
+        <p class="muted">${esc(p.summary)}</p>
+        <dl class="pd-specs">${fields}</dl>
+        <div class="qv-actions">
+          <a class="btn btn-dark" href="${p.enquire}"${ext}><span class="btn-dot"></span>${esc(S.enquire)}</a>
+          <a class="arrow-link" href="${p.url}"><span>${esc(S.view_details)}</span><span class="arrow-dot">${icon("i-arrow-up")}</span></a>
+        </div>
+      </div>
+    </div>`;
+    $$("[data-qv-thumb]", body).forEach((b) => b.addEventListener("click", () => {
+      const i = Number(b.dataset.qvThumb);
+      $("[data-qv-main]", body).innerHTML = main(i);
+      $("[data-qv-label]", body).textContent = p.images[i].label;
+      $$("[data-qv-thumb]", body).forEach((o) => { o.classList.toggle("is-active", o === b); o.setAttribute("aria-pressed", String(o === b)); });
+    }));
+    setModal(qvModal, true);
+  };
+  document.addEventListener("click", (e) => {
+    const qv = e.target.closest("[data-quick-view]");
+    if (qv) { e.preventDefault(); quickView(qv.dataset.quickView); }
   });
 
   /* ---------- Giant titles: split into letters that rise one by one ---------- */

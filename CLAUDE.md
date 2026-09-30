@@ -102,8 +102,11 @@ with "checks passed".
 - **Store structures, repurposed:** rating card → company card; "trusted by"
   logos → collection chips (marquee on phones); set-row price card →
   "details available" card; features card → enquiry card; newsletter panel →
-  partners panel; quick view / add to cart → view / enquire. No invented
-  reviews, stats, journal or partner logos.
+  partners panel; add to cart → enquire. Quick view is kept (Homely's
+  modal): `build.py` writes `static/js/data.<lang>.js` (`window.AHLAM`) and
+  `site.js` renders the modal from it, with photo thumbnails, details list,
+  enquire button and a link to the full page. The build checks every path in
+  those files. No invented reviews, stats, journal or partner logos.
 - **Product cut-outs** use `mix-blend-mode: multiply` so their white
   background melts into the grey panels.
 - **One image per product in every listing.** Other colours and real-life

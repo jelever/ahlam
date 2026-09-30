@@ -42,7 +42,7 @@ https://wa.me/{{ whatsapp_number }}?text={{ ((t.whatsapp_message ~ L(p.name) ~ '
   <div class="pc-media">
     <a href="{{ url('/products/' ~ p.slug ~ '/') }}" class="pc-img" tabindex="-1" aria-hidden="true">{{ picture(p.images[0].src, '', sizes='(max-width: 760px) 50vw, 25vw') }}</a>
     <div class="pc-actions">
-      <a class="pc-action" href="{{ url('/products/' ~ p.slug ~ '/') }}">{{ icon('i-eye') }}<span>{{ t.view_product }}</span></a>
+      <button class="pc-action" type="button" data-quick-view="{{ p.slug }}" aria-label="{{ t.quick_view }}: {{ L(p.name) }}">{{ icon('i-eye') }}<span>{{ t.quick_view }}</span></button>
       <a class="pc-action pc-action-dark" href="{{ enquire_href(p) }}"{% if whatsapp_number %} target="_blank" rel="noopener"{% endif %} aria-label="{{ t.enquire }}: {{ L(p.name) }}">{{ icon('i-chat') }}<span>{{ t.enquire_short }}</span></a>
     </div>
   </div>
