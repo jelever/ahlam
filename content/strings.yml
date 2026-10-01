@@ -15,6 +15,7 @@ all_products: {ar: جميع المنتجات, en: All products}
 skip: {ar: تخطَّ إلى المحتوى, en: Skip to content}
 lang_switch: {ar: English, en: العربية}
 lang_switch_short: {ar: EN, en: ع}
+language: {ar: اللغة, en: Language}
 
 browse_products: {ar: استعرض المنتجات, en: Browse products}
 browse_collection: {ar: استعرض المجموعة, en: View collection}

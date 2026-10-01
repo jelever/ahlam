@@ -106,7 +106,13 @@
       <a href="{{ url('/contact/') }}">{{ t.nav_contact }}</a>
     </nav>
     <div class="drawer-foot">
-      <a href="{{ other_url }}" class="drawer-lang" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{{ m.icon('i-globe') }} {{ t.lang_switch }}</a>
+      {# both languages, current one highlighted; each name in its own typeface #}
+      {% set ar_url = url(path) if lang == 'ar' else other_url %}
+      {% set en_url = url(path) if lang == 'en' else other_url %}
+      <div class="lang-seg" role="group" aria-label="{{ t.language }}">
+        <a href="{{ ar_url }}" lang="ar" hreflang="ar"{% if lang == 'ar' %} class="is-active" aria-current="true"{% endif %}>العربية</a>
+        <a href="{{ en_url }}" lang="en" hreflang="en"{% if lang == 'en' %} class="is-active" aria-current="true"{% endif %}>English</a>
+      </div>
       <div class="drawer-btns">
         <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
         <a href="{{ url('/products/') }}" class="btn btn-dark">{{ t.browse_products }}</a>

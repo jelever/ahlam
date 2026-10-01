@@ -934,3 +934,17 @@ html[lang="ar"] .qv-title { letter-spacing: 0; line-height: 1.4; }
 @media (max-width: 760px) {
   .brand-panel-arcs { width: 96px; height: 96px; }
 }
+
+/* drawer language switch: both languages as a segmented pill (the old site's
+   tab style), current one in black; 44px tall for touch; each name in its
+   own typeface whichever page it is on */
+.lang-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: var(--pill); background: var(--bg-soft); direction: rtl; } /* fixed order in both languages (العربية right, English left): switching moves the highlight, not the words */
+.lang-seg a {
+  display: grid; place-items: center; height: 44px; border-radius: var(--pill);
+  font-size: 15px; font-weight: 500; color: var(--ink-2);
+  transition: background-color .25s, color .25s;
+}
+.lang-seg a:not(.is-active):hover { background: #ececec; color: var(--ink); }
+.lang-seg a.is-active { background: var(--ink); color: var(--white); }
+.lang-seg a[lang="ar"] { font-family: "Alexandria", system-ui, sans-serif; }
+.lang-seg a[lang="en"] { font-family: "Figtree", system-ui, sans-serif; letter-spacing: 0; }
