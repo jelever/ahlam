@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}{{ L(p.name) }} — {{ site.name[lang] }}{% endblock %}
-{% block description %}{{ L(p.name) }} — {{ L(p.coll.summary) }}{% endblock %}
+{% block title %}{{ L(p.name) }} | {{ site.name[lang] }}{% endblock %}
+{% block description %}{{ L(p.name) }}. {{ L(p.coll.summary) }}{% endblock %}
 {% block main %}
 {% set col = p.coll %}
 <section class="section-flush">
@@ -11,10 +11,11 @@
         <div class="pd-main panel">
           {% for g in p.images %}
           <figure class="pd-slide{% if loop.first %} is-active{% endif %}" data-slide="{{ loop.index0 }}"{% if not loop.first %} hidden{% endif %}>
-            {{ m.picture(g.src, L(p.name) ~ ((' — ' ~ L(g.label)) if g.label else ''), sizes='(max-width: 1024px) 100vw, 55vw', lazy=not loop.first) }}
+            {{ m.picture(g.src, L(p.name) ~ ((' (' ~ L(g.label) ~ ')') if g.label else ''), sizes='(max-width: 1024px) 100vw, 55vw', lazy=not loop.first) }}
             {% if g.label %}<figcaption>{{ L(g.label) }}</figcaption>{% endif %}
           </figure>
           {% endfor %}
+          <button type="button" class="icon-btn lb-open" data-lb-open aria-label="{{ t.gallery_open }}">{{ m.icon('i-expand') }}</button>
           {% if p.images | length > 1 %}
           <div class="pd-nav">
             <button type="button" class="icon-btn" data-gallery-prev aria-label="{{ t.prev }}">{{ m.icon('i-chev-l') }}</button>
@@ -39,7 +40,7 @@
           {% for key, value in p.fields %}<div><dt>{{ t['field_' ~ key] }}</dt><dd><bdi>{{ L(value) }}</bdi></dd></div>{% endfor %}
         </dl>
         <div class="pd-cta load-in" style="--d:.36s">
-          <a class="btn btn-dark" href="{{ m.enquire_href(p) }}"{% if whatsapp_number %} target="_blank" rel="noopener"{% endif %}><span class="btn-dot"></span>{{ t.enquire }}</a>
+          <a class="btn btn-dark" href="{{ m.enquire_href(p) }}"{% if whatsapp_number %} target="_blank" rel="noopener"{% endif %}>{{ t.enquire }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
           <p class="pd-note">{{ t.enquire_note }}</p>
         </div>
       </div>

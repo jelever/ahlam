@@ -145,7 +145,7 @@ products:
   # assigned here by the material they show. Confirm with the client.
   - slug: camp-bag-chinese
     collection: camp-bags
-    name: {ar: شنطة عزبة — صيني, en: Camp bag — Chinese}
+    name: {ar: شنطة عزبة (صيني), en: Camp bag (Chinese)}
     fields:
       model: {ar: صيني, en: Chinese}
       contents: {ar: طقم من 3 شنط متداخلة, en: Set of 3 nesting bags}
@@ -158,7 +158,7 @@ products:
 
   - slug: camp-bag-tanzanian
     collection: camp-bags
-    name: {ar: شنطة عزبة — تنزاني, en: Camp bag — Tanzanian}
+    name: {ar: شنطة عزبة (تنزاني), en: Camp bag (Tanzanian)}
     fields:
       model: {ar: تنزاني, en: Tanzanian}
       contents: {ar: طقم من 3 شنط متداخلة, en: Set of 3 nesting bags}

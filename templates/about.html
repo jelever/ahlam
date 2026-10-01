@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{ t.about_eyebrow }} — {{ site.name[lang] }}{% endblock %}
+{% block title %}{{ t.about_eyebrow }} | {{ site.name[lang] }}{% endblock %}
 {% block main %}
 {{ m.page_hero(t.about_eyebrow, t.about_title, t.about_lead, 'bunk-beds/iron-bunk-bed/main.jpg', [(t.nav_about, None)], alt=L(products['iron-bunk-bed'].name)) }}
 <section class="section-sm">
@@ -28,7 +28,7 @@
   <div class="container">
     <div class="cta-band" data-reveal>
       <div><h2 class="h2">{{ t.partners_title }}</h2><p>{{ t.partners_text }}</p></div>
-      <a href="{{ url('/contact/') }}" class="btn btn-white"><span class="btn-dot"></span>{{ t.contact_us }}</a>
+      <a href="{{ url('/contact/') }}" class="btn btn-white">{{ t.contact_us }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
     </div>
   </div>
 </section>

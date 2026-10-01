@@ -26,6 +26,8 @@ view_all: {ar: عرض الكل, en: View all}
 quick_view: {ar: نظرة سريعة, en: Quick view}
 view_details: {ar: عرض التفاصيل الكاملة, en: View full details}
 close: {ar: إغلاق, en: Close}
+gallery: {ar: معرض صور المنتج, en: Product photo gallery}
+gallery_open: {ar: عرض الصور بالحجم الكامل, en: View photos full size}
 prev: {ar: السابق, en: Previous}
 next: {ar: التالي, en: Next}
 
@@ -115,5 +117,5 @@ not_found_text: {ar: الصفحة التي تبحث عنها غير موجودة
 back_home: {ar: العودة إلى الرئيسية, en: Back to home}
 
 meta_description:
-  ar: أحلام القمر — شركة أحلام القمر للتجارة. معرض رقمي لمستلزمات منزلية وتجارية للشركاء وعملاء الجملة.
-  en: Ahlam Alqamar Trading Company — a digital showcase of household and commercial supplies for partners and wholesale customers.
+  ar: "شركة أحلام القمر للتجارة: معرض رقمي لمستلزمات منزلية وتجارية للشركاء وعملاء الجملة."
+  en: "Ahlam Alqamar Trading Company: a digital showcase of household and commercial supplies for partners and wholesale customers."

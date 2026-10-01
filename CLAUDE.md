@@ -96,6 +96,11 @@ with "checks passed".
 - The source photo folders in `assets/ahlam/products images` contain an
   invisible U+200F in one folder name. The repo copies use ASCII names;
   never read from the Arabic paths in code.
+- **No em or en dash (— –) in anything a visitor reads or hears**, at the
+  owner's request: the audience is mainly Arabic. Use parentheses for a
+  variant ("شنطة عزبة (صيني)"), " | " in page titles, and a colon or full
+  stop in sentences. The build fails on a dash in page text, titles, alt
+  text, labels or the quick-view data. Code comments are exempt.
 - Shop wording is a build failure. Words such as الشراكة and المراسلة are
   fine; the check matches whole words.
 
@@ -117,6 +122,13 @@ with "checks passed".
   `site.js` renders the modal from it, with photo thumbnails, details list,
   enquire button and a link to the full page. The build checks every path in
   those files. No invented reviews, stats, journal or partner logos.
+- **Gallery preview (lightbox):** the product page viewer and quick view open
+  the product's photos full size and whole (expand button or a click on the
+  photo), with arrows (reading-direction aware), swipe and a counter. It
+  stacks above quick view; Escape closes the top modal only. Page frames
+  keep the old site's crop on purpose; the preview is where the whole photo
+  is seen. An edge-to-edge treatment for photos cut by the photographer was
+  tried and rejected by the owner (2026-10-01).
 - **Product cut-outs** use `mix-blend-mode: multiply` so their white
   background melts into the grey panels.
 - **One image per product in every listing.** Other colours and real-life

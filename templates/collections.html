@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{ t.nav_collections }} — {{ site.name[lang] }}{% endblock %}
+{% block title %}{{ t.nav_collections }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ t.collections_eyebrow }}{% endblock %}
 {% block main %}
 {{ m.page_hero(t.collections_eyebrow, t.nav_collections, t.collections_lead, None, [(t.nav_collections, None)]) }}

@@ -7,7 +7,7 @@
 {%- endmacro %}
 
 {% macro logo() -%}
-<a href="{{ url('/') }}" class="logo" aria-label="{{ site.name[lang] }} — {{ t.nav_home }}">
+<a href="{{ url('/') }}" class="logo" aria-label="{{ t.nav_home }}: {{ site.name[lang] }}">
   {{ icon('i-logo', 'logo-mark') }}
   <span class="logo-text"><span class="logo-name">{{ site.name[lang] }}</span><span class="logo-legal">{{ site.legal_name[lang] }}</span></span>
 </a>
@@ -109,7 +109,7 @@ https://wa.me/{{ whatsapp_number }}?text={{ ((t.whatsapp_message ~ L(p.name) ~ '
         <h2 class="h2">{{ t.partners_title }}</h2>
         <p class="muted">{{ t.partners_text }}</p>
         <div class="btn-row">
-          <a href="{{ url('/contact/') }}" class="btn btn-dark"><span class="btn-dot"></span>{{ t.contact_us }}</a>
+          <a href="{{ url('/contact/') }}" class="btn btn-dark">{{ t.contact_us }}{{ icon('i-arrow', 'btn-arrow') }}</a>
           <a href="{{ url('/products/') }}" class="btn btn-light">{{ t.browse_products }}</a>
         </div>
       </div>

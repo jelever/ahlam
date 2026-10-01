@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}{{ t.products_title }} — {{ site.name[lang] }}{% endblock %}
+{% block title %}{{ t.products_title }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ t.hero_lead }}{% endblock %}
 {% block main %}
 {% call m.page_hero(t.products_eyebrow, t.products_title, t.products_lead, 'metal-beds/single-iron-bed/main.jpg', [(t.nav_products, None)], alt=L(products['single-iron-bed'].name)) %}

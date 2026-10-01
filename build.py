@@ -295,7 +295,7 @@ def quick_view_data(site, strings, products, images: Images, lang: str) -> dict:
     return {
         "lang": lang,
         "products": data,
-        "strings": {k: t[k] for k in ("enquire", "view_details", "images_shown", "close")},
+        "strings": {k: t[k] for k in ("enquire", "view_details", "images_shown", "close", "gallery_open")},
     }
 
 
@@ -433,6 +433,11 @@ BANNED = [
 ]
 
 
+# The site speaks mainly to Arabic readers: no em or en dash anywhere a
+# visitor reads or hears (use parentheses, a colon or "|" instead).
+DASH = re.compile("[–—]")
+
+
 def check(site) -> list[str]:
     base = site["base_path"]
     errors = []
@@ -462,10 +467,14 @@ def check(site) -> list[str]:
         for pattern in BANNED:
             for m in pattern.finditer(text):
                 errors.append(f"{rel}: shop wording '{m.group(0)}'")
+        for m in DASH.finditer(text):
+            errors.append(f"{rel}: dash in visible text: '{text[max(0, m.start() - 25):m.end() + 25].strip()}'")
     # Quick-view data: every image and page it points at must exist too.
     for data_file in sorted((OUT / "static" / "js").glob("data.*.js")):
         text = data_file.read_text(encoding="utf-8")
         data = json.loads(text[text.index("{"):text.rindex("}") + 1])
+        if DASH.search(json.dumps(data, ensure_ascii=False)):
+            errors.append(f"{data_file.name}: dash in quick-view text")
         for slug, p in data["products"].items():
             refs = [p["url"]] + [im["src"] for im in p["images"]]
             refs += [part.strip().split(" ")[0] for im in p["images"] for part in im["srcset"].split(",")]

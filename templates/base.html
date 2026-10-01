@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{{ site.name[lang] }} — {{ site.legal_name[lang] }}{% endblock %}</title>
+  <title>{% block title %}{{ site.name[lang] }} | {{ site.legal_name[lang] }}{% endblock %}</title>
   <meta name="description" content="{% block description %}{{ t.meta_description }}{% endblock %}">
   <link rel="canonical" href="{{ canonical }}">
   {% for l, href in alternates.items() %}
@@ -126,7 +126,7 @@
         <div class="footer-brand" data-reveal>
           {{ m.logo() }}
           <p class="muted">{{ t.partners_text }}</p>
-          <div><a href="{{ url('/contact/') }}" class="btn btn-dark btn-sm"><span class="btn-dot"></span>{{ t.contact_us }}</a></div>
+          <div><a href="{{ url('/contact/') }}" class="btn btn-dark btn-sm">{{ t.contact_us }}{{ m.icon('i-arrow', 'btn-arrow') }}</a></div>
         </div>
         <div class="footer-col" data-reveal>
           <h4>{{ t.footer_links }}</h4>
@@ -162,6 +162,18 @@
   <div class="modal-panel" role="dialog" aria-modal="true" aria-label="{{ t.quick_view }}">
     <button class="icon-btn modal-close" type="button" aria-label="{{ t.close }}">{{ m.icon('i-close') }}</button>
     <div class="qv-body" data-qv-body></div>
+  </div>
+</div>
+
+<div class="modal lightbox" data-modal="lightbox" aria-hidden="true">
+  <div class="lb-panel" role="dialog" aria-modal="true" aria-label="{{ t.gallery }}">
+    <button class="icon-btn modal-close lb-close" type="button" aria-label="{{ t.close }}">{{ m.icon('i-close') }}</button>
+    <figure class="lb-stage" data-lb-stage>
+      <div class="lb-frame" data-lb-frame></div>
+      <figcaption class="lb-meta"><span data-lb-label></span><span class="lb-count" data-lb-count></span></figcaption>
+    </figure>
+    <button class="icon-btn lb-nav lb-prev" type="button" data-lb-prev aria-label="{{ t.prev }}">{{ m.icon('i-chev-l') }}</button>
+    <button class="icon-btn lb-nav lb-next" type="button" data-lb-next aria-label="{{ t.next }}">{{ m.icon('i-chev-r') }}</button>
   </div>
 </div>
 

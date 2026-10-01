@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}{{ L(c.name) }} — {{ site.name[lang] }}{% endblock %}
+{% block title %}{{ L(c.name) }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ L(c.summary) }}{% endblock %}
 {% block main %}
 {% call m.page_hero(t.nav_collections, L(c.name), L(c.summary), c.cover, [(t.nav_collections, url('/collections/')), (L(c.name), None)], alt=L(c.name)) %}
 <div class="hero-btns load-in" style="--d:.28s">
-  <a href="#products" class="btn btn-dark"><span class="btn-dot"></span>{{ t.browse_products }}</a>
+  <a href="#products" class="btn btn-dark">{{ t.browse_products }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
   <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
 </div>
 {% endcall %}

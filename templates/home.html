@@ -15,7 +15,7 @@
         <p class="hero-lead load-in" style="--d:.4s">{{ t.hero_lead }}</p>
         <div class="hero-btns load-in" style="--d:.5s">
           <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
-          <a href="{{ url('/products/') }}" class="btn btn-dark"><span class="btn-dot"></span>{{ t.browse_products }}</a>
+          <a href="{{ url('/products/') }}" class="btn btn-dark">{{ t.browse_products }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
         </div>
         <div class="trusted load-in" style="--d:.6s">
           <p>{{ t.hero_ranges }}</p>

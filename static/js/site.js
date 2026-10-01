@@ -65,24 +65,76 @@
     if (e.target === drawer || e.target.closest(".drawer-close") || e.target.closest("a")) setDrawer(false);
   });
   /* ---------- Modals ---------- */
-  let lastFocus;
+  // Modals can stack (the gallery opens over quick view): each remembers the
+  // element that opened it, and the page stays locked while any is open.
   const setModal = (modal, open) => {
-    if (open) lastFocus = document.activeElement;
+    if (open) modal._returnFocus = document.activeElement;
     modal.classList.toggle("is-open", open);
     modal.setAttribute("aria-hidden", String(!open));
-    lock(open);
+    lock(Boolean($(".modal.is-open")));
     if (open) setTimeout(() => $(".modal-close", modal)?.focus(), 60);
-    else lastFocus?.focus?.();
+    else modal._returnFocus?.focus?.();
   };
   $$(".modal").forEach((modal) => modal.addEventListener("click", (e) => {
-    if (e.target === modal || e.target.closest(".modal-close")) setModal(modal, false);
+    if (e.target === modal || e.target.matches("[data-lb-stage], .lb-panel") || e.target.closest(".modal-close")) setModal(modal, false);
   }));
 
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
-    $$(".modal.is-open").forEach((mo) => setModal(mo, false));
+    // close only the top-most modal (the gallery before quick view)
+    const top = $(".lightbox.is-open") || $(".modal.is-open");
+    if (top) { setModal(top, false); return; }
     if (drawer?.classList.contains("is-open")) setDrawer(false);
     closeAll();
+  });
+
+  /* ---------- Gallery preview (full-size photos, product page + quick view) ---------- */
+  const lb = $('[data-modal="lightbox"]');
+  let lbItems = [];
+  let lbCur = 0;
+  const lbShow = (i) => {
+    if (!lb || !lbItems.length) return;
+    lbCur = (i + lbItems.length) % lbItems.length;
+    const it = lbItems[lbCur];
+    $("[data-lb-frame]", lb).innerHTML = `<img src="${it.src}" srcset="${it.srcset}" sizes="100vw" alt="${esc(it.alt)}" class="${it.cutout ? "is-cutout" : "is-photo"}">`;
+    $("[data-lb-label]", lb).textContent = it.label || "";
+    $("[data-lb-count]", lb).textContent = lbItems.length > 1 ? `${lbCur + 1} / ${lbItems.length}` : "";
+    $$(".lb-nav", lb).forEach((b) => { b.hidden = lbItems.length < 2; });
+  };
+  const openGallery = (items, i) => {
+    if (!lb || !items.length) return;
+    lbItems = items;
+    lbShow(i);
+    setModal(lb, true);
+  };
+  if (lb) {
+    $("[data-lb-prev]", lb).addEventListener("click", () => lbShow(lbCur - 1));
+    $("[data-lb-next]", lb).addEventListener("click", () => lbShow(lbCur + 1));
+    document.addEventListener("keydown", (e) => {
+      if (!lb.classList.contains("is-open")) return;
+      // the "next" photo is to the left in Arabic
+      if (e.key === "ArrowRight") lbShow(lbCur + (rtl ? -1 : 1));
+      if (e.key === "ArrowLeft") lbShow(lbCur + (rtl ? 1 : -1));
+    });
+    let lx = null;
+    lb.addEventListener("touchstart", (e) => { lx = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener("touchend", (e) => {
+      if (lx === null || lbItems.length < 2) return;
+      const dx = e.changedTouches[0].clientX - lx;
+      if (Math.abs(dx) > 40) lbShow(lbCur + ((dx < 0) !== rtl ? 1 : -1));
+      lx = null;
+    });
+  }
+  // product page: photos come from the gallery slides
+  $$("[data-gallery]").forEach((g) => {
+    const items = () => $$("[data-slide] img", g).map((img) => ({
+      src: img.getAttribute("src"), srcset: img.getAttribute("srcset"), alt: img.alt,
+      cutout: img.classList.contains("is-cutout"),
+      label: img.closest("figure")?.querySelector("figcaption")?.textContent || "",
+    }));
+    const current = () => Number($(".pd-slide.is-active", g)?.dataset.slide || 0);
+    $("[data-lb-open]", g)?.addEventListener("click", () => openGallery(items(), current()));
+    $$("[data-slide] img", g).forEach((img) => img.addEventListener("click", () => openGallery(items(), current())));
   });
 
   /* ---------- Quick view (product cards) ---------- */
@@ -95,7 +147,7 @@
     const p = data.products[slug];
     const body = $("[data-qv-body]");
     if (!p || !body || !qvModal) return;
-    const main = (i) => pic(p.images[i], p.name + (p.images[i].label ? " — " + p.images[i].label : ""), "(max-width: 1024px) 92vw, 450px");
+    const main = (i) => pic(p.images[i], p.name + (p.images[i].label ? ` (${p.images[i].label})` : ""), "(max-width: 1024px) 92vw, 450px");
     const thumbs = p.images.length > 1
       ? `<div class="qv-thumbs" role="group" aria-label="${esc(S.images_shown)}">${p.images.map((im, i) =>
           `<button type="button" class="qv-thumb${i ? "" : " is-active"}" data-qv-thumb="${i}" aria-pressed="${!i}" aria-label="${esc(im.label || `${i + 1} / ${p.images.length}`)}">${pic(im, "", "110px")}</button>`).join("")}</div>`
@@ -104,7 +156,10 @@
     const ext = p.external ? ' target="_blank" rel="noopener"' : "";
     body.innerHTML = `<div class="qv">
       <div class="qv-media">
-        <div class="qv-img img-zoom" data-qv-main>${main(0)}</div>
+        <div class="qv-img img-zoom">
+          <div class="qv-frame" data-qv-main>${main(0)}</div>
+          <button type="button" class="icon-btn lb-open" data-qv-zoom aria-label="${esc(S.gallery_open)}">${icon("i-expand")}</button>
+        </div>
         ${thumbs}
         <p class="qv-label" data-qv-label>${esc(p.images[0].label)}</p>
       </div>
@@ -114,13 +169,21 @@
         <p class="muted">${esc(p.summary)}</p>
         <dl class="pd-specs">${fields}</dl>
         <div class="qv-actions">
-          <a class="btn btn-dark" href="${p.enquire}"${ext}><span class="btn-dot"></span>${esc(S.enquire)}</a>
+          <a class="btn btn-dark" href="${p.enquire}"${ext}>${esc(S.enquire)}${icon("i-arrow").replace('class="icon"', 'class="icon btn-arrow"')}</a>
           <a class="arrow-link" href="${p.url}"><span>${esc(S.view_details)}</span><span class="arrow-dot">${icon("i-arrow-up")}</span></a>
         </div>
       </div>
     </div>`;
+    let qvCur = 0;
+    const zoom = () => openGallery(p.images.map((im) => ({
+      src: im.src, srcset: im.srcset, cutout: im.cutout, label: im.label,
+      alt: p.name + (im.label ? ` (${im.label})` : ""),
+    })), qvCur);
+    $("[data-qv-zoom]", body).addEventListener("click", zoom);
+    $("[data-qv-main]", body).addEventListener("click", zoom);
     $$("[data-qv-thumb]", body).forEach((b) => b.addEventListener("click", () => {
       const i = Number(b.dataset.qvThumb);
+      qvCur = i;
       $("[data-qv-main]", body).innerHTML = main(i);
       $("[data-qv-label]", body).textContent = p.images[i].label;
       $$("[data-qv-thumb]", body).forEach((o) => { o.classList.toggle("is-active", o === b); o.setAttribute("aria-pressed", String(o === b)); });
