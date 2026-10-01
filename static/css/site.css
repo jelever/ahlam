@@ -891,3 +891,7 @@ html[lang="ar"] .qv-title { letter-spacing: 0; line-height: 1.4; }
   .lb-prev { inset-inline-start: calc(50% - 58px); }
   .lb-next { inset-inline-end: calc(50% - 58px); }
 }
+
+/* the viewer's fade animation isolates each slide, so the multiply blend of a
+   product shot needs the panel colour on the slide itself */
+.pd-slide { background: var(--bg-soft); }

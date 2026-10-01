@@ -55,8 +55,10 @@ the store features removed and the new identity, products and content in.
 3. Client to confirm: the camp-bag dimension photos (filed in each other's
    folders, reassigned by material); the "صناعة وطنية" label, taken from
    the folder names; the meaning of "صفت" in the heavy-mesh bed's folder.
-4. Clean photos without the CROWN logo (4 bed photos). The user chose to use
-   them as they are for now.
+4. Clean photos without the CROWN logo (3 bed photos: the single bed and
+   both heavy-mesh photos). The user chose to use them as they are for now.
+   The bunk bed's was replaced on 2026-10-01 by the client's logo-free shot
+   (`دورين 2.png`, 1536×1024).
 5. Owner's repository settings: protect `main`, and turn on Dependabot
    alerts and security updates. An uptime monitor, and a custom domain if
    the client wants one (see README).
