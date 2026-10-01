@@ -2,7 +2,7 @@
 {% block title %}{{ t.contact_title }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ t.contact_lead }}{% endblock %}
 {% block main %}
-{{ m.page_hero(t.contact_eyebrow, t.contact_title, t.contact_lead, 'plastic-tables/round-table/beige.jpg', [(t.nav_contact, None)], alt=L(products['round-plastic-table'].name)) }}
+{{ m.page_hero(t.contact_eyebrow, t.contact_title, t.contact_lead, None, [(t.nav_contact, None)], brand='light') }}
 <section class="section-sm">
   <div class="container">
     <div class="contact-cards" data-reveal-group>

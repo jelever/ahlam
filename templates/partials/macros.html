@@ -70,10 +70,12 @@ https://wa.me/{{ whatsapp_number }}?text={{ ((t.whatsapp_message ~ L(p.name) ~ '
 {%- endmacro %}
 
 {# Inner-page hero: soft grey panel like the home hero, optional image on the side #}
-{% macro page_hero(eyebrow_text, title, lead='', image=None, crumb_items=[], cls='', alt='') -%}
+{# brand='dark'|'light' fills the image slot with a brand panel (logo mark,
+   the kit's dot texture and corner arcs) for pages with no fitting photo #}
+{% macro page_hero(eyebrow_text, title, lead='', image=None, crumb_items=[], cls='', alt='', brand=None) -%}
 <section class="section-flush">
   <div class="container">
-    <div class="page-hero panel {{ cls }}{% if image %} has-image{% endif %}">
+    <div class="page-hero panel {{ cls }}{% if image or brand %} has-image{% endif %}">
       <div class="page-hero-copy">
         {{ crumbs(crumb_items) }}
         <p class="eyebrow load-in" style="--d:.05s">{{ eyebrow_text }}</p>
@@ -83,6 +85,8 @@ https://wa.me/{{ whatsapp_number }}?text={{ ((t.whatsapp_message ~ L(p.name) ~ '
       </div>
       {% if image %}
       <div class="page-hero-media img-zoom load-scale">{{ picture(image, alt, sizes='(max-width: 1024px) 100vw, 52vw', lazy=False) }}</div>
+      {% elif brand %}
+      <div class="page-hero-media brand-panel brand-{{ brand }} load-scale" aria-hidden="true">{{ icon('i-logo', 'brand-panel-mark') }}</div>
       {% endif %}
     </div>
   </div>

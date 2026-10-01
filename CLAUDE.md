@@ -59,7 +59,11 @@ the store features removed and the new identity, products and content in.
    both heavy-mesh photos). The user chose to use them as they are for now.
    The bunk bed's was replaced on 2026-10-01 by the client's logo-free shot
    (`دورين 2.png`, 1536×1024).
-5. Owner's repository settings: protect `main`, and turn on Dependabot
+5. Real company photos for the about and contact pages (warehouse, stock in
+   quantity, loading or delivery, office or showroom front). They replace
+   the brand panels. Never stock photos: they would present someone else's
+   premises as the company's.
+6. Owner's repository settings: protect `main`, and turn on Dependabot
    alerts and security updates. An uptime monitor, and a custom domain if
    the client wants one (see README).
 
@@ -131,6 +135,16 @@ with "checks passed".
   keep the old site's crop on purpose; the preview is where the whole photo
   is seen. An edge-to-edge treatment for photos cut by the photographer was
   tried and rejected by the owner (2026-10-01).
+- **About and contact headers use brand panels, not product photos**
+  (`page_hero(..., brand='dark'|'light')`). The about header repeated the home
+  hero, and the contact header's table was unrelated. The panel is the logo
+  mark and the kit's `corner-arcs` (copied to `static/brand/decor/`, drawn
+  through a CSS mask as the kit's own CSS does) over a soft radial light.
+  The kit's dot texture was tried and dropped at the owner's choice: the old
+  site uses no textures.
+  The kit's `pattern-houses` and `ornament-roof` contain the crescent and
+  `rings` reads as a moon halo, so they are not used. This is a stopgap until
+  the client sends real company photos.
 - **Product cut-outs** use `mix-blend-mode: multiply` so their white
   background melts into the grey panels.
 - **One image per product in every listing.** Other colours and real-life

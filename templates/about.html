@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{ t.about_eyebrow }} | {{ site.name[lang] }}{% endblock %}
 {% block main %}
-{{ m.page_hero(t.about_eyebrow, t.about_title, t.about_lead, 'bunk-beds/iron-bunk-bed/main.jpg', [(t.nav_about, None)], alt=L(products['iron-bunk-bed'].name)) }}
+{{ m.page_hero(t.about_eyebrow, t.about_title, t.about_lead, None, [(t.nav_about, None)], brand='dark') }}
 <section class="section-sm">
   <div class="container">
     <div class="split">
