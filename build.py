@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import html
 import http.server
 import json
@@ -204,6 +205,20 @@ def page_path(lang: str, path: str) -> str:
     return ("/en" if lang == "en" else "") + path
 
 
+def build_version() -> str:
+    """Short hash of everything that shapes the CSS, JS and quick-view data:
+    the static files, the content files and the list of product photos."""
+    h = hashlib.sha1()
+    for p in sorted((ROOT / "static").rglob("*")) + sorted(CONTENT.glob("*.yml")):
+        if p.is_file():
+            h.update(p.relative_to(ROOT).as_posix().encode())
+            h.update(p.read_bytes())
+    for p in sorted(IMAGES.rglob("*")):
+        if p.is_file():
+            h.update(f"{p.relative_to(IMAGES).as_posix()}:{p.stat().st_size}".encode())
+    return h.hexdigest()[:10]
+
+
 def make_env(site, strings, images: Images):
     env = Environment(
         loader=FileSystemLoader(ROOT / "templates"),
@@ -213,9 +228,16 @@ def make_env(site, strings, images: Images):
         lstrip_blocks=True,
     )
     base = site["base_path"]
+    version = build_version()
 
     def asset(path: str) -> str:
-        return f"{base}/{path.lstrip('/')}"
+        # Stylesheets and scripts carry a content version: browsers (iOS
+        # Safari above all) otherwise keep an old copy for up to GitHub
+        # Pages' 10-minute cache and pair it with new pages.
+        url = f"{base}/{path.lstrip('/')}"
+        if path.endswith((".css", ".js")):
+            url += f"?v={version}"
+        return url
 
     def img(src, alt, sizes="100vw", cls="", eager=False):
         info = images.get(src)

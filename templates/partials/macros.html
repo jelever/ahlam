@@ -86,7 +86,16 @@ https://wa.me/{{ whatsapp_number }}?text={{ ((t.whatsapp_message ~ L(p.name) ~ '
       {% if image %}
       <div class="page-hero-media img-zoom load-scale">{{ picture(image, alt, sizes='(max-width: 1024px) 100vw, 52vw', lazy=False) }}</div>
       {% elif brand %}
-      <div class="page-hero-media brand-panel brand-{{ brand }} load-scale" aria-hidden="true">{{ icon('i-logo', 'brand-panel-mark') }}</div>
+      {# Plain inline SVGs with their own viewBox and size (no masks, no
+         pseudo-elements, no aspect-ratio), so iOS Safari renders them as
+         Chrome does. Arcs: the kit's corner-arcs, mirrored for RTL. #}
+      <div class="page-hero-media brand-panel brand-{{ brand }} load-scale" aria-hidden="true">
+        <svg class="brand-panel-arcs" viewBox="0 0 240 240" width="240" height="240" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5">
+          {% if dir == 'rtl' %}<path d="M160 0A80 80 0 0 0 240 80"/><path d="M110 0A130 130 0 0 0 240 130"/><path d="M60 0A180 180 0 0 0 240 180"/><path d="M10 0A230 230 0 0 0 240 230"/>
+          {% else %}<path d="M0 80A80 80 0 0 0 80 0"/><path d="M0 130A130 130 0 0 0 130 0"/><path d="M0 180A180 180 0 0 0 180 0"/><path d="M0 230A230 230 0 0 0 230 0"/>{% endif %}
+        </svg>
+        <svg class="brand-panel-mark" viewBox="48 48 189.2 193.5" width="168" height="172" focusable="false">{{ mark_g }}</svg>
+      </div>
       {% endif %}
     </div>
   </div>

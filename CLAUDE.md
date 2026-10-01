@@ -55,10 +55,12 @@ the store features removed and the new identity, products and content in.
 3. Client to confirm: the camp-bag dimension photos (filed in each other's
    folders, reassigned by material); the "صناعة وطنية" label, taken from
    the folder names; the meaning of "صفت" in the heavy-mesh bed's folder.
-4. Clean photos without the CROWN logo (3 bed photos: the single bed and
-   both heavy-mesh photos). The user chose to use them as they are for now.
-   The bunk bed's was replaced on 2026-10-01 by the client's logo-free shot
-   (`دورين 2.png`, 1536×1024).
+4. Clean photos without the CROWN logo (2 photos left: the heavy-mesh bed,
+   folded and unfolded). The user chose to use them as they are for now.
+   Replaced on 2026-10-01 with the client's logo-free shots: the bunk bed
+   (`دورين 2.png`, 1536×1024) and the single bed
+   (`crown_bed_product_1200x1200.png`, 1200×1200, a little soft at full
+   size).
 5. Real company photos for the about and contact pages (warehouse, stock in
    quantity, loading or delivery, office or showroom front). They replace
    the brand panels. Never stock photos: they would present someone else's
@@ -97,6 +99,15 @@ with "checks passed".
   check reports it.
 - Templates use `StrictUndefined`: optional data (such as an image `label`)
   must be normalised in `load_content()`.
+- **iOS Safari is the owner's test phone.** Safari does not stretch a grid row
+  to a height that comes from `aspect-ratio`, so grid-centred content sits at
+  the top edge (this broke the brand panels). Centre with absolute positioning
+  and give SVGs a `viewBox` and explicit width and height. Avoid CSS masks and
+  `z-index: -1` pseudo-elements inside clipped, animated boxes. Chrome will
+  not show these bugs.
+- CSS and JS URLs carry `?v=<hash>` (`build_version()` in `build.py`) so
+  phones never pair new pages with a cached old stylesheet. Keep loading them
+  through `asset()`.
 - Image fit is automatic: photos whose border is at least 70% near-white are
   shown whole on white (`is-cutout`); others fill the frame (`is-photo`).
 - The source photo folders in `assets/ahlam/products images` contain an
