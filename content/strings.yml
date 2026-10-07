@@ -83,6 +83,11 @@ field_size: {ar: المقاس, en: Size}
 field_contents: {ar: المحتوى, en: Contents}
 field_origin: {ar: المنشأ, en: Origin}
 field_code: {ar: الكود, en: Code}
+field_brand: {ar: العلامة التجارية, en: Brand}
+field_material: {ar: الخامة, en: Material}
+field_pattern: {ar: التصميم, en: Design}
+field_filling: {ar: الحشوة, en: Filling}
+field_weight: {ar: الوزن, en: Weight}
 
 about_eyebrow: {ar: من نحن, en: About us}
 about_title: {ar: أحلام القمر, en: Ahlam Alqamar}

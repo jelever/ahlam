@@ -7,8 +7,14 @@
 #   fields it has; leave a field out rather than guess it.
 # - No prices, no stock, no ratings.
 #
+# Sources: product names come from the client's file names; details from
+# the file names or from what is printed on the client's own images (codes,
+# set contents, sizes, materials). English names are our translations.
+#
 # Images are paths under content/images/. The first image of a product is
-# its main image. `label` names what the image shows (a colour or a view).
+# its main image; "second.jpg" is the client's secondary image (usually the
+# product on a real or coloured background). `label` names what an image
+# shows (a colour or a view).
 #
 # A collection with `soon: true` has no products or photos yet: it shows
 # as a "coming soon" card and gets no page. To launch it, add its photos,
@@ -29,12 +35,47 @@ collections:
       en: Two-tier iron beds for home and commercial use.
     cover: bunk-beds/iron-bunk-bed/main.jpg
 
-  - slug: bedding
-    name: {ar: المفروشات, en: Bedding}
+  - slug: comforters
+    name: {ar: اللحافات, en: Comforters}
     summary:
-      ar: تشكيلة من اللحافات للاستخدام المنزلي والتجاري.
-      en: A range of comforters for home and commercial use.
-    cover: bedding/flint-comforter/main.jpg
+      ar: لحافات شتوية وصيفية وقطنية للاستخدام المنزلي والتجاري.
+      en: Winter, summer and cotton comforters for home and commercial use.
+    cover: comforters/flint/main.jpg
+
+  - slug: blankets
+    name: {ar: البطانيات, en: Blankets}
+    summary:
+      ar: بطانيات فرو للاستخدام المنزلي والتجاري.
+      en: Fur blankets for home and commercial use.
+    cover: blankets/bifi/main.jpg
+
+  - slug: pillows
+    name: {ar: الوسائد, en: Pillows}
+    summary:
+      ar: مخدات فندقية ومخدات ميموري فوم.
+      en: Hotel pillows and memory foam pillows.
+    cover: pillows/hotel-50x70/main.jpg
+
+  - slug: rugs
+    name: {ar: الفرشات, en: Floor rugs}
+    summary:
+      ar: فرشات سراميك ونانو فرو بمقاسات متعددة، سادة ومشجرة.
+      en: Ceramic and nano fur rugs in several sizes, plain and patterned.
+    cover: rugs/ceramic-patterned-230x160/main.jpg
+
+  - slug: prayer-rugs
+    name: {ar: سجاد الصلاة, en: Prayer rugs}
+    summary:
+      ar: سجاد صلاة بتصاميم وألوان متعددة.
+      en: Prayer rugs in a range of designs and colours.
+    cover: prayer-rugs/simli-white/main.jpg
+
+  - slug: chairs
+    name: {ar: الكراسي, en: Chairs}
+    summary:
+      ar: كراسي بلاستيك بيد وبدون يد للاستخدام المنزلي والتجاري.
+      en: Plastic chairs, with and without arms, for home and commercial use.
+    cover: chairs/waha/main.jpg
 
   - slug: plastic-tables
     name: {ar: الطاولات البلاستيكية, en: Plastic tables}
@@ -50,17 +91,8 @@ collections:
       en: Nesting storage bag sets for trips and camps.
     cover: camp-bags/chinese/main.jpg
 
-  - slug: chairs
-    name: {ar: الكراسي, en: Chairs}
-    soon: true
   - slug: event-chairs
     name: {ar: كراسي المناسبات, en: Event chairs}
-    soon: true
-  - slug: blankets
-    name: {ar: البطانيات, en: Blankets}
-    soon: true
-  - slug: pillows
-    name: {ar: الوسائد, en: Pillows}
     soon: true
   - slug: tablecloths
     name: {ar: مفارش الطاولات, en: Tablecloths}
@@ -70,6 +102,7 @@ collections:
     soon: true
 
 products:
+  # ---------------------------------------------------------------- metal beds
   - slug: rt-m101-folding-bed
     collection: metal-beds
     name: {ar: سرير قابل للطي بعجلات, en: Folding bed on castors}
@@ -91,6 +124,7 @@ products:
     images:
       - {src: metal-beds/single-iron-bed/main.jpg}
 
+  # New logo-free photos (2026-10-08); the client numbered the folded view first.
   - slug: heavy-mesh-folding-bed
     collection: metal-beds
     name: {ar: سرير حديد قابل للطي بشبك ثقيل, en: Heavy-mesh folding iron bed}
@@ -98,8 +132,8 @@ products:
       type: {ar: سرير حديد قابل للطي، شبك ثقيل, en: Folding iron bed, heavy mesh}
       origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
     images:
-      - {src: metal-beds/heavy-mesh-folding-bed/unfolded.jpg, label: {ar: مفتوح, en: Unfolded}}
       - {src: metal-beds/heavy-mesh-folding-bed/folded.jpg, label: {ar: مطوي, en: Folded}}
+      - {src: metal-beds/heavy-mesh-folding-bed/unfolded.jpg, label: {ar: مفتوح, en: Unfolded}}
 
   - slug: iron-bunk-bed
     collection: bunk-beds
@@ -110,15 +144,438 @@ products:
     images:
       - {src: bunk-beds/iron-bunk-bed/main.jpg}
 
+  # ---------------------------------------------------------------- comforters
+  # Codes, set contents, sizes, material and origin are as printed on the
+  # client's secondary images. File names and printed codes differ in two
+  # places (LIZA / LISA-111, HOtel Platenium / HOtel-paltinan-604): shown as
+  # supplied; confirm with the client.
+  - slug: comforter-dantil
+    collection: comforters
+    name: {ar: لحاف DANTIL, en: DANTIL comforter}
+    fields:
+      code: FO/DANTIL-505
+      type: {ar: لحاف شتوي, en: Winter comforter}
+      contents: {ar: طقم 8 قطع, en: 8-piece set}
+      size: {ar: "اللحاف 240 × 260 سم", en: "Quilt 240 × 260 cm"}
+    images:
+      - {src: comforters/dantil/main.jpg}
+      - {src: comforters/dantil/second.jpg}
+
+  - slug: comforter-liza
+    collection: comforters
+    name: {ar: لحاف LIZA, en: LIZA comforter}
+    fields:
+      code: LISA-111
+      type: {ar: لحاف شتوي, en: Winter comforter}
+    images:
+      - {src: comforters/liza/main.jpg}
+      - {src: comforters/liza/second.jpg}
+
   - slug: flint-comforter
-    collection: bedding
+    collection: comforters
     name: {ar: لحاف FLINT, en: FLINT comforter}
     fields:
-      model: FLINT
-      type: {ar: لحاف, en: Comforter}
+      code: FLINT-321
+      type: {ar: لحاف صيفي, en: Summer comforter}
     images:
-      - {src: bedding/flint-comforter/main.jpg}
+      - {src: comforters/flint/main.jpg}
+      - {src: comforters/flint/second.jpg}
 
+  - slug: comforter-cloud
+    collection: comforters
+    name: {ar: لحاف CLOUD, en: CLOUD comforter}
+    fields:
+      code: CLOUD-110
+      type: {ar: لحاف صيفي, en: Summer comforter}
+    images:
+      - {src: comforters/cloud/main.jpg}
+      - {src: comforters/cloud/second.jpg}
+
+  - slug: comforter-elo
+    collection: comforters
+    name: {ar: لحاف ELO, en: ELO comforter}
+    fields:
+      code: ELO-105
+      type: {ar: لحاف صيفي, en: Summer comforter}
+    images:
+      - {src: comforters/elo/main.jpg}
+      - {src: comforters/elo/second.jpg}
+
+  - slug: comforter-hotel-platinum
+    collection: comforters
+    name: {ar: لحاف Hotel Platenium, en: Hotel Platenium comforter}
+    fields:
+      code: HOtel-paltinan-604
+      type: {ar: لحاف صيفي, en: Summer comforter}
+      contents: {ar: طقم 7 قطع أو طقم 5 قطع, en: 7-piece or 5-piece set}
+      size: {ar: "اللحاف 240 × 260 سم (طقم 7 قطع)، 180 × 240 سم (طقم 5 قطع)", en: "Quilt 240 × 260 cm (7-piece set), 180 × 240 cm (5-piece set)"}
+      origin: {ar: صنع في الصين, en: Made in China}
+    images:
+      - {src: comforters/hotel-platinum/main.jpg}
+      - {src: comforters/hotel-platinum/second.jpg}
+
+  - slug: comforter-luz
+    collection: comforters
+    name: {ar: لحاف LUZ, en: LUZ comforter}
+    fields:
+      code: LUZ-216
+      type: {ar: لحاف صيفي, en: Summer comforter}
+    images:
+      - {src: comforters/luz/main.jpg}
+      - {src: comforters/luz/second.jpg}
+
+  - slug: comforter-ma-s
+    collection: comforters
+    name: {ar: لحاف MA-S مضغوط سادة, en: MA-S compressed plain comforter}
+    fields:
+      code: MA/S-502
+      type: {ar: لحاف صيفي, en: Summer comforter}
+      pattern: {ar: سادة, en: Plain}
+    images:
+      - {src: comforters/ma-s/main.jpg}
+      - {src: comforters/ma-s/second.jpg}
+
+  - slug: comforter-sadu
+    collection: comforters
+    name: {ar: لحاف SADU, en: SADU comforter}
+    fields:
+      code: SADU-117
+      type: {ar: لحاف صيفي, en: Summer comforter}
+    images:
+      - {src: comforters/sadu/main.jpg}
+      - {src: comforters/sadu/second.jpg}
+
+  - slug: comforter-tulip
+    collection: comforters
+    name: {ar: لحاف TULIP, en: TULIP comforter}
+    fields:
+      code: TULIP-3022
+      type: {ar: لحاف صيفي, en: Summer comforter}
+    images:
+      - {src: comforters/tulip/main.jpg}
+      - {src: comforters/tulip/second.jpg}
+
+  - slug: comforter-ava
+    collection: comforters
+    name: {ar: لحاف AVA, en: AVA comforter}
+    fields:
+      code: AVA-1020
+      type: {ar: لحاف قطني, en: Cotton comforter}
+      material: {ar: قطن 100%, en: 100% cotton}
+      contents: {ar: "لحاف، غطاء مخدة، كيس مخدة، شرشف بمطاط", en: "Comforter, pillow sham, pillow case, fitted sheet"}
+      origin: {ar: صنع في الصين, en: Made in China}
+    images:
+      - {src: comforters/ava/main.jpg}
+      - {src: comforters/ava/second.jpg}
+
+  - slug: comforter-cotton-100
+    collection: comforters
+    name: {ar: لحاف COTTON 100%, en: COTTON 100% comforter}
+    fields:
+      code: HOTEL-COTTON-12
+      type: {ar: لحاف قطني, en: Cotton comforter}
+      contents: {ar: طقم 8 قطع, en: 8-piece set}
+      size: {ar: "اللحاف 240 × 260 سم، المرتبة 200 × 200 سم", en: "Duvet 240 × 260 cm, mattress 200 × 200 cm"}
+    images:
+      - {src: comforters/cotton-100/main.jpg}
+      - {src: comforters/cotton-100/second.jpg}
+
+  # ---------------------------------------------------------------- blankets
+  - slug: blanket-bifi
+    collection: blankets
+    name: {ar: بطانية فرو النفرين BIFI, en: Al Nafrin fur blanket BIFI}
+    fields:
+      model: BIFI
+      type: {ar: بطانية, en: Blanket}
+      material: {ar: فرو, en: Fur}
+    images:
+      - {src: blankets/bifi/main.jpg}
+      - {src: blankets/bifi/second.jpg}
+
+  # ---------------------------------------------------------------- pillows
+  # The supplied pillow images are lifestyle or packaging shots; no white-
+  # background photos yet.
+  - slug: pillow-classic
+    collection: pillows
+    name: {ar: مخدة كلاسيك, en: Classic pillow}
+    fields:
+      type: {ar: مخدة, en: Pillow}
+    images:
+      - {src: pillows/classic/main.jpg}
+
+  # Specs as printed on the client's image. Named by its printed size to tell
+  # it apart from the other hotel pillow once the brand was removed.
+  - slug: pillow-hotel-50x70
+    collection: pillows
+    name: {ar: مخدة فندقية 50×70, en: Hotel pillow 50×70}
+    fields:
+      type: {ar: مخدة فندقية, en: Hotel pillow}
+      size: {ar: 50 × 70 سم, en: 50 × 70 cm}
+      filling: {ar: مايكرو فايبر, en: Microfibre}
+      weight: {ar: 1500 جرام, en: 1500 g}
+    images:
+      - {src: pillows/hotel-50x70/main.jpg}
+
+  - slug: pillow-hotel
+    collection: pillows
+    name: {ar: مخدة فندقية, en: Hotel pillow}
+    fields:
+      type: {ar: مخدة فندقية, en: Hotel pillow}
+    images:
+      - {src: pillows/hotel/main.jpg}
+
+  - slug: pillow-memory-foam-mesh
+    collection: pillows
+    name: {ar: مخدة ميموري فوم غطاء شبكي, en: Memory foam pillow, mesh cover}
+    fields:
+      type: {ar: مخدة ميموري فوم, en: Memory foam pillow}
+    images:
+      - {src: pillows/memory-foam-mesh/main.jpg}
+
+  - slug: pillow-memory-foam-contour-gel
+    collection: pillows
+    name: {ar: مخدة ميموري فوم كونتور بطبقة جل, en: Contour memory foam pillow with gel layer}
+    fields:
+      type: {ar: مخدة ميموري فوم, en: Memory foam pillow}
+    images:
+      - {src: pillows/memory-foam-contour-gel/main.jpg}
+
+  # ---------------------------------------------------------------- floor rugs
+  # Names and sizes as the client's file names give them. Two names differ
+  # only in spelling (سراميك / سيراميك مشجر 290×190) but are different rugs;
+  # both are published as supplied, pending a distinct name from the client.
+  - slug: rug-ceramic-plain-160x230
+    collection: rugs
+    name: {ar: فرش سراميك سادة 160×230, en: Ceramic rug, plain, 160×230}
+    fields:
+      material: {ar: سراميك, en: Ceramic}
+      pattern: {ar: سادة, en: Plain}
+      size: {ar: 160 × 230 سم, en: 160 × 230 cm}
+    images:
+      - {src: rugs/ceramic-plain-160x230/main.jpg}
+      - {src: rugs/ceramic-plain-160x230/second.jpg}
+
+  - slug: rug-ceramic-patterned-230x160
+    collection: rugs
+    name: {ar: فرش سراميك مشجر 230×160, en: Ceramic rug, patterned, 230×160}
+    fields:
+      material: {ar: سراميك, en: Ceramic}
+      pattern: {ar: مشجر, en: Patterned}
+      size: {ar: 230 × 160 سم, en: 230 × 160 cm}
+    images:
+      - {src: rugs/ceramic-patterned-230x160/main.jpg}
+      - {src: rugs/ceramic-patterned-230x160/second.jpg}
+
+  - slug: rug-ceramic-patterned-290x190-a
+    collection: rugs
+    name: {ar: فرش سراميك مشجر 290×190, en: Ceramic rug, patterned, 290×190}
+    fields:
+      material: {ar: سراميك, en: Ceramic}
+      pattern: {ar: مشجر, en: Patterned}
+      size: {ar: 290 × 190 سم, en: 290 × 190 cm}
+    images:
+      - {src: rugs/ceramic-patterned-290x190-a/main.jpg}
+      - {src: rugs/ceramic-patterned-290x190-a/second.jpg}
+
+  - slug: rug-ceramic-plain-290x190
+    collection: rugs
+    name: {ar: فرش سيراميك سادة 290×190, en: Ceramic rug, plain, 290×190}
+    fields:
+      material: {ar: سيراميك, en: Ceramic}
+      pattern: {ar: سادة, en: Plain}
+      size: {ar: 290 × 190 سم, en: 290 × 190 cm}
+    images:
+      - {src: rugs/ceramic-plain-290x190/main.jpg}
+      - {src: rugs/ceramic-plain-290x190/second.jpg}
+
+  - slug: rug-ceramic-patterned-290x190-b
+    collection: rugs
+    name: {ar: فرش سيراميك مشجر 290×190, en: Ceramic rug, patterned, 290×190 (medallion)}
+    fields:
+      material: {ar: سيراميك, en: Ceramic}
+      pattern: {ar: مشجر, en: Patterned}
+      size: {ar: 290 × 190 سم, en: 290 × 190 cm}
+    images:
+      - {src: rugs/ceramic-patterned-290x190-b/main.jpg}
+      - {src: rugs/ceramic-patterned-290x190-b/second.jpg}
+
+  - slug: rug-nano-fur-plain-190x290
+    collection: rugs
+    name: {ar: فرش نانو فرو سادة 190×290, en: Nano fur rug, plain, 190×290}
+    fields:
+      material: {ar: نانو فرو, en: Nano fur}
+      pattern: {ar: سادة, en: Plain}
+      size: {ar: 190 × 290 سم, en: 190 × 290 cm}
+    images:
+      - {src: rugs/nano-fur-plain-190x290/main.jpg}
+      - {src: rugs/nano-fur-plain-190x290/second.jpg}
+
+  - slug: rug-nano-fur-plain-2x3
+    collection: rugs
+    name: {ar: فرش نانو فرو سادة 2×3, en: Nano fur rug, plain, 2×3}
+    fields:
+      material: {ar: نانو فرو, en: Nano fur}
+      pattern: {ar: سادة, en: Plain}
+      size: {ar: 2 × 3 م, en: 2 × 3 m}
+    images:
+      - {src: rugs/nano-fur-plain-2x3/main.jpg}
+      - {src: rugs/nano-fur-plain-2x3/second.jpg}
+
+  - slug: rug-nano-fur-patterned-190x290
+    collection: rugs
+    name: {ar: فرش نانو فرو مشجر 190×290, en: Nano fur rug, patterned, 190×290}
+    fields:
+      material: {ar: نانو فرو, en: Nano fur}
+      pattern: {ar: مشجر, en: Patterned}
+      size: {ar: 190 × 290 سم, en: 190 × 290 cm}
+    images:
+      - {src: rugs/nano-fur-patterned-190x290/main.jpg}
+      - {src: rugs/nano-fur-patterned-190x290/second.jpg}
+
+  - slug: rug-nano-patterned-230x160
+    collection: rugs
+    name: {ar: فرش نانو مشجر 230×160, en: Nano rug, patterned, 230×160}
+    fields:
+      material: {ar: نانو, en: Nano}
+      pattern: {ar: مشجر, en: Patterned}
+      size: {ar: 230 × 160 سم, en: 230 × 160 cm}
+    images:
+      - {src: rugs/nano-patterned-230x160/main.jpg}
+      - {src: rugs/nano-patterned-230x160/second.jpg}
+
+  - slug: rug-nano-patterned-2x3
+    collection: rugs
+    name: {ar: فرش نانو مشجر 2×3, en: Nano rug, patterned, 2×3}
+    fields:
+      material: {ar: نانو, en: Nano}
+      pattern: {ar: مشجر, en: Patterned}
+      size: {ar: 2 × 3 م, en: 2 × 3 m}
+    images:
+      - {src: rugs/nano-patterned-2x3/main.jpg}
+      - {src: rugs/nano-patterned-2x3/second.jpg}
+
+  - slug: rug-nano-patterned-4x3
+    collection: rugs
+    name: {ar: فرش نانو مشجر 4×3, en: Nano rug, patterned, 4×3}
+    fields:
+      material: {ar: نانو, en: Nano}
+      pattern: {ar: مشجر, en: Patterned}
+      size: {ar: 4 × 3 م, en: 4 × 3 m}
+    images:
+      - {src: rugs/nano-patterned-4x3/main.jpg}
+      - {src: rugs/nano-patterned-4x3/second.jpg}
+
+  - slug: rug-runner-100x300
+    collection: rugs
+    name: {ar: مدة 100×300, en: Runner rug 100×300}
+    fields:
+      type: {ar: مدة, en: Runner}
+      size: {ar: 100 × 300 سم, en: 100 × 300 cm}
+    images:
+      - {src: rugs/runner-100x300/main.jpg}
+      - {src: rugs/runner-100x300/second.jpg}
+
+  # ---------------------------------------------------------------- prayer rugs
+  # File name "نركي أولترا" read as "تركي أولترا" (the other Turkish rug's
+  # spelling). English names transliterate the model names; confirm.
+  - slug: prayer-rug-turkish-dudia
+    collection: prayer-rugs
+    name: {ar: سجاد صلاة تركي دوديا, en: Turkish prayer rug Dudia}
+    fields:
+      model: {ar: دوديا, en: Dudia}
+      type: {ar: سجادة صلاة, en: Prayer rug}
+    images:
+      - {src: prayer-rugs/turkish-dudia/main.jpg}
+      - {src: prayer-rugs/turkish-dudia/second.jpg}
+
+  - slug: prayer-rug-simli-white
+    collection: prayer-rugs
+    name: {ar: سجاد صلاة سيملي أبيض, en: Simli prayer rug (white)}
+    fields:
+      model: {ar: سيملي, en: Simli}
+      type: {ar: سجادة صلاة, en: Prayer rug}
+    images:
+      - {src: prayer-rugs/simli-white/main.jpg}
+      - {src: prayer-rugs/simli-white/second.jpg}
+
+  - slug: prayer-rug-turkish-ultra
+    collection: prayer-rugs
+    name: {ar: سجاد صلاة تركي أولترا, en: Turkish prayer rug Ultra}
+    fields:
+      model: {ar: أولترا, en: Ultra}
+      type: {ar: سجادة صلاة, en: Prayer rug}
+    images:
+      - {src: prayer-rugs/turkish-ultra/main.jpg}
+      - {src: prayer-rugs/turkish-ultra/second.jpg}
+
+  # ---------------------------------------------------------------- chairs
+  - slug: chair-waha
+    collection: chairs
+    name: {ar: كرسي الواحة, en: Al Waha chair}
+    fields:
+      type: {ar: كرسي بلاستيك, en: Plastic chair}
+    images:
+      - {src: chairs/waha/main.jpg}
+      - {src: chairs/waha/second.jpg}
+
+  - slug: chair-heavy-armless
+    collection: chairs
+    name: {ar: كرسي بلاستيك ثقيل بدون يد, en: Heavy plastic chair, armless}
+    fields:
+      type: {ar: كرسي بلاستيك ثقيل بدون يد, en: Heavy plastic chair, armless}
+    images:
+      - {src: chairs/heavy-armless/main.jpg}
+      - {src: chairs/heavy-armless/second.jpg}
+
+  - slug: chair-heavy-arms
+    collection: chairs
+    name: {ar: كرسي ثقيل بيد, en: Heavy chair with arms}
+    fields:
+      type: {ar: كرسي بلاستيك ثقيل بيد, en: Heavy plastic chair with arms}
+    images:
+      - {src: chairs/heavy-arms/main.jpg}
+      - {src: chairs/heavy-arms/second.jpg}
+
+  - slug: chair-rattan
+    collection: chairs
+    name: {ar: كرسي راتان بلاستيك وطني, en: Plastic rattan chair}
+    fields:
+      type: {ar: كرسي راتان بلاستيك, en: Plastic rattan chair}
+      origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
+    images:
+      - {src: chairs/rattan/main.jpg}
+      - {src: chairs/rattan/second.jpg}
+
+  - slug: chair-metal-legs
+    collection: chairs
+    name: {ar: كرسي رجل حديد, en: Chair with metal legs}
+    fields:
+      type: {ar: كرسي بلاستيك برجل حديد, en: Plastic chair, metal legs}
+    images:
+      - {src: chairs/metal-legs/main.jpg}
+      - {src: chairs/metal-legs/second.jpg}
+
+  - slug: chair-star-armless
+    collection: chairs
+    name: {ar: كرسي ستار بدون يد, en: Star chair, armless}
+    fields:
+      model: {ar: ستار, en: Star}
+      type: {ar: كرسي بلاستيك بدون يد, en: Plastic chair, armless}
+    images:
+      - {src: chairs/star-armless/main.jpg}
+      - {src: chairs/star-armless/second.jpg}
+
+  - slug: chair-magic
+    collection: chairs
+    name: {ar: كرسي ماجيك, en: Magic chair}
+    fields:
+      model: {ar: ماجيك, en: Magic}
+      type: {ar: كرسي بلاستيك, en: Plastic chair}
+    images:
+      - {src: chairs/magic/main.jpg}
+      - {src: chairs/magic/second.jpg}
+
+  # ---------------------------------------------------------------- plastic tables
   - slug: round-plastic-table
     collection: plastic-tables
     name: {ar: طاولة بلاستيك دائرية, en: Round plastic table}
@@ -141,8 +598,9 @@ products:
       - {src: plastic-tables/square-table/beige.jpg, label: {ar: بيج, en: Beige}}
       - {src: plastic-tables/square-table/white.jpg, label: {ar: أبيض, en: White}}
 
-  # The two dimension photos were filed in each other's folders; they are
-  # assigned here by the material they show. Confirm with the client.
+  # ---------------------------------------------------------------- camp bags
+  # The Chinese model's two dimension photos were filed in each other's
+  # folders; they are assigned by the material they show. Confirm.
   - slug: camp-bag-chinese
     collection: camp-bags
     name: {ar: شنطة عزبة (صيني), en: Camp bag (Chinese)}
@@ -156,6 +614,7 @@ products:
       - {src: camp-bags/chinese/dimensions.jpg, label: {ar: المقاسات, en: Dimensions}}
       - {src: camp-bags/chinese/detail.jpg, label: {ar: تفاصيل, en: Detail}}
 
+  # New photos (2026-10-08) replace the earlier three.
   - slug: camp-bag-tanzanian
     collection: camp-bags
     name: {ar: شنطة عزبة (تنزاني), en: Camp bag (Tanzanian)}
@@ -165,12 +624,11 @@ products:
       size: {ar: "70 × 45 · 59 × 38 · 50 × 35 سم", en: "70 × 45 · 59 × 38 · 50 × 35 cm"}
     images:
       - {src: camp-bags/tanzanian/main.jpg}
-      - {src: camp-bags/tanzanian/dimensions.jpg, label: {ar: المقاسات, en: Dimensions}}
-      - {src: camp-bags/tanzanian/detail.jpg, label: {ar: تفاصيل, en: Detail}}
+      - {src: camp-bags/tanzanian/open.jpg, label: {ar: الطقم مفتوح, en: Set, open}}
 
-# Home page: the hero product (its main image is used) and the editorial
-# rows, in order. The hero needs a product shown whole: the RT-M101 photos
-# are cropped at the edges.
+# Home page: the hero product (its main image is used); `featured` feeds the
+# mega menu (first two) and the collections page's product grid.
 home:
   hero: iron-bunk-bed
-  featured: [rt-m101-folding-bed, iron-bunk-bed, flint-comforter, round-plastic-table]
+  featured: [rt-m101-folding-bed, flint-comforter, chair-waha, rug-ceramic-patterned-230x160,
+             prayer-rug-simli-white, blanket-bifi, iron-bunk-bed, round-plastic-table]

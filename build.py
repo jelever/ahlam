@@ -35,7 +35,8 @@ OUT = ROOT / "_site"
 CACHE = ROOT / ".cache" / "img"
 LANGS = ("ar", "en")
 WIDTHS = (640, 1200, 2000)
-FIELD_ORDER = ("model", "type", "size", "contents", "origin", "code")
+FIELD_ORDER = ("brand", "model", "code", "type", "material", "pattern", "size",
+               "contents", "filling", "weight", "origin")
 
 
 class BuildError(Exception):
@@ -459,6 +460,10 @@ BANNED = [
 # visitor reads or hears (use parentheses, a colon or "|" instead).
 DASH = re.compile("[–—]")
 
+# Product brands are not shown, at the owner's request (2026-10-08): the site
+# presents the company's range, not other companies' names.
+BRANDS = re.compile(rf"\b(ROSHINA|ROSHAN|CROWN)\b|(?<![{AR}])(روشينا|روشن|كراون)(?![{AR}])", re.I)
+
 
 def check(site) -> list[str]:
     base = site["base_path"]
@@ -489,6 +494,8 @@ def check(site) -> list[str]:
         for pattern in BANNED:
             for m in pattern.finditer(text):
                 errors.append(f"{rel}: shop wording '{m.group(0)}'")
+        for m in BRANDS.finditer(text):
+            errors.append(f"{rel}: brand name '{m.group(0)}'")
         for m in DASH.finditer(text):
             errors.append(f"{rel}: dash in visible text: '{text[max(0, m.start() - 25):m.end() + 25].strip()}'")
     # Quick-view data: every image and page it points at must exist too.
@@ -497,6 +504,8 @@ def check(site) -> list[str]:
         data = json.loads(text[text.index("{"):text.rindex("}") + 1])
         if DASH.search(json.dumps(data, ensure_ascii=False)):
             errors.append(f"{data_file.name}: dash in quick-view text")
+        if BRANDS.search(json.dumps(data, ensure_ascii=False)):
+            errors.append(f"{data_file.name}: brand name in quick-view text")
         for slug, p in data["products"].items():
             refs = [p["url"]] + [im["src"] for im in p["images"]]
             refs += [part.strip().split(" ")[0] for im in p["images"] for part in im["srcset"].split(",")]
