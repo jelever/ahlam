@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="hero-media load-scale">
-        <div class="hero-img img-zoom" data-parallax>{{ m.picture(hero.images[0].src, L(hero.name), sizes='(max-width: 1024px) 100vw, 56vw', lazy=False) }}</div>
+        <div class="hero-img img-zoom" data-parallax>{{ m.picture(hero_image or hero.images[0].src, L(hero.name), sizes='(max-width: 1024px) 100vw, 56vw', lazy=False) }}</div>
       </div>
     </div>
   </div>

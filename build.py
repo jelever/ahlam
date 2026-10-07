@@ -342,7 +342,8 @@ def build(release: bool = False):
 
     featured = [products[s] for s in home["featured"]]
     pages: list[tuple[str, str, dict]] = [
-        ("/", "home.html", {"page": "home", "hero": products[home["hero"]]}),
+        ("/", "home.html", {"page": "home", "hero": products[home["hero"]],
+                            "hero_image": home.get("hero_image")}),
         ("/collections/", "collections.html", {"page": "collections"}),
         ("/products/", "products.html", {"page": "products"}),
         ("/about/", "about.html", {"page": "about"}),

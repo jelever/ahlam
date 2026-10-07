@@ -630,6 +630,9 @@ products:
 # Home page: the hero product (its main image is used); `featured` feeds the
 # mega menu (first two) and the collections page's product grid.
 home:
-  hero: iron-bunk-bed
+  hero: rug-nano-patterned-4x3
+  # optional: a specific image of the hero product (the rug's main image has a
+  # white border; its second is the same room scene, full frame)
+  hero_image: rugs/nano-patterned-4x3/second.jpg
   featured: [rt-m101-folding-bed, flint-comforter, chair-waha, rug-ceramic-patterned-230x160,
              prayer-rug-simli-white, blanket-bifi, iron-bunk-bed, round-plastic-table]

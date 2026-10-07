@@ -948,3 +948,7 @@ html[lang="ar"] .qv-title { letter-spacing: 0; line-height: 1.4; }
 .lang-seg a.is-active { background: var(--ink); color: var(--white); }
 .lang-seg a[lang="ar"] { font-family: "Alexandria", system-ui, sans-serif; }
 .lang-seg a[lang="en"] { font-family: "Figtree", system-ui, sans-serif; letter-spacing: 0; }
+
+/* page-hero photos fill the media box instead of sizing it: a portrait photo
+   (the collections runner) otherwise stretched the hero past the screen */
+.page-hero-media img { position: absolute; inset: 0; }

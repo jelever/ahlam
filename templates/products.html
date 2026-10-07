@@ -2,7 +2,7 @@
 {% block title %}{{ t.products_title }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ t.hero_lead }}{% endblock %}
 {% block main %}
-{% call m.page_hero(t.products_eyebrow, t.products_title, t.products_lead, 'metal-beds/single-iron-bed/main.jpg', [(t.nav_products, None)], alt=L(products['single-iron-bed'].name)) %}
+{% call m.page_hero(t.products_eyebrow, t.products_title, t.products_lead, 'ambience/flint-room.jpg', [(t.nav_products, None)], alt=L(products['flint-comforter'].name)) %}
 <div class="chip-list load-in" style="--d:.28s; margin-top: 26px">
   {% for c in collections %}<a class="chip" href="#{{ c.slug }}">{{ L(c.name) }}</a>{% endfor %}
 </div>
