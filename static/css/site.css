@@ -952,3 +952,7 @@ html[lang="ar"] .qv-title { letter-spacing: 0; line-height: 1.4; }
 /* page-hero photos fill the media box instead of sizing it: a portrait photo
    (the collections runner) otherwise stretched the hero past the screen */
 .page-hero-media img { position: absolute; inset: 0; }
+
+/* products menu: collections with their model counts */
+.mega-col a.mega-coll { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.mega-count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }

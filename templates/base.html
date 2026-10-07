@@ -50,14 +50,15 @@
         <button class="nav-caret" type="button" aria-expanded="false" aria-label="{{ t.nav_products }}">{{ m.icon('i-chev-d') }}</button>
         <div class="mega">
           <div class="mega-inner">
+            {# collections in two columns with their model counts; individual
+               products live on the products page (48 links did not fit) #}
+            {% set half = (collections | length + 1) // 2 %}
+            {% for group in [collections[:half], collections[half:]] %}
             <div class="mega-col">
-              <p class="mega-title">{{ t.mega_collections }}</p>
-              {% for c in collections %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}
+              <p class="mega-title"{% if not loop.first %} aria-hidden="true"{% endif %}>{{ t.mega_collections if loop.first else ' ' }}</p>
+              {% for c in group %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="mega-coll"><span>{{ L(c.name) }}</span><span class="mega-count">{{ c.products | length }}</span></a>{% endfor %}
             </div>
-            <div class="mega-col">
-              <p class="mega-title">{{ t.nav_products }}</p>
-              {% for p in products.values() %}<a href="{{ url('/products/' ~ p.slug ~ '/') }}">{{ L(p.name) }}</a>{% endfor %}
-            </div>
+            {% endfor %}
             {% for fp in mega_featured %}
             <a href="{{ url('/products/' ~ fp.slug ~ '/') }}" class="mega-feature">
               <span class="mega-feature-img img-zoom">{{ m.picture(fp.images[0].src, '', sizes='320px') }}</span>

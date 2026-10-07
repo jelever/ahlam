@@ -64,6 +64,12 @@ def bilingual(value, where: str):
         missing = [lang for lang in LANGS if not value.get(lang)]
         if missing:
             raise BuildError(f"{where}: missing {', '.join(missing)}")
+        # In YAML flow style {ar: ..., en: a, b} a comma ends the value and
+        # "b" becomes a stray key: quote any text that contains a comma.
+        extra = set(value) - set(LANGS)
+        if extra:
+            raise BuildError(f"{where}: unexpected keys {sorted(map(str, extra))}; "
+                             "a comma in an unquoted value? quote the text")
         return value
     if isinstance(value, (str, int, float)):
         return {lang: str(value) for lang in LANGS}
@@ -341,6 +347,7 @@ def build(release: bool = False):
     soon = [c for c in collections.values() if c["soon"]]
 
     featured = [products[s] for s in home["featured"]]
+    mega_featured = [products[s] for s in home.get("mega", home["featured"][:2])]
     pages: list[tuple[str, str, dict]] = [
         ("/", "home.html", {"page": "home", "hero": products[home["hero"]],
                             "hero_image": home.get("hero_image")}),
@@ -368,7 +375,7 @@ def build(release: bool = False):
             context = dict(
                 ctx, lang=lang, dir="rtl" if lang == "ar" else "ltr", t=t, L=L, url=url,
                 path=path, collections=published, soon=soon, products=products,
-                featured=featured, mega_featured=featured[:2],
+                featured=featured, mega_featured=mega_featured,
                 contact_items=contact_items(site, t, lang),
                 other_lang="en" if lang == "ar" else "ar",
                 other_url=site["base_path"] + page_path("en" if lang == "ar" else "ar", path),

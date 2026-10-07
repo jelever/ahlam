@@ -129,7 +129,7 @@ products:
     collection: metal-beds
     name: {ar: سرير حديد قابل للطي بشبك ثقيل, en: Heavy-mesh folding iron bed}
     fields:
-      type: {ar: سرير حديد قابل للطي، شبك ثقيل, en: Folding iron bed, heavy mesh}
+      type: {ar: سرير حديد قابل للطي، شبك ثقيل, en: "Folding iron bed, heavy mesh"}
       origin: {ar: صناعة وطنية, en: Made in Saudi Arabia}
     images:
       - {src: metal-beds/heavy-mesh-folding-bed/folded.jpg, label: {ar: مطوي, en: Folded}}
@@ -327,7 +327,7 @@ products:
 
   - slug: pillow-memory-foam-mesh
     collection: pillows
-    name: {ar: مخدة ميموري فوم غطاء شبكي, en: Memory foam pillow, mesh cover}
+    name: {ar: مخدة ميموري فوم غطاء شبكي, en: "Memory foam pillow, mesh cover"}
     fields:
       type: {ar: مخدة ميموري فوم, en: Memory foam pillow}
     images:
@@ -347,7 +347,7 @@ products:
   # both are published as supplied, pending a distinct name from the client.
   - slug: rug-ceramic-plain-160x230
     collection: rugs
-    name: {ar: فرش سراميك سادة 160×230, en: Ceramic rug, plain, 160×230}
+    name: {ar: فرش سراميك سادة 160×230, en: "Ceramic rug, plain, 160×230"}
     fields:
       material: {ar: سراميك, en: Ceramic}
       pattern: {ar: سادة, en: Plain}
@@ -358,7 +358,7 @@ products:
 
   - slug: rug-ceramic-patterned-230x160
     collection: rugs
-    name: {ar: فرش سراميك مشجر 230×160, en: Ceramic rug, patterned, 230×160}
+    name: {ar: فرش سراميك مشجر 230×160, en: "Ceramic rug, patterned, 230×160"}
     fields:
       material: {ar: سراميك, en: Ceramic}
       pattern: {ar: مشجر, en: Patterned}
@@ -369,7 +369,7 @@ products:
 
   - slug: rug-ceramic-patterned-290x190-a
     collection: rugs
-    name: {ar: فرش سراميك مشجر 290×190, en: Ceramic rug, patterned, 290×190}
+    name: {ar: فرش سراميك مشجر 290×190, en: "Ceramic rug, patterned, 290×190"}
     fields:
       material: {ar: سراميك, en: Ceramic}
       pattern: {ar: مشجر, en: Patterned}
@@ -380,7 +380,7 @@ products:
 
   - slug: rug-ceramic-plain-290x190
     collection: rugs
-    name: {ar: فرش سيراميك سادة 290×190, en: Ceramic rug, plain, 290×190}
+    name: {ar: فرش سيراميك سادة 290×190, en: "Ceramic rug, plain, 290×190"}
     fields:
       material: {ar: سيراميك, en: Ceramic}
       pattern: {ar: سادة, en: Plain}
@@ -391,7 +391,7 @@ products:
 
   - slug: rug-ceramic-patterned-290x190-b
     collection: rugs
-    name: {ar: فرش سيراميك مشجر 290×190, en: Ceramic rug, patterned, 290×190 (medallion)}
+    name: {ar: فرش سيراميك مشجر 290×190, en: "Ceramic rug, patterned, 290×190 (medallion)"}
     fields:
       material: {ar: سيراميك, en: Ceramic}
       pattern: {ar: مشجر, en: Patterned}
@@ -402,7 +402,7 @@ products:
 
   - slug: rug-nano-fur-plain-190x290
     collection: rugs
-    name: {ar: فرش نانو فرو سادة 190×290, en: Nano fur rug, plain, 190×290}
+    name: {ar: فرش نانو فرو سادة 190×290, en: "Nano fur rug, plain, 190×290"}
     fields:
       material: {ar: نانو فرو, en: Nano fur}
       pattern: {ar: سادة, en: Plain}
@@ -413,7 +413,7 @@ products:
 
   - slug: rug-nano-fur-plain-2x3
     collection: rugs
-    name: {ar: فرش نانو فرو سادة 2×3, en: Nano fur rug, plain, 2×3}
+    name: {ar: فرش نانو فرو سادة 2×3, en: "Nano fur rug, plain, 2×3"}
     fields:
       material: {ar: نانو فرو, en: Nano fur}
       pattern: {ar: سادة, en: Plain}
@@ -424,7 +424,7 @@ products:
 
   - slug: rug-nano-fur-patterned-190x290
     collection: rugs
-    name: {ar: فرش نانو فرو مشجر 190×290, en: Nano fur rug, patterned, 190×290}
+    name: {ar: فرش نانو فرو مشجر 190×290, en: "Nano fur rug, patterned, 190×290"}
     fields:
       material: {ar: نانو فرو, en: Nano fur}
       pattern: {ar: مشجر, en: Patterned}
@@ -435,7 +435,7 @@ products:
 
   - slug: rug-nano-patterned-230x160
     collection: rugs
-    name: {ar: فرش نانو مشجر 230×160, en: Nano rug, patterned, 230×160}
+    name: {ar: فرش نانو مشجر 230×160, en: "Nano rug, patterned, 230×160"}
     fields:
       material: {ar: نانو, en: Nano}
       pattern: {ar: مشجر, en: Patterned}
@@ -446,7 +446,7 @@ products:
 
   - slug: rug-nano-patterned-2x3
     collection: rugs
-    name: {ar: فرش نانو مشجر 2×3, en: Nano rug, patterned, 2×3}
+    name: {ar: فرش نانو مشجر 2×3, en: "Nano rug, patterned, 2×3"}
     fields:
       material: {ar: نانو, en: Nano}
       pattern: {ar: مشجر, en: Patterned}
@@ -457,7 +457,7 @@ products:
 
   - slug: rug-nano-patterned-4x3
     collection: rugs
-    name: {ar: فرش نانو مشجر 4×3, en: Nano rug, patterned, 4×3}
+    name: {ar: فرش نانو مشجر 4×3, en: "Nano rug, patterned, 4×3"}
     fields:
       material: {ar: نانو, en: Nano}
       pattern: {ar: مشجر, en: Patterned}
@@ -521,9 +521,9 @@ products:
 
   - slug: chair-heavy-armless
     collection: chairs
-    name: {ar: كرسي بلاستيك ثقيل بدون يد, en: Heavy plastic chair, armless}
+    name: {ar: كرسي بلاستيك ثقيل بدون يد, en: "Heavy plastic chair, armless"}
     fields:
-      type: {ar: كرسي بلاستيك ثقيل بدون يد, en: Heavy plastic chair, armless}
+      type: {ar: كرسي بلاستيك ثقيل بدون يد, en: "Heavy plastic chair, armless"}
     images:
       - {src: chairs/heavy-armless/main.jpg}
       - {src: chairs/heavy-armless/second.jpg}
@@ -551,17 +551,17 @@ products:
     collection: chairs
     name: {ar: كرسي رجل حديد, en: Chair with metal legs}
     fields:
-      type: {ar: كرسي بلاستيك برجل حديد, en: Plastic chair, metal legs}
+      type: {ar: كرسي بلاستيك برجل حديد, en: "Plastic chair, metal legs"}
     images:
       - {src: chairs/metal-legs/main.jpg}
       - {src: chairs/metal-legs/second.jpg}
 
   - slug: chair-star-armless
     collection: chairs
-    name: {ar: كرسي ستار بدون يد, en: Star chair, armless}
+    name: {ar: كرسي ستار بدون يد, en: "Star chair, armless"}
     fields:
       model: {ar: ستار, en: Star}
-      type: {ar: كرسي بلاستيك بدون يد, en: Plastic chair, armless}
+      type: {ar: كرسي بلاستيك بدون يد, en: "Plastic chair, armless"}
     images:
       - {src: chairs/star-armless/main.jpg}
       - {src: chairs/star-armless/second.jpg}
@@ -611,7 +611,7 @@ products:
       size: {ar: "70 × 45 · 59 × 38 · 50 × 35 سم", en: "70 × 45 · 59 × 38 · 50 × 35 cm"}
     images:
       - {src: camp-bags/chinese/main.jpg}
-      - {src: camp-bags/chinese/open.jpg, label: {ar: الطقم مفتوح, en: Set, open}}
+      - {src: camp-bags/chinese/open.jpg, label: {ar: الطقم مفتوح, en: "Set, open"}}
       - {src: camp-bags/chinese/dimensions.jpg, label: {ar: المقاسات, en: Dimensions}}
       - {src: camp-bags/chinese/detail.jpg, label: {ar: تفاصيل, en: Detail}}
 
@@ -625,7 +625,7 @@ products:
       size: {ar: "70 × 45 · 59 × 38 · 50 × 35 سم", en: "70 × 45 · 59 × 38 · 50 × 35 cm"}
     images:
       - {src: camp-bags/tanzanian/main.jpg}
-      - {src: camp-bags/tanzanian/open.jpg, label: {ar: الطقم مفتوح, en: Set, open}}
+      - {src: camp-bags/tanzanian/open.jpg, label: {ar: الطقم مفتوح, en: "Set, open"}}
 
 # Home page: the hero product (its main image is used); `featured` feeds the
 # mega menu (first two) and the collections page's product grid.
@@ -636,3 +636,4 @@ home:
   hero_image: rugs/nano-patterned-4x3/second.jpg
   featured: [rt-m101-folding-bed, flint-comforter, chair-waha, rug-ceramic-patterned-230x160,
              prayer-rug-simli-white, blanket-bifi, iron-bunk-bed, round-plastic-table]
+  mega: [rt-m101-folding-bed, rug-nano-patterned-230x160]
