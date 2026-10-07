@@ -54,7 +54,7 @@ collections:
     summary:
       ar: مخدات فندقية ومخدات ميموري فوم.
       en: Hotel pillows and memory foam pillows.
-    cover: pillows/classic/main.jpg
+    cover: pillows/hotel-50x70/main.jpg
 
   - slug: rugs
     name: {ar: الفرشات, en: Floor rugs}
