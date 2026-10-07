@@ -40,7 +40,7 @@ collections:
     summary:
       ar: لحافات شتوية وصيفية وقطنية للاستخدام المنزلي والتجاري.
       en: Winter, summer and cotton comforters for home and commercial use.
-    cover: comforters/flint/main.jpg
+    cover: comforters/dantil/main.jpg
 
   - slug: blankets
     name: {ar: البطانيات, en: Blankets}
@@ -54,14 +54,14 @@ collections:
     summary:
       ar: مخدات فندقية ومخدات ميموري فوم.
       en: Hotel pillows and memory foam pillows.
-    cover: pillows/hotel-50x70/main.jpg
+    cover: pillows/classic/main.jpg
 
   - slug: rugs
     name: {ar: الفرشات, en: Floor rugs}
     summary:
       ar: فرشات سراميك ونانو فرو بمقاسات متعددة، سادة ومشجرة.
       en: Ceramic and nano fur rugs in several sizes, plain and patterned.
-    cover: rugs/ceramic-patterned-230x160/main.jpg
+    cover: rugs/nano-patterned-230x160/main.jpg
 
   - slug: prayer-rugs
     name: {ar: سجاد الصلاة, en: Prayer rugs}
@@ -89,7 +89,7 @@ collections:
     summary:
       ar: أطقم شنط تخزين متداخلة للرحلات والعزب.
       en: Nesting storage bag sets for trips and camps.
-    cover: camp-bags/chinese/main.jpg
+    cover: camp-bags/tanzanian/main.jpg
 
   - slug: event-chairs
     name: {ar: كراسي المناسبات, en: Event chairs}
@@ -315,6 +315,7 @@ products:
       weight: {ar: 1500 جرام, en: 1500 g}
     images:
       - {src: pillows/hotel-50x70/main.jpg}
+      - {src: pillows/hotel-50x70/second.jpg}
 
   - slug: pillow-hotel
     collection: pillows
