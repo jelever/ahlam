@@ -56,7 +56,7 @@
             {% for group in [collections[:half], collections[half:]] %}
             <div class="mega-col">
               <p class="mega-title"{% if not loop.first %} aria-hidden="true"{% endif %}>{{ t.mega_collections if loop.first else ' ' }}</p>
-              {% for c in group %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="mega-coll" data-preview="{{ c.products[:2] | map(attribute='slug') | join(',') }}"><span>{{ L(c.name) }}</span><span class="mega-count">{{ c.products | length }}</span></a>{% endfor %}
+              {% for c in group %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="mega-coll" data-preview="{{ c.preview_slugs | join(',') }}"><span>{{ L(c.name) }}</span><span class="mega-count">{{ c.products | length }}</span></a>{% endfor %}
             </div>
             {% endfor %}
             {% for fp in mega_featured %}

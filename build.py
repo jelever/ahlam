@@ -128,6 +128,14 @@ def load_content():
     for c in collections.values():
         if not c["soon"] and not c["products"]:
             raise BuildError(f"collection {c['slug']} has no products; mark it soon: true")
+        # The two products the products menu previews on hover: `preview` in
+        # catalog.yml, else the collection's first two.
+        own = [p["slug"] for p in c["products"]]
+        chosen = c.get("preview") or own[:2]
+        stray = [s for s in chosen if s not in own]
+        if stray:
+            raise BuildError(f"collection {c['slug']}: preview {stray} not in this collection")
+        c["preview_slugs"] = chosen[:2]
 
     home = catalog["home"]
     for slug in home["featured"]:

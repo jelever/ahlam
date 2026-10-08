@@ -62,6 +62,8 @@ collections:
       ar: فرشات سراميك ونانو فرو بمقاسات متعددة، سادة ومشجرة.
       en: Ceramic and nano fur rugs in several sizes, plain and patterned.
     cover: rugs/nano-patterned-230x160/main.jpg
+    # products menu hover preview (default: the first two products)
+    preview: [rug-nano-patterned-2x3, rug-nano-patterned-230x160]
 
   - slug: prayer-rugs
     name: {ar: سجاد الصلاة, en: Prayer rugs}
