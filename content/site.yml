@@ -2,10 +2,12 @@
 # catalog.yml; templates hold no business data.
 
 # Public address of the site. base_path is the folder GitHub Pages serves
-# the site from ("/ahlam" on jelever.github.io/ahlam). Set it to "" when a
-# custom domain points at the site, and change base_url with it.
-base_url: https://jelever.github.io
-base_path: /ahlam
+# the site from: "" on a custom domain (the site is at its root), "/ahlam"
+# on jelever.github.io/ahlam. base_url is used for canonical, hreflang,
+# sitemap and share-preview addresses.
+# Custom domain since 2026-10-08 (set in the repo's Settings -> Pages).
+base_url: https://ahlam.elgaily.com
+base_path: ""
 
 name:
   ar: أحلام القمر
