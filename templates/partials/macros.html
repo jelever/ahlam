@@ -18,8 +18,15 @@
 <a href="{{ href }}" class="arrow-link {{ cls }}"><span>{{ text }}</span><span class="arrow-dot">{{ icon('i-arrow-up') }}</span></a>
 {%- endmacro %}
 
+{# Model count. Arabic counted nouns: 1 موديل واحد, 2 موديلان, 3-10 N موديلات,
+   11 and up N موديل (the owner's choice over the formal موديلًا). #}
 {% macro count(c) -%}
-{% if c.products | length == 1 %}{{ t.model_one }}{% else %}{{ c.products | length }} {{ t.models }}{% endif %}
+{%- set n = c.products | length -%}
+{%- if n == 1 -%}{{ t.model_one }}
+{%- elif lang == 'ar' and n == 2 -%}{{ t.model_two }}
+{%- elif lang == 'ar' and n > 10 -%}{{ n }} {{ t.model_many }}
+{%- else -%}{{ n }} {{ t.models }}
+{%- endif -%}
 {%- endmacro %}
 
 {# The first detail worth showing in a card: size, else model. #}

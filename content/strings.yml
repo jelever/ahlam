@@ -69,6 +69,8 @@ products_lead:
   en: One image per item. Open a product to see the details available.
 models: {ar: موديلات, en: models}
 model_one: {ar: موديل واحد, en: 1 model}
+model_two: {ar: موديلان, en: 2 models}
+model_many: {ar: موديل, en: models}
 more_in_collection: {ar: منتجات أخرى من المجموعة, en: More from this collection}
 other_collections: {ar: مجموعات أخرى, en: Other collections}
 images_shown: {ar: صور المنتج, en: Product photos}
