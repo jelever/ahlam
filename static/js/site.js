@@ -309,6 +309,84 @@
     });
   });
 
+  /* ---------- Products menu: featured photos follow the hovered collection ---------- */
+  // Hover or focus a collection and, after a short pause (so a cursor
+  // passing over other names on its way to the photos changes nothing), the
+  // two featured slots show that collection's first two products. Moving
+  // onto the photos keeps them; closing the menu restores the defaults.
+  // A one-product collection leaves slot two empty.
+  //
+  // The new photos are fetched and decoded while the old ones stay on
+  // screen; only then does each slot fade out (0.12s), swap, and fade back
+  // in (0.2s), slot two 40ms after slot one. A newer hover cancels an older
+  // swap still in flight.
+  (() => {
+    const mega = $(".has-mega");
+    const panel = mega && $(".mega", mega);
+    const slots = mega ? $$("[data-mega-slot]", mega) : [];
+    const P = (window.AHLAM || {}).products || {};
+    if (!slots.length || !Object.keys(P).length) return;
+    const defaults = slots.map((s) => [s.innerHTML, s.getAttribute("href")]);
+    const OUT = 120, STAGGER = 40;
+    const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
+    const preload = (im) => {
+      const img = new Image();
+      img.sizes = "320px"; img.srcset = im.srcset; img.src = im.src;
+      return (img.decode ? img.decode() : Promise.resolve()).catch(() => {});
+    };
+    const fill = (slot, p, im) => {
+      slot.setAttribute("href", p.url);
+      slot.style.visibility = "";
+      const img = $("img", slot);
+      img.src = im.src; img.srcset = im.srcset; img.alt = "";
+      img.className = im.cutout ? "is-cutout" : "is-photo";
+      $("strong", slot).textContent = p.name;
+      $(".mega-feature-copy .muted", slot).textContent = p.collection;
+    };
+    let current = null;
+    let token = 0;
+    let timer;
+    const restore = () => {
+      token++;
+      slots.forEach((s, i) => {
+        s.innerHTML = defaults[i][0]; s.setAttribute("href", defaults[i][1]);
+        s.style.visibility = ""; s.classList.remove("is-swapping");
+      });
+      panel.classList.remove("is-previewing");
+    };
+    const show = async (link) => {
+      if (link === current) return;
+      current = link;
+      const items = (link.dataset.preview || "").split(",").map((k) => P[k]).filter(Boolean);
+      if (!items.length) return;
+      const mine = ++token;
+      await Promise.all(items.map((p) => preload(p.images[0])));
+      if (mine !== token) return;                       // a newer hover took over
+      panel.classList.add("is-previewing");
+      slots.forEach((s, i) => { s.style.setProperty("--swap-d", `${i * STAGGER}ms`); s.classList.add("is-swapping"); });
+      // each slot swaps the moment its own fade-out ends: no blank pause
+      slots.forEach((s, i) => wait(OUT + i * STAGGER).then(() => {
+        if (mine !== token) return;
+        if (items[i]) {
+          fill(s, items[i], items[i].images[0]);
+          void s.offsetWidth;                            // start the fade-in from the hidden state
+          s.classList.remove("is-swapping");
+        } else {
+          s.style.visibility = "hidden";                 // stays faded out, then hidden
+        }
+      }));
+    };
+    $$(".mega-coll", mega).forEach((link) => {
+      link.addEventListener("pointerenter", () => { clearTimeout(timer); timer = setTimeout(() => show(link), 120); });
+      link.addEventListener("pointerleave", () => clearTimeout(timer));
+      link.addEventListener("focus", () => show(link));
+    });
+    // restore once the menu has closed and faded out, unless it was reopened
+    new MutationObserver(() => {
+      if (!mega.classList.contains("is-open") && current) { current = null; clearTimeout(timer); setTimeout(() => { if (!mega.classList.contains("is-open") && !current) restore(); }, 400); }
+    }).observe(mega, { attributes: true, attributeFilter: ["class"] });
+  })();
+
   /* ---------- Misc ---------- */
   $$("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });
 })();

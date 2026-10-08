@@ -56,11 +56,11 @@
             {% for group in [collections[:half], collections[half:]] %}
             <div class="mega-col">
               <p class="mega-title"{% if not loop.first %} aria-hidden="true"{% endif %}>{{ t.mega_collections if loop.first else ' ' }}</p>
-              {% for c in group %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="mega-coll"><span>{{ L(c.name) }}</span><span class="mega-count">{{ c.products | length }}</span></a>{% endfor %}
+              {% for c in group %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="mega-coll" data-preview="{{ c.products[:2] | map(attribute='slug') | join(',') }}"><span>{{ L(c.name) }}</span><span class="mega-count">{{ c.products | length }}</span></a>{% endfor %}
             </div>
             {% endfor %}
             {% for fp in mega_featured %}
-            <a href="{{ url('/products/' ~ fp.slug ~ '/') }}" class="mega-feature">
+            <a href="{{ url('/products/' ~ fp.slug ~ '/') }}" class="mega-feature" data-mega-slot>
               <span class="mega-feature-img img-zoom">{{ m.picture(fp.images[0].src, '', sizes='320px') }}</span>
               <span class="mega-feature-copy">
                 <span class="eyebrow">{{ t.mega_featured }}</span>

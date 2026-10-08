@@ -956,3 +956,17 @@ html[lang="ar"] .qv-title { letter-spacing: 0; line-height: 1.4; }
 /* products menu: collections with their model counts */
 .mega-col a.mega-coll { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
 .mega-count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* products menu preview: once a collection is previewed, the featured slots
+   use a short, even swap (fade out .12s, in .2s, slight rise, slot two 40ms
+   later) instead of the menu's slower entry transition. The selectors out-
+   rank the entry rules (.nav-item.is-open .mega .mega-inner > :nth-child(n)). */
+.nav-item.is-open .mega.is-previewing .mega-inner > .mega-feature {
+  transition: opacity .2s var(--ease-out), transform .25s var(--ease-out);
+  transition-delay: var(--swap-d, 0s);
+}
+.nav-item.is-open .mega.is-previewing .mega-inner > .mega-feature.is-swapping {
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .12s var(--ease), transform .12s var(--ease);
+  transition-delay: var(--swap-d, 0s);
+}
