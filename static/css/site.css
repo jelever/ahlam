@@ -553,6 +553,10 @@ html[dir="rtl"] .page-hero.has-image { padding-inline: clamp(20px, 4vw, 58px) cl
 /* ------------------------------------------------------------------ motion */
 .load-in { animation: fadeUp .9s var(--ease-out) var(--d, 0s) both; }
 .load-scale { animation: scaleIn 1.4s var(--ease-out) .1s both; }
+/* Hold a hero image's entrance until the photo has arrived (site.js adds
+   is-ready), so it plays on the photo instead of on an empty frame that the
+   photo then pops into. */
+.js .load-scale:has(img):not(.is-ready) { animation-play-state: paused; }
 @keyframes scaleIn { from { opacity: 0; clip-path: inset(6% 6% 6% 6% round 18px); transform: scale(1.04); } to { opacity: 1; clip-path: inset(0 0 0 0 round 0); transform: none; } }
 .js [data-reveal] { opacity: 0; transform: translateY(34px); transition: opacity .9s var(--ease-out) var(--d, 0s), transform 1.1s var(--ease-out) var(--d, 0s); }
 .js [data-reveal].is-in { opacity: 1; transform: none; }

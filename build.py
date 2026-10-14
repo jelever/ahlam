@@ -260,11 +260,26 @@ def make_env(site, strings, images: Images):
         largest_w, largest = info["variants"][-1]
         height = round(info["h"] * largest_w / info["w"])
         classes = " ".join(x for x in (cls, "is-cutout" if info["cutout"] else "is-photo") if x)
-        loading = 'fetchpriority="high"' if eager else 'loading="lazy"'
+        # An eager image is a page's first big photo. Its own onload starts
+        # the entrance animation of the frame around it (.load-scale), without
+        # waiting for site.js, which is deferred until the fonts arrive.
+        loading = ("fetchpriority=\"high\" onload=\"this.closest('.load-scale')"
+                   "?.classList.add('is-ready')\"" if eager else 'loading="lazy"')
         return Markup(
             f'<img src="{asset(largest)}" srcset="{srcset}" sizes="{html.escape(sizes)}" '
             f'width="{largest_w}" height="{height}" alt="{html.escape(alt)}" class="{classes}" '
             f'{loading} decoding="async">'
+        )
+
+    def preload(src, sizes="100vw"):
+        """<link rel=preload> for a page's first big image, so the phone
+        starts fetching it while the fonts and stylesheet are still loading
+        instead of after."""
+        info = images.get(src)
+        srcset = ", ".join(f"{asset(rel)} {w}w" for w, rel in info["variants"])
+        return Markup(
+            f'<link rel="preload" as="image" imagesrcset="{srcset}" '
+            f'imagesizes="{html.escape(sizes)}" fetchpriority="high">'
         )
 
     # The logo mark's shapes, used as the <symbol id="i-logo"> of the sprite.
@@ -272,7 +287,7 @@ def make_env(site, strings, images: Images):
     mark_g = Markup(mark[mark.index("<g"):mark.rindex("</g>") + 4])
 
     whatsapp = site["contact"]["whatsapp"]
-    env.globals.update(asset=asset, img=img, site=site, year=dt.date.today().year,
+    env.globals.update(asset=asset, img=img, preload=preload, site=site, year=dt.date.today().year,
                        is_placeholder=is_placeholder, mark_g=mark_g,
                        whatsapp_number=None if is_placeholder(whatsapp) else whatsapp)
     return env

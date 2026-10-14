@@ -25,6 +25,7 @@
   <link rel="icon" href="{{ asset('static/brand/favicon/favicon.svg') }}" type="image/svg+xml">
   <link rel="apple-touch-icon" href="{{ asset('static/brand/favicon/apple-touch-icon.png') }}">
   <link rel="manifest" href="{{ asset('static/brand/favicon/site.webmanifest') }}">
+  {% block preload %}{% endblock %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   {% if lang == 'ar' -%}

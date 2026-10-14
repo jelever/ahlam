@@ -9,16 +9,37 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const lock = (on) => { document.body.style.overflow = on ? "hidden" : ""; };
 
+  /* ---------- Hero image: entrance waits for the photo ----------
+     The image's own onload (written by build.py) adds is-ready. This is the
+     fallback: a photo that failed, or one still loading after 2.5s on a slow
+     connection, does not keep the frame hidden. */
+  $$(".load-scale").forEach((box) => {
+    const img = $("img", box);
+    if (!img) return;
+    const ready = () => box.classList.add("is-ready");
+    if (img.complete) return ready();
+    img.addEventListener("error", ready, { once: true });
+    setTimeout(ready, 2500);
+  });
+
   /* ---------- Header: shadow on scroll, hide when scrolling down ---------- */
   const header = $(".site-header");
-  let lastY = window.scrollY;
+  /* The header changes state only after 24px of travel in one direction.
+     Comparing single scroll events flickered: smooth wheel, trackpad and
+     iOS momentum scrolling send many events of a few pixels each, and every
+     small one un-hid the header. The position is clamped to the page so
+     iOS's rubber-band bounce at the bottom does not count as scrolling up. */
+  let lastY = window.scrollY, travel = 0;
   const onScroll = () => {
-    const y = window.scrollY;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const y = Math.min(Math.max(window.scrollY, 0), Math.max(max, 0));
     header?.classList.toggle("is-scrolled", y > 16);
-    const menuOpen = $(".nav-item.is-open");
-    if (header && !menuOpen) header.classList.toggle("is-hidden", y > 480 && y > lastY + 4);
-    if (y < lastY - 4) header?.classList.remove("is-hidden");
+    const d = y - lastY;
     lastY = y;
+    if (!header || !d) return;
+    travel = (travel > 0) === (d > 0) ? travel + d : d;
+    if (y <= 480 || travel < -24) header.classList.remove("is-hidden");
+    else if (travel > 24 && !$(".nav-item.is-open")) header.classList.add("is-hidden");
   };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });

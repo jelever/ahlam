@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{ L(p.name) }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ L(p.name) }}. {{ L(p.coll.summary) }}{% endblock %}
+{% block preload %}{{ preload(p.images[0].src, '(max-width: 1024px) 100vw, 55vw') }}{% endblock %}
 {% block main %}
 {% set col = p.coll %}
 <section class="section-flush">

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block preload %}{{ preload(hero_image or hero.images[0].src, '(max-width: 1024px) 100vw, 56vw') }}{% endblock %}
 {% block main %}
 <section class="section-flush">
   <div class="container">
