@@ -35,6 +35,9 @@ Everything the client may change is in `content/`:
 | `strings.yml` | every piece of interface text, in Arabic and English |
 | `images/<collection>/<product>/` | original photos (ASCII file names) |
 
+Earlier product photos, no longer used, are kept in `archive/` with a README
+on how to restore them. The build does not read that folder.
+
 **Add a product:** put its photos in `content/images/<collection>/<slug>/`
 and add an entry under `products:` in `catalog.yml`. The first image is the
 one shown everywhere; the others (other colours, real-life photos) appear only

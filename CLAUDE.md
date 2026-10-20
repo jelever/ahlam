@@ -53,14 +53,13 @@ the store features removed and the new identity, products and content in.
 2. Photos for the six coming-soon collections: chairs, event chairs,
    blankets, pillows, tablecloths, ready-packed bedding.
 3. Client to confirm: the camp-bag dimension photos (filed in each other's
-   folders, reassigned by material); the "صناعة وطنية" label, taken from
-   the folder names; the meaning of "صفت" in the heavy-mesh bed's folder.
-4. Clean photos without the CROWN logo (2 photos left: the heavy-mesh bed,
-   folded and unfolded). The user chose to use them as they are for now.
-   Replaced on 2026-10-01 with the client's logo-free shots: the bunk bed
-   (`دورين 2.png`, 1536×1024) and the single bed
-   (`crown_bed_product_1200x1200.png`, 1200×1200, a little soft at full
-   size).
+   folders again in the 2026-10-20 set, reassigned by material); the
+   "صناعة وطنية" label, taken from the folder names; the meaning of "صفت"
+   in the heavy-mesh bed's folder.
+4. Brand logos in photos: since 2026-10-20 the site uses the client's new
+   set as supplied, with CROWN on the three iron beds and ROSHINA, ROSHAN
+   and CROWN on comforters and pillows (owner's choice). The logo-free
+   versions are in `archive/product-images-2026-10-20/`.
 5. Real company photos for the about and contact pages (warehouse, stock in
    quantity, loading or delivery, office or showroom front). They replace
    the brand panels. Never stock photos: they would present someone else's
@@ -161,8 +160,16 @@ with "checks passed".
 - **One image per product in every listing.** Other colours and real-life
   photos appear only as thumbnails on the product page. This is the client's
   core requirement.
-- **Hero is the bunk bed, not RT-M101.** The RT-M101 photos are cropped at
-  the right and bottom edges.
+- **Home hero is the nano 4×3 rug's room scene** (`home.hero` in
+  `catalog.yml`). The products hero is `ambience/flint-room.jpg`.
+- **Product photos are the client's set of 2026-10-20, used as supplied**
+  (`products images - new (2)`). That includes the CROWN, ROSHINA and ROSHAN
+  logos printed on beds, comforters and pillows: the owner's choice. Names,
+  details and URLs stay brand-free, and the build's BRANDS check enforces
+  that. Most products have a single real-background photo. The previous
+  set is kept in `archive/product-images-2026-10-20/`, with a README on how
+  to restore it: the white cut-outs, the logo-free bed shots, the RT-M101
+  colour cut-outs. Nothing reads that folder.
 - **The official logo mark is kept although it contains a crescent.** It is
   the identity. None of the kit's crescent or moon decorations are used.
 - **No contact form.** A static host cannot send mail; WhatsApp, phone and
