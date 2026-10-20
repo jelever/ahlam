@@ -5,8 +5,9 @@
 # the site from: "" on a custom domain (the site is at its root), "/ahlam"
 # on jelever.github.io/ahlam. base_url is used for canonical, hreflang,
 # sitemap and share-preview addresses.
-# Custom domain since 2026-10-08 (set in the repo's Settings -> Pages).
-base_url: https://ahlam.elgaily.com
+# Custom domain (set in the repo's Settings -> Pages): ahlam.elgaily.com from
+# 2026-10-08, ahlamalqamar.com from 2026-10-20.
+base_url: https://ahlamalqamar.com
 base_path: ""
 
 name:

@@ -22,7 +22,11 @@ the store features removed and the new identity, products and content in.
 - Stack: static HTML from `build.py` (Jinja2, Pillow, PyYAML); vanilla CSS/JS
 - Hosting: GitHub Pages (deployed by `.github/workflows/pages.yml` on every
   push to `main`), no Railway project
-- Live at https://jelever.github.io/ahlam/; no custom domain yet
+- Domain: https://ahlamalqamar.com (from 2026-10-20; ahlam.elgaily.com
+  before). DNS is at GoDaddy (`ns25/26.domaincontrol.com`): the apex has A
+  records to GitHub Pages, and `www` is a CNAME. The MX and TXT records are
+  the company's Google email: never touch them. The custom domain is set in
+  Settings → Pages, which only the owner `jelever` can change.
 - GitHub: `jelever/ahlam` (public; free Pages needs it). `MBajily` is a
   collaborator with push access but not admin: repository settings (Pages,
   Dependabot alerts, branch protection) need the owner, `jelever`
