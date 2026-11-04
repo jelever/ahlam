@@ -14,14 +14,31 @@
   const S = data.strings;
 
   // The page stays locked while the drawer, the search or any modal is open.
+  // iOS Safari ignores overflow: hidden on the body, so the page is pinned in
+  // place (position: fixed at its scroll offset) and put back on close.
+  let lockedY = null;
+  // a cut-out's background tone (from build.py), filling the frame around it
+  const edge = (im) => (im.cutout && im.edge ? ` style="--edge:${im.edge}"` : "");
+
   const lock = () => {
-    const open = $(".modal.is-open, .drawer.is-open, .search-overlay.is-open");
-    document.body.style.overflow = open ? "hidden" : "";
+    const open = Boolean($(".modal.is-open, .drawer.is-open, .search-overlay.is-open"));
+    const b = document.body.style;
+    if (open && lockedY === null) {
+      lockedY = window.scrollY;
+      Object.assign(b, { position: "fixed", top: `-${lockedY}px`, left: "0", right: "0", overflow: "hidden" });
+    } else if (!open && lockedY !== null) {
+      Object.assign(b, { position: "", top: "", left: "", right: "", overflow: "" });
+      const html = document.documentElement.style;
+      html.scrollBehavior = "auto";          // jump back, do not smooth-scroll
+      window.scrollTo(0, lockedY);
+      html.scrollBehavior = "";
+      lockedY = null;
+    }
   };
 
   /* ---------- Header: frosted once the page scrolls ---------- */
   const header = $(".site-header");
-  const onScroll = () => header?.classList.toggle("is-scrolled", window.scrollY > 24);
+  const onScroll = () => { if (lockedY === null) header?.classList.toggle("is-scrolled", window.scrollY > 24); };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -92,7 +109,7 @@
       if (!hits.length) { results.innerHTML = `<p class="search-empty">${esc(S.search_empty)} «${esc(raw)}»</p>`; return; }
       results.innerHTML = `<p class="search-label">${esc(S.search_results)} (${hits.length})</p><div class="search-grid">` +
         hits.map(({ p }) => `<a class="search-item" href="${p.url}">
-          <span class="search-thumb"><img src="${p.thumb}" alt="" width="64" height="64" loading="lazy" class="${p.images[0].cutout ? "is-cutout" : "is-photo"}"></span>
+          <span class="search-thumb"><img src="${p.thumb}" alt="" width="64" height="64" loading="lazy" class="${p.images[0].cutout ? "is-cutout" : "is-photo"}"${edge(p.images[0])}></span>
           <span><strong>${esc(p.name)}</strong><small>${esc(p.collection)}</small></span>
         </a>`).join("") + "</div>";
     };
@@ -128,7 +145,7 @@
     if (!lb || !lbItems.length) return;
     lbCur = (i + lbItems.length) % lbItems.length;
     const it = lbItems[lbCur];
-    $("[data-lb-frame]", lb).innerHTML = `<img src="${it.src}" srcset="${it.srcset}" sizes="100vw" alt="${esc(it.alt)}" class="${it.cutout ? "is-cutout" : "is-photo"}">`;
+    $("[data-lb-frame]", lb).innerHTML = `<img src="${it.src}" srcset="${it.srcset}" sizes="100vw" alt="${esc(it.alt)}" class="${it.cutout ? "is-cutout" : "is-photo"}"${edge(it)}>`;
     $("[data-lb-label]", lb).textContent = it.label || "";
     $("[data-lb-count]", lb).textContent = lbItems.length > 1 ? `${lbCur + 1} / ${lbItems.length}` : "";
     $$(".lb-nav", lb).forEach((b) => { b.hidden = lbItems.length < 2; });
@@ -182,7 +199,7 @@
     });
     const items = () => $$("[data-slide] img", g).map((img) => ({
       src: img.getAttribute("src"), srcset: img.getAttribute("srcset"), alt: img.alt,
-      cutout: img.classList.contains("is-cutout"),
+      cutout: img.classList.contains("is-cutout"), edge: img.style.getPropertyValue("--edge"),
       label: img.closest("figure")?.querySelector("figcaption")?.textContent || "",
     }));
     $("[data-lb-open]", g)?.addEventListener("click", () => openGallery(items(), cur));
@@ -191,7 +208,7 @@
 
   /* ---------- Quick view (product cards) ---------- */
   const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#${id}"/></svg>`;
-  const pic = (im, alt, sizes) => `<img src="${im.src}" srcset="${im.srcset}" sizes="${sizes}" width="${im.w}" height="${im.h}" alt="${esc(alt)}" class="${im.cutout ? "is-cutout" : "is-photo"}" decoding="async">`;
+  const pic = (im, alt, sizes) => `<img src="${im.src}" srcset="${im.srcset}" sizes="${sizes}" width="${im.w}" height="${im.h}" alt="${esc(alt)}" class="${im.cutout ? "is-cutout" : "is-photo"}"${edge(im)} decoding="async">`;
   const qvModal = $('[data-modal="quick-view"]');
   const quickView = (slug) => {
     const p = data.products[slug];
@@ -226,7 +243,7 @@
     </div>`;
     let qvCur = 0;
     const zoom = () => openGallery(p.images.map((im) => ({
-      src: im.src, srcset: im.srcset, cutout: im.cutout, label: im.label,
+      src: im.src, srcset: im.srcset, cutout: im.cutout, edge: im.edge, label: im.label,
       alt: p.name + (im.label ? ` (${im.label})` : ""),
     })), qvCur);
     $("[data-qv-zoom]", body).addEventListener("click", zoom);
@@ -262,21 +279,30 @@
     $$("[data-reveal]").forEach(reveal);
   }
 
-  /* ---------- Hero parallax (after the entrance zoom) ---------- */
+  /* ---------- Hero parallax (after the entrance zoom), desktop only ----------
+     The photo drifts down as the page scrolls, by at most the spare image
+     the scale leaves above the frame, so the frame's empty top never shows.
+     Off on phones and touch screens: there the photo stacks under the copy,
+     and moving it during touch scrolling made it look stuck. */
   const para = $("[data-parallax]");
+  const desktop = window.matchMedia("(min-width: 901px) and (hover: hover) and (pointer: fine)");
   if (para && !reduceMotion) {
     const img = $("img", para);
+    const SCALE = 1.08;
     let ready = false, ticking = false;
-    // the entrance zoom keeps its last frame (fill: both), which would win
-    // over the inline transform: drop it once it has played
-    img?.addEventListener("animationend", () => { img.style.animation = "none"; ready = true; update(); }, { once: true });
     const update = () => {
       ticking = false;
       if (!ready || !img) return;
-      const y = Math.min(window.scrollY, window.innerHeight);
-      img.style.transform = `translateY(${(y * 0.12).toFixed(1)}px) scale(1.04)`;
+      if (!desktop.matches) { img.style.transform = ""; return; }
+      const room = para.offsetHeight * (SCALE - 1) / 2;
+      const y = Math.min(window.scrollY * 0.06, room);
+      img.style.transform = `translateY(${y.toFixed(1)}px) scale(${SCALE})`;
     };
+    // the entrance zoom keeps its last frame (fill: both), which would win
+    // over the inline transform: drop it once it has played
+    img?.addEventListener("animationend", () => { img.style.animation = "none"; ready = true; update(); }, { once: true });
     window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    desktop.addEventListener?.("change", update);
   }
 
   /* ---------- Olive slider (cross-fade) ---------- */

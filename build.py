@@ -168,6 +168,7 @@ class Images:
             im = ImageOps.exif_transpose(im).convert("RGB")
             w, h = im.size
             cutout = self._is_cutout(im)
+            edge = self._edge_colour(im)
             stem = src.rsplit(".", 1)[0]
             widths = sorted({min(x, w) for x in WIDTHS})
             variants = []
@@ -188,7 +189,7 @@ class Images:
             target = OUT / rel
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(CACHE / rel, target)
-        return {"w": w, "h": h, "cutout": cutout, "variants": variants, "og": og_rel}
+        return {"w": w, "h": h, "cutout": cutout, "edge": edge, "variants": variants, "og": og_rel}
 
     @staticmethod
     def _is_cutout(im: Image.Image) -> bool:
@@ -203,6 +204,19 @@ class Images:
         border = [small.getpixel((x, y)) for x in range(w) for y in (1, h - 2)]
         border += [small.getpixel((x, y)) for y in range(h) for x in (1, w - 2)]
         return sum(v >= 235 for v in border) / len(border) >= 0.7
+
+    @staticmethod
+    def _edge_colour(im: Image.Image) -> str:
+        """The photo's background tone: the median colour of its outer ring.
+        A cut-out is shown whole, and the frame around it is filled with this
+        colour, so the image reads as filling the frame without being cropped."""
+        small = im.copy()
+        small.thumbnail((200, 200))
+        w, h = small.size
+        ring = [small.getpixel((x, y)) for x in range(w) for y in (0, 1, h - 2, h - 1)]
+        ring += [small.getpixel((x, y)) for y in range(h) for x in (0, 1, w - 2, w - 1)]
+        mid = len(ring) // 2
+        return "#" + "".join(f"{sorted(c[i] for c in ring)[mid]:02x}" for i in range(3))
 
     @staticmethod
     def _og(im: Image.Image) -> Image.Image:
@@ -267,6 +281,7 @@ def make_env(site, strings, images: Images):
         largest_w, largest = info["variants"][-1]
         height = round(info["h"] * largest_w / info["w"])
         classes = " ".join(x for x in (cls, "is-cutout" if info["cutout"] else "is-photo") if x)
+        edge = f' style="--edge:{info["edge"]}"' if info["cutout"] else ""
         # An eager image is a page's first big photo. Its own onload starts
         # the entrance animation of the frame around it (.load-scale), without
         # waiting for site.js, which is deferred until the fonts arrive.
@@ -274,7 +289,7 @@ def make_env(site, strings, images: Images):
                    "?.classList.add('is-ready')\"" if eager else 'loading="lazy"')
         return Markup(
             f'<img src="{asset(largest)}" srcset="{srcset}" sizes="{html.escape(sizes)}" '
-            f'width="{largest_w}" height="{height}" alt="{html.escape(alt)}" class="{classes}" '
+            f'width="{largest_w}" height="{height}" alt="{html.escape(alt)}" class="{classes}"{edge} '
             f'{loading} decoding="async">'
         )
 
@@ -358,6 +373,7 @@ def quick_view_data(site, strings, products, images: Images, lang: str) -> dict:
                 "w": info["variants"][-1][0],
                 "h": round(info["h"] * info["variants"][-1][0] / info["w"]),
                 "cutout": info["cutout"],
+                "edge": info["edge"],
                 "label": L(im["label"]) if im["label"] else "",
             })
         data[p["slug"]] = {

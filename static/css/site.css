@@ -222,6 +222,7 @@ bdi { unicode-bidi: isolate; }
 .drawer { position: fixed; inset: 0; z-index: 80; background: rgba(30, 30, 25, .35); opacity: 0; visibility: hidden; transition: opacity .35s, visibility .35s; }
 .drawer.is-open { opacity: 1; visibility: visible; }
 .drawer-panel {
+  overscroll-behavior: contain;
   position: absolute; inset-inline-end: 0; top: 0; bottom: 0; width: min(340px, 88vw); background: var(--bg);
   padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto;
   transform: translateX(calc(100% * var(--dir))); transition: transform .5s var(--ease-out);
@@ -251,7 +252,7 @@ bdi { unicode-bidi: isolate; }
 .search-overlay { position: fixed; inset: 0; z-index: 85; background: rgba(30, 30, 25, .4); opacity: 0; visibility: hidden; transition: opacity .35s, visibility .35s; }
 .search-overlay.is-open { opacity: 1; visibility: visible; }
 .search-panel {
-  background: var(--bg); padding: 28px 0 32px; box-shadow: var(--shadow); max-height: 85vh; overflow-y: auto;
+  background: var(--bg); padding: 28px 0 32px; box-shadow: var(--shadow); max-height: 85vh; max-height: 85dvh; overflow-y: auto; overscroll-behavior: contain;
   transform: translateY(-30px); transition: transform .5s var(--ease-out);
 }
 .search-overlay.is-open .search-panel { transform: none; }
@@ -272,17 +273,18 @@ bdi { unicode-bidi: isolate; }
 .search-item:hover, .search-item:focus-visible { background: var(--card); }
 .search-thumb { width: 64px; height: 64px; border-radius: 10px; overflow: hidden; background: var(--card); flex: none; }
 .search-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.search-thumb img.is-cutout { object-fit: contain; mix-blend-mode: multiply; padding: 8%; }
 .search-item > span:last-child { display: flex; flex-direction: column; }
 .search-item strong { font-weight: 500; }
 .search-item small { color: var(--muted); font-size: 12.5px; }
 .search-empty { color: var(--muted); }
 
 /* ---------- Product photos ----------
-   A photo whose border is mostly white (build.py: is-cutout) is shown whole
-   on the surface it sits on; multiply melts its white background into it.
-   Real photos (is-photo) fill their frame. */
-img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; padding: 8%; }
+   A photo whose border is mostly light (build.py: is-cutout) is a product
+   card or studio shot: it is shown whole, and the rest of its frame takes the
+   photo's own background tone (--edge, sampled by build.py), so it fills the
+   frame without its text or badges being cropped. Real photos (is-photo)
+   fill their frame by cropping. */
+img.is-cutout { object-fit: contain !important; background-color: var(--edge, #fff); }
 
 /* ---------- Home: hero ---------- */
 .hero { position: relative; }
@@ -344,7 +346,6 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
 .collection-card:hover .cc-link svg { transform: translateX(calc(4px * var(--dir))); }
 .cc-img { width: 96px; height: 96px; border-radius: 50%; overflow: hidden; background: var(--card); flex: none; transition: transform .8s var(--ease); }
 .cc-img img { width: 100%; height: 100%; object-fit: cover; }
-.cc-img img.is-cutout { padding: 12%; }
 .collection-card:hover .cc-img { transform: rotate(-6deg) scale(1.05); }
 
 /* ---------- Feature strip ---------- */
@@ -381,7 +382,6 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
   isolation: isolate; box-shadow: var(--shadow-sm); background: var(--card); scroll-snap-align: start;
 }
 .room-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease); }
-.room-card img.is-cutout { padding: 10% 10% 30%; }
 .room-card::after {
   content: ""; position: absolute; inset: 40% 0 0; z-index: 1;
   background: linear-gradient(to top, rgba(28, 24, 18, .62), rgba(28, 24, 18, 0));
@@ -453,9 +453,6 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
   background: linear-gradient(to right, var(--olive-2) 0, rgba(75, 86, 65, .55) 16%, rgba(75, 86, 65, 0) 40%);
 }
 :root[dir="rtl"] .arrival-media::after { background: linear-gradient(to left, var(--olive-2) 0, rgba(75, 86, 65, .55) 16%, rgba(75, 86, 65, 0) 40%); }
-.arrival-media:has(img.is-cutout) { background: var(--card); }
-.arrival-media img.is-cutout { padding: 6% 6% 6% 18%; }
-:root[dir="rtl"] .arrival-media img.is-cutout { padding: 6% 18% 6% 6%; }
 .arrival-arrows { position: absolute; top: 22px; inset-inline-end: 24px; z-index: 4; display: flex; gap: 10px; }
 .arrival-dots { position: absolute; inset-inline-start: clamp(32px, 4vw, 52px); bottom: 22px; z-index: 4; display: flex; gap: 6px; }
 .arrival-dots button { width: 18px; height: 3px; border-radius: 3px; background: rgba(255, 255, 255, .3); transition: width .4s var(--ease), background .4s; }
@@ -593,7 +590,7 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
 
 /* ---------- Products page: collection chips ---------- */
 .shop { padding-bottom: clamp(32px, 4vw, 56px); }
-.shop-cats { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.shop-cats { display: flex; gap: 8px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; padding: 4px 2px 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
 .shop-cats::-webkit-scrollbar { display: none; }
 .shop-coll-link { margin-top: 28px; text-align: center; }
 .soon { margin-top: clamp(32px, 4vw, 56px); }
@@ -625,7 +622,7 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
 .pdp-nav { position: absolute; bottom: 14px; inset-inline-end: 14px; z-index: 3; display: flex; gap: 8px; }
 .pdp-nav .round-btn { background: var(--white); box-shadow: var(--shadow-sm); }
 .pdp-nav .round-btn:hover { background: var(--olive); color: #fff; }
-.pdp-thumbs { display: flex; gap: 10px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; padding: 3px; }
+.pdp-thumbs { display: flex; gap: 10px; margin-top: 12px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; padding: 3px; }
 .pdp-thumb { width: 84px; height: 84px; flex: none; border-radius: 12px; overflow: hidden; background: var(--card); opacity: .6; outline: 1.5px solid transparent; outline-offset: 2px; transition: opacity .3s, outline-color .3s; }
 .pdp-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .pdp-thumb:hover { opacity: .9; }
@@ -663,7 +660,6 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
 .mini-collections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .mini-collection { position: relative; display: block; border-radius: var(--radius); overflow: hidden; aspect-ratio: 1.6; isolation: isolate; background: var(--card); }
 .mini-collection img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
-.mini-collection img.is-cutout { padding: 6% 20% 22%; }
 .mini-collection::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(28, 24, 18, .62), transparent 60%); }
 .mini-collection span { position: absolute; inset-inline: 18px; bottom: 16px; z-index: 2; color: #fff; font-size: 18px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .mini-collection span svg { width: 18px; height: 18px; transition: transform .4s var(--ease); }
@@ -723,7 +719,10 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
 .modal { position: fixed; inset: 0; z-index: 110; background: rgba(28, 26, 20, .55); display: grid; place-items: center; padding: 16px; opacity: 0; visibility: hidden; transition: opacity .35s, visibility 0s .4s; }
 .modal.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
 .modal-panel {
-  position: relative; width: min(940px, 100%); max-height: calc(100vh - 32px); overflow-y: auto;
+  /* dvh: on iPhones vh includes the area behind Safari's toolbars, which hid
+     the bottom of the panel (the enquire button) */
+  position: relative; width: min(940px, 100%); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px);
+  overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
   background: var(--bg); border-radius: 22px; padding: 18px;
   transform: translateY(30px) scale(.97); transition: transform .6s var(--ease-out);
 }
@@ -753,10 +752,10 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
 .lb-stage { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: 100%; }
 .lb-frame { display: flex; justify-content: center; max-width: 100%; }
 .lb-frame img {
-  width: auto; height: auto; max-width: min(1200px, 100%); max-height: calc(100vh - 150px);
+  width: auto; height: auto; max-width: min(1200px, 100%); max-height: calc(100vh - 150px); max-height: calc(100dvh - 150px);
   border-radius: 14px; animation: fadeIn .5s var(--ease) both;
 }
-.lb-frame img.is-cutout { mix-blend-mode: normal; background: var(--white); padding: 3%; }
+.lb-frame img.is-cutout { padding: 3%; }
 .lb-frame img.is-photo { object-fit: contain; }
 .lb-meta { display: flex; gap: 14px; align-items: center; color: rgba(255, 255, 255, .85); font-size: 13.5px; min-height: 1.4em; }
 .lb-count { color: rgba(255, 255, 255, .55); direction: ltr; unicode-bidi: isolate; }
@@ -830,7 +829,6 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
   .arrival-slide, .banner-card .arrival-slide { grid-template-columns: 1fr; }
   .arrival-media, .banner-card .arrival-media { min-height: 240px; order: -1; }
   .arrival-media::after, :root[dir="rtl"] .arrival-media::after { background: linear-gradient(to top, var(--olive-2) 0, rgba(75, 86, 65, 0) 35%); }
-  .arrival-media img.is-cutout, :root[dir="rtl"] .arrival-media img.is-cutout { padding: 6% 6% 14%; }
   .arrival-copy { padding-bottom: 56px; }
   .why-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .newsletter { grid-template-columns: minmax(0, 1fr); padding: 0 28px; }
@@ -845,10 +843,13 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
   .pdp-gallery, .contact-card { position: static; }
   .mini-collections { grid-template-columns: 1fr 1fr; }
   .room-cards {
-    display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 14px;
+    display: flex; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 14px;
     margin: 0 calc(-1 * var(--gutter)); padding: 6px var(--gutter) 16px; scroll-padding-inline: var(--gutter);
   }
   .room-card { flex: 0 0 34%; }
+  /* in the swipe row the cards fade in without the rise: the cards still off
+     to the side wait unrevealed, 34px low, which gave the row vertical scroll */
+  .js .room-cards [data-reveal] { transform: none; }
   .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .qv { grid-template-columns: 1fr; gap: 12px; }
   .qv-img { aspect-ratio: 4 / 3; }
@@ -873,7 +874,7 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
   .strip-grid { gap: 20px 12px; padding-top: 26px; padding-bottom: 26px; }
   .strip-item { flex-direction: column; align-items: flex-start; gap: 10px; }
   .room-cards {
-    display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 12px;
+    display: flex; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 12px;
     margin: 0 calc(-1 * var(--gutter)); padding: 6px var(--gutter) 16px; scroll-padding-inline: var(--gutter);
   }
   .room-card { flex: 0 0 62%; }
@@ -893,7 +894,7 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
   .mini-collections, .soon-list, .contact-tiles { grid-template-columns: 1fr; }
   .pdp-cta { flex-direction: column; }
   .lb-panel { padding: 64px 12px 84px; }
-  .lb-frame img { max-height: calc(100vh - 190px); }
+  .lb-frame img { max-height: calc(100vh - 190px); max-height: calc(100dvh - 190px); }
   .lb-nav { top: auto; bottom: 18px; transform: none; }
   .lb-prev { inset-inline-start: calc(50% - 58px); }
   .lb-next { inset-inline-end: calc(50% - 58px); }
