@@ -1,6 +1,15 @@
 {
-  "name": "Ahlam Alqamar",
-  "short_name": "Ahlam Alqamar",
+  "id": "/",
+  "name": "أحلام القمر للتجارة",
+  "short_name": "أحلام القمر",
+  "description": "معرض منتجات شركة أحلام القمر للتجارة",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#3d4633",
+  "background_color": "#faf7f3",
   "icons": [
     {
       "src": "icon-192.png",
@@ -18,8 +27,5 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "theme_color": "#000000",
-  "background_color": "#FFFFFF",
-  "display": "standalone"
+  ]
 }

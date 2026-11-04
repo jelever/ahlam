@@ -1,71 +1,29 @@
-/* Ahlam Alqamar — interactions and motion, carried over from the Homely site
-   (header, mega menu, drawer, reveal, letter-split titles, hero zoom, tabs,
-   gallery). The store scripts (cart, wishlist, quick view, forms) are gone. */
+/* Ahlam Alqamar: interactions and motion.
+   From the reference design (references/home-collections/ahlam, js/main.js
+   and js/search.js): header, drawer, reveal and stagger, hero parallax, the
+   olive slider and the search overlay. Carried over from the previous site:
+   quick view, the gallery preview (lightbox) and the product gallery. New:
+   the collection filter on the products page. No cart or store code. */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const rtl = document.documentElement.dir === "rtl";
-  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const lock = (on) => { document.body.style.overflow = on ? "hidden" : ""; };
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const data = window.AHLAM || { products: {}, strings: {} };
+  const S = data.strings;
 
-  /* ---------- Hero image: entrance waits for the photo ----------
-     The image's own onload (written by build.py) adds is-ready. This is the
-     fallback: a photo that failed, or one still loading after 2.5s on a slow
-     connection, does not keep the frame hidden. */
-  $$(".load-scale").forEach((box) => {
-    const img = $("img", box);
-    if (!img) return;
-    const ready = () => box.classList.add("is-ready");
-    if (img.complete) return ready();
-    img.addEventListener("error", ready, { once: true });
-    setTimeout(ready, 2500);
-  });
-
-  /* ---------- Header: shadow on scroll, hide when scrolling down ---------- */
-  const header = $(".site-header");
-  /* The header changes state only after 24px of travel in one direction.
-     Comparing single scroll events flickered: smooth wheel, trackpad and
-     iOS momentum scrolling send many events of a few pixels each, and every
-     small one un-hid the header. The position is clamped to the page so
-     iOS's rubber-band bounce at the bottom does not count as scrolling up. */
-  let lastY = window.scrollY, travel = 0;
-  const onScroll = () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    const y = Math.min(Math.max(window.scrollY, 0), Math.max(max, 0));
-    header?.classList.toggle("is-scrolled", y > 16);
-    const d = y - lastY;
-    lastY = y;
-    if (!header || !d) return;
-    travel = (travel > 0) === (d > 0) ? travel + d : d;
-    if (y <= 480 || travel < -24) header.classList.remove("is-hidden");
-    else if (travel > 24 && !$(".nav-item.is-open")) header.classList.add("is-hidden");
+  // The page stays locked while the drawer, the search or any modal is open.
+  const lock = () => {
+    const open = $(".modal.is-open, .drawer.is-open, .search-overlay.is-open");
+    document.body.style.overflow = open ? "hidden" : "";
   };
+
+  /* ---------- Header: frosted once the page scrolls ---------- */
+  const header = $(".site-header");
+  const onScroll = () => header?.classList.toggle("is-scrolled", window.scrollY > 24);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
-
-  /* ---------- Mega menu (hover on desktop, click everywhere) ---------- */
-  const items = $$(".nav-item.has-drop");
-  const closeAll = (except) => items.forEach((it) => {
-    if (it === except) return;
-    it.classList.remove("is-open");
-    $("[aria-expanded]", it)?.setAttribute("aria-expanded", "false");
-  });
-  items.forEach((it) => {
-    const btn = $(".nav-caret, .nav-drop-btn", it);
-    let timer;
-    const open = () => { clearTimeout(timer); closeAll(it); it.classList.add("is-open"); btn?.setAttribute("aria-expanded", "true"); };
-    const close = () => { timer = setTimeout(() => { it.classList.remove("is-open"); btn?.setAttribute("aria-expanded", "false"); }, 160); };
-    it.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") open(); });
-    it.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") close(); });
-    btn?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (it.classList.contains("is-open")) { it.classList.remove("is-open"); btn.setAttribute("aria-expanded", "false"); }
-      else open();
-    });
-    it.addEventListener("focusout", (e) => { if (!it.contains(e.relatedTarget)) { it.classList.remove("is-open"); btn?.setAttribute("aria-expanded", "false"); } });
-  });
-  document.addEventListener("click", (e) => { if (!e.target.closest(".nav-item")) closeAll(); });
 
   /* ---------- Drawer ---------- */
   const drawer = $(".drawer");
@@ -76,7 +34,7 @@
     drawer.setAttribute("aria-hidden", String(!open));
     drawer.inert = !open;
     toggle?.setAttribute("aria-expanded", String(open));
-    lock(open);
+    lock();
     if (open) setTimeout(() => $(".drawer-close", drawer)?.focus(), 80);
     else toggle?.focus();
   };
@@ -85,14 +43,15 @@
   drawer?.addEventListener("click", (e) => {
     if (e.target === drawer || e.target.closest(".drawer-close") || e.target.closest("a")) setDrawer(false);
   });
-  /* ---------- Modals ---------- */
-  // Modals can stack (the gallery opens over quick view): each remembers the
-  // element that opened it, and the page stays locked while any is open.
+
+  /* ---------- Modals ----------
+     They stack (the gallery opens over quick view): each remembers the
+     element that opened it. */
   const setModal = (modal, open) => {
     if (open) modal._returnFocus = document.activeElement;
     modal.classList.toggle("is-open", open);
     modal.setAttribute("aria-hidden", String(!open));
-    lock(Boolean($(".modal.is-open")));
+    lock();
     if (open) setTimeout(() => $(".modal-close", modal)?.focus(), 60);
     else modal._returnFocus?.focus?.();
   };
@@ -100,13 +59,65 @@
     if (e.target === modal || e.target.matches("[data-lb-stage], .lb-panel") || e.target.closest(".modal-close")) setModal(modal, false);
   }));
 
+  /* ---------- Search overlay (Arabic-aware matching) ---------- */
+  const search = $(".search-overlay");
+  const setSearch = (open) => {
+    if (!search) return;
+    if (open) search._returnFocus = document.activeElement;
+    search.classList.toggle("is-open", open);
+    search.setAttribute("aria-hidden", String(!open));
+    search.inert = !open;
+    lock();
+    if (open) setTimeout(() => $("#search-input", search)?.focus(), 60);
+    else search._returnFocus?.focus?.();
+  };
+  if (search) {
+    search.inert = true;
+    const input = $("#search-input", search);
+    const results = $("[data-search-results]", search);
+    // hamza forms, alef maqsura and taa marbuta match their plain letters;
+    // diacritics and tatweel are ignored
+    const norm = (s) => String(s || "").toLowerCase().normalize("NFKD")
+      .replace(/[ً-ٰٟـ]/g, "")
+      .replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي");
+    const index = Object.entries(data.products).map(([slug, p]) => ({
+      slug, p, text: norm([p.name, p.collection, slug.replace(/-/g, " "), ...p.fields.map((f) => f[1])].join(" ")),
+    }));
+    const render = () => {
+      const raw = input.value.trim();
+      const q = norm(raw);
+      if (!q) { results.innerHTML = ""; return; }
+      const words = q.split(/\s+/);
+      const hits = index.filter((it) => words.every((w) => it.text.includes(w))).slice(0, 12);
+      if (!hits.length) { results.innerHTML = `<p class="search-empty">${esc(S.search_empty)} «${esc(raw)}»</p>`; return; }
+      results.innerHTML = `<p class="search-label">${esc(S.search_results)} (${hits.length})</p><div class="search-grid">` +
+        hits.map(({ p }) => `<a class="search-item" href="${p.url}">
+          <span class="search-thumb"><img src="${p.thumb}" alt="" width="64" height="64" loading="lazy" class="${p.images[0].cutout ? "is-cutout" : "is-photo"}"></span>
+          <span><strong>${esc(p.name)}</strong><small>${esc(p.collection)}</small></span>
+        </a>`).join("") + "</div>";
+    };
+    input.addEventListener("input", render);
+    $$("[data-search-open]").forEach((b) => b.addEventListener("click", () => setSearch(true)));
+    $("[data-search-close]", search).addEventListener("click", () => setSearch(false));
+    search.addEventListener("click", (e) => { if (e.target === search) setSearch(false); });
+    $$("[data-search-term]", search).forEach((b) => b.addEventListener("click", () => {
+      input.value = b.dataset.searchTerm; render(); input.focus();
+    }));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/" && !search.classList.contains("is-open") && !$(".modal.is-open") &&
+          !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
+        e.preventDefault(); setSearch(true);
+      }
+    });
+  }
+
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
-    // close only the top-most modal (the gallery before quick view)
+    // close only the top-most layer (the gallery before quick view)
     const top = $(".lightbox.is-open") || $(".modal.is-open");
     if (top) { setModal(top, false); return; }
+    if (search?.classList.contains("is-open")) { setSearch(false); return; }
     if (drawer?.classList.contains("is-open")) setDrawer(false);
-    closeAll();
   });
 
   /* ---------- Gallery preview (full-size photos, product page + quick view) ---------- */
@@ -146,21 +157,39 @@
       lx = null;
     });
   }
-  // product page: photos come from the gallery slides
+
+  /* ---------- Product gallery (product page) ---------- */
   $$("[data-gallery]").forEach((g) => {
+    const slides = $$("[data-slide]", g);
+    const thumbs = $$("[data-thumb]", g);
+    let cur = 0;
+    const show = (i) => {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach((s, j) => { s.hidden = j !== cur; s.classList.toggle("is-active", j === cur); });
+      thumbs.forEach((t, j) => { t.classList.toggle("is-active", j === cur); t.setAttribute("aria-pressed", String(j === cur)); });
+    };
+    thumbs.forEach((t, i) => t.addEventListener("click", () => show(i)));
+    $("[data-gallery-prev]", g)?.addEventListener("click", () => show(cur - 1));
+    $("[data-gallery-next]", g)?.addEventListener("click", () => show(cur + 1));
+    let x0 = null;
+    const main = $(".pdp-main", g);
+    main?.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    main?.addEventListener("touchend", (e) => {
+      if (x0 === null || slides.length < 2) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) show(cur + ((dx < 0) !== rtl ? 1 : -1));
+      x0 = null;
+    });
     const items = () => $$("[data-slide] img", g).map((img) => ({
       src: img.getAttribute("src"), srcset: img.getAttribute("srcset"), alt: img.alt,
       cutout: img.classList.contains("is-cutout"),
       label: img.closest("figure")?.querySelector("figcaption")?.textContent || "",
     }));
-    const current = () => Number($(".pd-slide.is-active", g)?.dataset.slide || 0);
-    $("[data-lb-open]", g)?.addEventListener("click", () => openGallery(items(), current()));
-    $$("[data-slide] img", g).forEach((img) => img.addEventListener("click", () => openGallery(items(), current())));
+    $("[data-lb-open]", g)?.addEventListener("click", () => openGallery(items(), cur));
+    $$("[data-slide] img", g).forEach((img) => img.addEventListener("click", () => openGallery(items(), cur)));
   });
 
   /* ---------- Quick view (product cards) ---------- */
-  const data = window.AHLAM || { products: {}, strings: {} };
-  const S = data.strings;
   const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#${id}"/></svg>`;
   const pic = (im, alt, sizes) => `<img src="${im.src}" srcset="${im.srcset}" sizes="${sizes}" width="${im.w}" height="${im.h}" alt="${esc(alt)}" class="${im.cutout ? "is-cutout" : "is-photo"}" decoding="async">`;
   const qvModal = $('[data-modal="quick-view"]');
@@ -168,16 +197,16 @@
     const p = data.products[slug];
     const body = $("[data-qv-body]");
     if (!p || !body || !qvModal) return;
-    const main = (i) => pic(p.images[i], p.name + (p.images[i].label ? ` (${p.images[i].label})` : ""), "(max-width: 1024px) 92vw, 450px");
+    const main = (i) => pic(p.images[i], p.name + (p.images[i].label ? ` (${p.images[i].label})` : ""), "(max-width: 900px) 92vw, 450px");
     const thumbs = p.images.length > 1
       ? `<div class="qv-thumbs" role="group" aria-label="${esc(S.images_shown)}">${p.images.map((im, i) =>
-          `<button type="button" class="qv-thumb${i ? "" : " is-active"}" data-qv-thumb="${i}" aria-pressed="${!i}" aria-label="${esc(im.label || `${i + 1} / ${p.images.length}`)}">${pic(im, "", "110px")}</button>`).join("")}</div>`
+          `<button type="button" class="qv-thumb${i ? "" : " is-active"}" data-qv-thumb="${i}" aria-pressed="${!i}" aria-label="${esc(im.label || `${i + 1} / ${p.images.length}`)}">${pic(im, "", "90px")}</button>`).join("")}</div>`
       : "";
     const fields = p.fields.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd><bdi>${esc(v)}</bdi></dd></div>`).join("");
     const ext = p.external ? ' target="_blank" rel="noopener"' : "";
     body.innerHTML = `<div class="qv">
       <div class="qv-media">
-        <div class="qv-img img-zoom">
+        <div class="qv-img">
           <div class="qv-frame" data-qv-main>${main(0)}</div>
           <button type="button" class="icon-btn lb-open" data-qv-zoom aria-label="${esc(S.gallery_open)}">${icon("i-expand")}</button>
         </div>
@@ -185,13 +214,13 @@
         <p class="qv-label" data-qv-label>${esc(p.images[0].label)}</p>
       </div>
       <div class="qv-info">
-        <p class="eyebrow">${esc(p.collection)}</p>
+        <p class="eyebrow">${icon("i-dot")}${esc(p.collection)}</p>
         <h2 class="qv-title">${esc(p.name)}</h2>
         <p class="muted">${esc(p.summary)}</p>
         <dl class="pd-specs">${fields}</dl>
         <div class="qv-actions">
-          <a class="btn btn-dark" href="${p.enquire}"${ext}>${esc(S.enquire)}${icon("i-arrow").replace('class="icon"', 'class="icon btn-arrow"')}</a>
-          <a class="arrow-link" href="${p.url}"><span>${esc(S.view_details)}</span><span class="arrow-dot">${icon("i-arrow-up")}</span></a>
+          <a class="btn btn-dark" href="${p.enquire}"${ext}>${esc(S.enquire)} ${icon("i-arrow")}</a>
+          <a class="text-link" href="${p.url}">${esc(S.view_details)} ${icon("i-arrow")}</a>
         </div>
       </div>
     </div>`;
@@ -216,197 +245,123 @@
     if (qv) { e.preventDefault(); quickView(qv.dataset.quickView); }
   });
 
-  /* ---------- Giant titles: split into letters that rise one by one ---------- */
-  $$(".h-giant").forEach((el) => {
-    if (reduceMotion || document.documentElement.lang === "ar") return; // keep Arabic letters joined
-    const text = el.textContent.trim();
-    el.setAttribute("aria-label", text);
-    el.innerHTML = [...text].map((ch, i) => ch === " " ? " " :
-      `<span class="ch-wrap" aria-hidden="true"><span class="ch" style="--i:${i}">${esc(ch)}</span></span>`).join("");
-  });
-
   /* ---------- Scroll reveal + stagger ---------- */
   $$("[data-reveal-group]").forEach((group) => {
-    $$(":scope > [data-reveal]", group).forEach((el, i) => el.style.setProperty("--d", `${Math.min(i, 8) * 0.09}s`));
+    $$(":scope > [data-reveal]", group).forEach((el, i) => el.style.setProperty("--d", `${Math.min(i, 8) * 0.08}s`));
   });
   const reveal = (el) => el.classList.add("is-in");
+  let io = null;
   if ("IntersectionObserver" in window && !reduceMotion) {
-    const io = new IntersectionObserver((entries) => {
+    io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) { reveal(entry.target); io.unobserve(entry.target); }
       });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.06 });
-    $$("[data-reveal], .h-giant").forEach((el) => io.observe(el));
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
+    $$("[data-reveal]").forEach((el) => io.observe(el));
   } else {
-    $$("[data-reveal], .h-giant").forEach(reveal);
+    $$("[data-reveal]").forEach(reveal);
   }
 
-  /* ---------- Hero image: gentle zoom as the page scrolls ---------- */
+  /* ---------- Hero parallax (after the entrance zoom) ---------- */
   const para = $("[data-parallax]");
   if (para && !reduceMotion) {
     const img = $("img", para);
-    let ticking = false;
+    let ready = false, ticking = false;
+    // the entrance zoom keeps its last frame (fill: both), which would win
+    // over the inline transform: drop it once it has played
+    img?.addEventListener("animationend", () => { img.style.animation = "none"; ready = true; update(); }, { once: true });
     const update = () => {
-      const r = para.getBoundingClientRect();
-      const p = Math.min(Math.max(-r.top / r.height, 0), 1);
-      img.style.setProperty("--ps", (1 + p * 0.08).toFixed(4));
       ticking = false;
+      if (!ready || !img) return;
+      const y = Math.min(window.scrollY, window.innerHeight);
+      img.style.transform = `translateY(${(y * 0.12).toFixed(1)}px) scale(1.04)`;
     };
     window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   }
 
-  /* ---------- Tabs with a sliding pill ---------- */
-  $$("[data-tabs]").forEach((tabs) => {
-    const list = $(".tab-list", tabs);
-    const btns = $$(".tab-btn", list);
-    const pill = $(".tab-pill", list);
-    const panels = btns.map((b) => document.getElementById(b.getAttribute("aria-controls")));
-    const place = () => {
-      const active = btns.find((b) => b.getAttribute("aria-selected") === "true") || btns[0];
-      if (!pill || !active) return;
-      const lr = list.getBoundingClientRect();
-      const br = active.getBoundingClientRect();
-      // the pill is anchored at inset-inline-start: 0, which is the right edge in RTL
-      const x = rtl ? -(lr.right - br.right) : br.left - lr.left;
-      pill.style.setProperty("--x", `${x}px`);
-      pill.style.setProperty("--w", `${br.width}px`);
-      pill.style.setProperty("--y", `${br.top - lr.top}px`);
-      pill.style.setProperty("--h", `${br.height}px`);
-    };
-    const select = (i, focus) => {
-      btns.forEach((b, j) => {
-        const on = i === j;
-        b.setAttribute("aria-selected", String(on));
-        b.tabIndex = on ? 0 : -1;
-        if (panels[j]) {
-          panels[j].hidden = !on;
-          panels[j].classList.toggle("is-active", on);
-          if (on && !reduceMotion) {
-            panels[j].classList.remove("is-entering"); void panels[j].offsetWidth; panels[j].classList.add("is-entering");
-            $$("[data-reveal]", panels[j]).forEach(reveal);
-          }
-        }
-      });
-      if (focus) btns[i].focus();
-      place();
-    };
-    btns.forEach((b, i) => {
-      b.addEventListener("click", () => select(i));
-      b.addEventListener("keydown", (e) => {
-        const next = { ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1, Home: -99, End: 99 }[e.key];
-        if (next === undefined) return;
-        e.preventDefault();
-        const n = next === -99 ? 0 : next === 99 ? btns.length - 1 : (i + next + btns.length) % btns.length;
-        select(n, true);
-      });
+  /* ---------- Olive slider (cross-fade) ---------- */
+  $$('[data-slider="arrival"]').forEach((arrival) => {
+    const slides = $$(".arrival-slide", arrival);
+    const dotsWrap = $("[data-dots]", arrival);
+    if (slides.length < 2 || !dotsWrap) return;
+    let index = 0;
+    let timer;
+    const dots = slides.map((_, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-label", `${i + 1} / ${slides.length}`);
+      b.addEventListener("click", () => { go(i); restart(); });
+      dotsWrap.appendChild(b);
+      return b;
     });
-    // pill position needs fonts and layout; the list is always rendered, so observe its size
-    if ("ResizeObserver" in window) new ResizeObserver(place).observe(list);
-    document.fonts?.ready.then(place);
-    place();
-  });
-
-  /* ---------- Product gallery ---------- */
-  $$("[data-gallery]").forEach((g) => {
-    const slides = $$("[data-slide]", g);
-    const thumbs = $$("[data-thumb]", g);
-    let cur = 0;
-    const show = (i) => {
-      cur = (i + slides.length) % slides.length;
-      slides.forEach((s, j) => { s.hidden = j !== cur; s.classList.toggle("is-active", j === cur); });
-      thumbs.forEach((t, j) => { t.classList.toggle("is-active", j === cur); t.setAttribute("aria-pressed", String(j === cur)); });
+    const go = (i) => {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((s, k) => {
+        s.classList.toggle("is-active", k === index);
+        s.setAttribute("aria-hidden", String(k !== index));
+        s.inert = k !== index;
+      });
+      dots.forEach((d, k) => { d.classList.toggle("is-active", k === index); d.setAttribute("aria-current", String(k === index)); });
     };
-    thumbs.forEach((t, i) => t.addEventListener("click", () => show(i)));
-    $("[data-gallery-prev]", g)?.addEventListener("click", () => show(cur - 1));
-    $("[data-gallery-next]", g)?.addEventListener("click", () => show(cur + 1));
+    const restart = () => {
+      clearInterval(timer);
+      if (!reduceMotion) timer = setInterval(() => go(index + 1), 6000);
+    };
+    $("[data-prev]", arrival)?.addEventListener("click", () => { go(index - 1); restart(); });
+    $("[data-next]", arrival)?.addEventListener("click", () => { go(index + 1); restart(); });
+    arrival.addEventListener("mouseenter", () => clearInterval(timer));
+    arrival.addEventListener("mouseleave", restart);
+    arrival.addEventListener("focusin", () => clearInterval(timer));
     let x0 = null;
-    const main = $(".pd-main", g);
-    main?.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-    main?.addEventListener("touchend", (e) => {
-      if (x0 === null || slides.length < 2) return;
+    arrival.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    arrival.addEventListener("touchend", (e) => {
+      if (x0 === null) return;
       const dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 40) show(cur + ((dx < 0) !== rtl ? 1 : -1));
+      if (Math.abs(dx) > 40) { go(index + ((dx < 0) !== rtl ? 1 : -1)); restart(); }
       x0 = null;
     });
+    go(0);
+    restart();
   });
 
-  /* ---------- Products menu: featured photos follow the hovered collection ---------- */
-  // Hover or focus a collection and, after a short pause (so a cursor
-  // passing over other names on its way to the photos changes nothing), the
-  // two featured slots show that collection's first two products. Moving
-  // onto the photos keeps them; closing the menu restores the defaults.
-  // A one-product collection leaves slot two empty.
-  //
-  // The new photos are fetched and decoded while the old ones stay on
-  // screen; only then does each slot fade out (0.12s), swap, and fade back
-  // in (0.2s), slot two 40ms after slot one. A newer hover cancels an older
-  // swap still in flight.
-  (() => {
-    const mega = $(".has-mega");
-    const panel = mega && $(".mega", mega);
-    const slots = mega ? $$("[data-mega-slot]", mega) : [];
-    const P = (window.AHLAM || {}).products || {};
-    if (!slots.length || !Object.keys(P).length) return;
-    const defaults = slots.map((s) => [s.innerHTML, s.getAttribute("href")]);
-    const OUT = 120, STAGGER = 40;
-    const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
-    const preload = (im) => {
-      const img = new Image();
-      img.sizes = "320px"; img.srcset = im.srcset; img.src = im.src;
-      return (img.decode ? img.decode() : Promise.resolve()).catch(() => {});
-    };
-    const fill = (slot, p, im) => {
-      slot.setAttribute("href", p.url);
-      slot.style.visibility = "";
-      const img = $("img", slot);
-      img.src = im.src; img.srcset = im.srcset; img.alt = "";
-      img.className = im.cutout ? "is-cutout" : "is-photo";
-      $("strong", slot).textContent = p.name;
-      $(".mega-feature-copy .muted", slot).textContent = p.collection;
-    };
-    let current = null;
-    let token = 0;
-    let timer;
-    const restore = () => {
-      token++;
-      slots.forEach((s, i) => {
-        s.innerHTML = defaults[i][0]; s.setAttribute("href", defaults[i][1]);
-        s.style.visibility = ""; s.classList.remove("is-swapping");
+  /* ---------- Products page: filter by collection, kept in ?c= ---------- */
+  const grid = $("[data-filter-grid]");
+  if (grid) {
+    const chips = $$("[data-filter]");
+    const cards = $$(".product-card", grid);
+    const links = $("[data-coll-link]");
+    const known = new Set(chips.map((c) => c.dataset.filter));
+    const apply = (slug, animate) => {
+      if (!known.has(slug)) slug = "";
+      chips.forEach((c) => {
+        const on = c.dataset.filter === slug;
+        c.classList.toggle("is-active", on);
+        if (on) c.setAttribute("aria-current", "true"); else c.removeAttribute("aria-current");
       });
-      panel.classList.remove("is-previewing");
+      cards.forEach((card) => {
+        card.hidden = Boolean(slug) && card.dataset.coll !== slug;
+        if (!card.hidden) reveal(card);
+      });
+      if (links) {
+        links.hidden = !slug;
+        $$("[data-for]", links).forEach((p) => { p.hidden = p.dataset.for !== slug; });
+      }
+      if (animate && !reduceMotion) { grid.classList.remove("is-refreshing"); void grid.offsetWidth; grid.classList.add("is-refreshing"); }
     };
-    const show = async (link) => {
-      if (link === current) return;
-      current = link;
-      const items = (link.dataset.preview || "").split(",").map((k) => P[k]).filter(Boolean);
-      if (!items.length) return;
-      const mine = ++token;
-      await Promise.all(items.map((p) => preload(p.images[0])));
-      if (mine !== token) return;                       // a newer hover took over
-      panel.classList.add("is-previewing");
-      slots.forEach((s, i) => { s.style.setProperty("--swap-d", `${i * STAGGER}ms`); s.classList.add("is-swapping"); });
-      // each slot swaps the moment its own fade-out ends: no blank pause
-      slots.forEach((s, i) => wait(OUT + i * STAGGER).then(() => {
-        if (mine !== token) return;
-        if (items[i]) {
-          fill(s, items[i], items[i].images[0]);
-          void s.offsetWidth;                            // start the fade-in from the hidden state
-          s.classList.remove("is-swapping");
-        } else {
-          s.style.visibility = "hidden";                 // stays faded out, then hidden
-        }
-      }));
-    };
-    $$(".mega-coll", mega).forEach((link) => {
-      link.addEventListener("pointerenter", () => { clearTimeout(timer); timer = setTimeout(() => show(link), 120); });
-      link.addEventListener("pointerleave", () => clearTimeout(timer));
-      link.addEventListener("focus", () => show(link));
-    });
-    // restore once the menu has closed and faded out, unless it was reopened
-    new MutationObserver(() => {
-      if (!mega.classList.contains("is-open") && current) { current = null; clearTimeout(timer); setTimeout(() => { if (!mega.classList.contains("is-open") && !current) restore(); }, 400); }
-    }).observe(mega, { attributes: true, attributeFilter: ["class"] });
-  })();
+    const fromUrl = () => new URLSearchParams(location.search).get("c") || "";
+    chips.forEach((chip) => chip.addEventListener("click", (e) => {
+      e.preventDefault();
+      const slug = chip.dataset.filter;
+      const url = new URL(location.href);
+      if (slug) url.searchParams.set("c", slug); else url.searchParams.delete("c");
+      history.pushState({ c: slug }, "", url);
+      apply(slug, true);
+    }));
+    window.addEventListener("popstate", () => apply(fromUrl(), true));
+    apply(fromUrl(), false);
+    // bring the chosen chip into view on phones
+    if (fromUrl()) $(".chip.is-active", $(".shop-cats"))?.scrollIntoView({ block: "nearest", inline: "center" });
+  }
 
   /* ---------- Misc ---------- */
   $$("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });

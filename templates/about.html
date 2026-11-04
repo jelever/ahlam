@@ -1,35 +1,36 @@
 {% extends 'base.html' %}
 {% block title %}{{ t.about_eyebrow }} | {{ site.name[lang] }}{% endblock %}
+{% block description %}{{ t.about_lead }}{% endblock %}
 {% block main %}
-{{ m.page_hero(t.about_eyebrow, t.about_title, t.about_lead, None, [(t.nav_about, None)], brand='dark') }}
-<section class="section-sm">
-  <div class="container">
-    <div class="split">
-      <div class="split-media img-zoom" data-reveal>{{ m.picture('ambience/flint-room.jpg', L(products['flint-comforter'].name), sizes='(max-width: 1024px) 100vw, 50vw') }}</div>
-      <div class="split-copy" data-reveal>
-        <p class="eyebrow">{{ t.about_eyebrow }}</p>
-        <h2 class="h2">{{ t.about_how_title }}</h2>
-        <p class="muted">{{ t.about_how_text }}</p>
-        <div>{{ m.arrow_link(t.browse_products, url('/products/')) }}</div>
-      </div>
-    </div>
-  </div>
-</section>
+{{ m.page_hero(t.about_eyebrow, t.about_title, t.about_lead, None, [(t.nav_about, None)], brand=True) }}
 <section class="section">
-  <div class="container">
-    {{ m.section_head(t.nav_collections, t.about_what_title, '', url('/collections/'), t.view_all) }}
-    <div class="tile-grid tile-grid-3" data-reveal-group>
-      {% for c in collections %}{{ m.tile(c) }}{% endfor %}
-    </div>
-    {{ m.soon_list() }}
-  </div>
-</section>
-<section class="section-sm">
-  <div class="container">
-    <div class="cta-band" data-reveal>
-      <div><h2 class="h2">{{ t.partners_title }}</h2><p>{{ t.partners_text }}</p></div>
-      <a href="{{ url('/contact/') }}" class="btn btn-white">{{ t.contact_us }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
+  <div class="container split">
+    <div class="split-media" data-reveal>{{ m.picture('ambience/flint-room.jpg', L(products['flint-comforter'].name), sizes='(max-width: 900px) 100vw, 640px') }}</div>
+    <div class="split-copy" data-reveal>
+      {{ m.eyebrow(t.about_eyebrow) }}
+      <h2 class="h2">{{ t.about_how_title }}</h2>
+      <p class="muted">{{ t.about_how_text }}</p>
+      {{ m.text_link(t.browse_products, url('/products/')) }}
     </div>
   </div>
 </section>
+
+{{ m.steps() }}
+
+<section class="rooms section">
+  <div class="container rooms-grid">
+    <div class="rooms-intro" data-reveal>
+      {{ m.eyebrow(t.nav_collections) }}
+      <h2 class="h2">{{ t.about_what_title }}</h2>
+      {{ m.text_link(t.all_collections, url('/collections/')) }}
+    </div>
+    <div class="room-cards" data-reveal-group>
+      {% for c in collections %}{{ m.coll_card(c) }}{% endfor %}
+    </div>
+  </div>
+  <div class="container">{{ m.soon_list() }}</div>
+</section>
+
+{{ m.cta_band(t.partners_title, t.partners_text, m.enquire_href(), t.contact_us) }}
+<div class="section-gap"></div>
 {% endblock %}

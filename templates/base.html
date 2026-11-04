@@ -12,16 +12,24 @@
   {% endfor %}
   <link rel="alternate" hreflang="x-default" href="{{ alternates['ar'] }}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="{{ site.name[lang] }}">
+  <meta property="og:site_name" content="{{ site.legal_name[lang] }}">
   <meta property="og:title" content="{{ self.title() }}">
   <meta property="og:description" content="{{ self.description() }}">
   <meta property="og:url" content="{{ canonical }}">
   <meta property="og:image" content="{{ og_image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ self.title() }}">
   <meta property="og:locale" content="{{ 'ar_SA' if lang == 'ar' else 'en_US' }}">
+  <meta property="og:locale:alternate" content="{{ 'en_US' if lang == 'ar' else 'ar_SA' }}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="twitter:title" content="{{ self.title() }}">
+  <meta name="twitter:description" content="{{ self.description() }}">
+  <meta name="twitter:image" content="{{ og_image }}">
+  <meta name="theme-color" content="#3d4633">
+  <meta name="color-scheme" content="light">
   <script>document.documentElement.classList.add('js');</script>
-  <link rel="icon" href="{{ asset('static/brand/favicon/favicon.ico') }}" sizes="any">
+  <link rel="icon" href="{{ asset('static/brand/favicon/favicon.ico') }}" sizes="32x32">
   <link rel="icon" href="{{ asset('static/brand/favicon/favicon.svg') }}" type="image/svg+xml">
   <link rel="apple-touch-icon" href="{{ asset('static/brand/favicon/apple-touch-icon.png') }}">
   <link rel="manifest" href="{{ asset('static/brand/favicon/site.webmanifest') }}">
@@ -29,60 +37,35 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   {% if lang == 'ar' -%}
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
   {%- else -%}
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Alexandria:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Alexandria:wght@400;500&display=swap" rel="stylesheet">
   {%- endif %}
   <link rel="stylesheet" href="{{ asset('static/css/site.css') }}">
+  <script type="application/ld+json">{{ org_jsonld }}</script>
 </head>
 <body class="page-{{ page }}">
 <a class="skip-link" href="#main">{{ t.skip }}</a>
 {% include 'partials/sprite.html' %}
 
-<header class="site-header">
+{% macro nav_link(key, href) -%}
+<a href="{{ href }}"{% if page == key %} class="is-active" aria-current="page"{% endif %}>{{ t['nav_' ~ key] }}</a>
+{%- endmacro %}
+
+<header class="site-header{% if page != 'home' %} is-inner{% endif %}">
   <div class="container header-inner">
     {{ m.logo() }}
-
     <nav class="main-nav" aria-label="{{ t.nav_primary }}">
-      <a href="{{ url('/') }}" class="nav-link{% if page == 'home' %} is-active{% endif %}"{% if page == 'home' %} aria-current="page"{% endif %}>{{ t.nav_home }}</a>
-
-      <div class="nav-item has-drop has-mega">
-        <a href="{{ url('/products/') }}" class="nav-link{% if page == 'products' %} is-active{% endif %}"{% if page == 'products' %} aria-current="page"{% endif %}>{{ t.nav_products }}</a>
-        <button class="nav-caret" type="button" aria-expanded="false" aria-label="{{ t.nav_products }}">{{ m.icon('i-chev-d') }}</button>
-        <div class="mega">
-          <div class="mega-inner">
-            {# collections in two columns with their model counts; individual
-               products live on the products page (48 links did not fit) #}
-            {% set half = (collections | length + 1) // 2 %}
-            {% for group in [collections[:half], collections[half:]] %}
-            <div class="mega-col">
-              <p class="mega-title"{% if not loop.first %} aria-hidden="true"{% endif %}>{{ t.mega_collections if loop.first else ' ' }}</p>
-              {% for c in group %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="mega-coll" data-preview="{{ c.preview_slugs | join(',') }}"><span>{{ L(c.name) }}</span><span class="mega-count">{{ c.products | length }}</span></a>{% endfor %}
-            </div>
-            {% endfor %}
-            {% for fp in mega_featured %}
-            <a href="{{ url('/products/' ~ fp.slug ~ '/') }}" class="mega-feature" data-mega-slot>
-              <span class="mega-feature-img img-zoom">{{ m.picture(fp.images[0].src, '', sizes='320px') }}</span>
-              <span class="mega-feature-copy">
-                <span class="eyebrow">{{ t.mega_featured }}</span>
-                <strong>{{ L(fp.name) }}</strong>
-                <span class="muted">{{ L(fp.coll.name) }}</span>
-              </span>
-            </a>
-            {% endfor %}
-          </div>
-          <div class="mega-foot">{{ m.arrow_link(t.all_products, url('/products/')) }}</div>
-        </div>
-      </div>
-
-      <a href="{{ url('/collections/') }}" class="nav-link{% if page == 'collections' %} is-active{% endif %}"{% if page == 'collections' %} aria-current="page"{% endif %}>{{ t.nav_collections }}</a>
-      <a href="{{ url('/about/') }}" class="nav-link{% if page == 'about' %} is-active{% endif %}"{% if page == 'about' %} aria-current="page"{% endif %}>{{ t.nav_about }}</a>
-      <a href="{{ url('/contact/') }}" class="nav-link{% if page == 'contact' %} is-active{% endif %}"{% if page == 'contact' %} aria-current="page"{% endif %}>{{ t.nav_contact }}</a>
+      {{ nav_link('home', url('/')) }}
+      {{ nav_link('products', url('/products/')) }}
+      {{ nav_link('collections', url('/collections/')) }}
+      {{ nav_link('about', url('/about/')) }}
+      {{ nav_link('contact', url('/contact/')) }}
     </nav>
-
     <div class="header-actions">
+      <button class="icon-btn" type="button" data-search-open aria-label="{{ t.search_open }}">{{ m.icon('i-search') }}</button>
       <a class="lang-switch" href="{{ other_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}" aria-label="{{ t.lang_switch }}">{{ t.lang_switch_short }}</a>
-      <a href="{{ url('/products/') }}" class="btn btn-dark btn-xs hide-md">{{ t.browse_products }}</a>
+      <a href="{{ m.enquire_href() }}"{{ m.ext() }} class="btn btn-dark btn-sm header-cta">{{ t.contact_us }}</a>
       <button class="icon-btn menu-toggle" type="button" aria-label="{{ t.menu_open }}" aria-expanded="false">{{ m.icon('i-menu') }}</button>
     </div>
   </div>
@@ -90,35 +73,40 @@
 
 <div class="drawer" aria-hidden="true">
   <div class="drawer-panel" role="dialog" aria-label="{{ t.nav_primary }}">
-    <div class="drawer-top">
-      {{ m.logo() }}
-      <button class="icon-btn drawer-close" type="button" aria-label="{{ t.menu_close }}">{{ m.icon('i-close') }}</button>
-    </div>
-    <nav class="drawer-nav">
-      <a href="{{ url('/') }}">{{ t.nav_home }}</a>
-      <details>
-        <summary>{{ t.nav_products }} {{ m.icon('i-chev-d') }}</summary>
-        <div class="drawer-sub">
-          <a href="{{ url('/products/') }}">{{ t.all_products }}</a>
-          {% for c in collections %}<a href="{{ url('/products/#' ~ c.slug) }}">{{ L(c.name) }}</a>{% endfor %}
-        </div>
-      </details>
-      <a href="{{ url('/collections/') }}">{{ t.nav_collections }}</a>
-      <a href="{{ url('/about/') }}">{{ t.nav_about }}</a>
-      <a href="{{ url('/contact/') }}">{{ t.nav_contact }}</a>
+    <button class="icon-btn drawer-close" type="button" aria-label="{{ t.menu_close }}">{{ m.icon('i-close') }}</button>
+    {{ m.logo() }}
+    <nav>
+      {{ nav_link('home', url('/')) }}
+      {{ nav_link('products', url('/products/')) }}
+      {{ nav_link('collections', url('/collections/')) }}
+      {{ nav_link('about', url('/about/')) }}
+      {{ nav_link('contact', url('/contact/')) }}
     </nav>
-    <div class="drawer-foot">
-      {# both languages, current one highlighted; each name in its own typeface #}
-      {% set ar_url = url(path) if lang == 'ar' else other_url %}
-      {% set en_url = url(path) if lang == 'en' else other_url %}
-      <div class="lang-seg" role="group" aria-label="{{ t.language }}">
-        <a href="{{ ar_url }}" lang="ar" hreflang="ar"{% if lang == 'ar' %} class="is-active" aria-current="true"{% endif %}>العربية</a>
-        <a href="{{ en_url }}" lang="en" hreflang="en"{% if lang == 'en' %} class="is-active" aria-current="true"{% endif %}>English</a>
+    {# both languages, current one highlighted; each name in its own typeface #}
+    {% set ar_url = url(path) if lang == 'ar' else other_url %}
+    {% set en_url = url(path) if lang == 'en' else other_url %}
+    <div class="lang-seg" role="group" aria-label="{{ t.language }}">
+      <a href="{{ ar_url }}" lang="ar" hreflang="ar"{% if lang == 'ar' %} class="is-active" aria-current="true"{% endif %}>العربية</a>
+      <a href="{{ en_url }}" lang="en" hreflang="en"{% if lang == 'en' %} class="is-active" aria-current="true"{% endif %}>English</a>
+    </div>
+    <a href="{{ m.enquire_href() }}"{{ m.ext() }} class="btn btn-dark btn-block">{{ t.contact_us }} {{ m.icon('i-arrow') }}</a>
+  </div>
+</div>
+
+<div class="search-overlay" aria-hidden="true">
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="{{ t.search_label }}">
+    <div class="container">
+      <div class="search-bar">
+        {{ m.icon('i-search') }}
+        <label class="sr-only" for="search-input">{{ t.search_label }}</label>
+        <input id="search-input" type="search" placeholder="{{ t.search_placeholder }}" autocomplete="off" enterkeyhint="search">
+        <button class="icon-btn" type="button" data-search-close aria-label="{{ t.close }}">{{ m.icon('i-close') }}</button>
       </div>
-      <div class="drawer-btns">
-        <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
-        <a href="{{ url('/products/') }}" class="btn btn-dark">{{ t.browse_products }}</a>
+      <div class="search-hint">
+        <span>{{ t.search_hint }}</span>
+        {% for c in collections[:6] %}<button type="button" data-search-term="{{ L(c.name) }}">{{ L(c.name) }}</button>{% endfor %}
       </div>
+      <div class="search-results" data-search-results aria-live="polite"></div>
     </div>
   </div>
 </div>
@@ -129,38 +117,36 @@
 
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-panel panel">
-      <div class="footer-grid" data-reveal-group>
-        <div class="footer-brand" data-reveal>
-          {{ m.logo() }}
-          <p class="muted">{{ t.partners_text }}</p>
-          <div><a href="{{ url('/contact/') }}" class="btn btn-dark btn-sm">{{ t.contact_us }}{{ m.icon('i-arrow', 'btn-arrow') }}</a></div>
-        </div>
-        <div class="footer-col" data-reveal>
-          <h4>{{ t.footer_links }}</h4>
-          <a href="{{ url('/products/') }}">{{ t.nav_products }}</a>
-          <a href="{{ url('/collections/') }}">{{ t.nav_collections }}</a>
-          <a href="{{ url('/about/') }}">{{ t.nav_about }}</a>
-          <a href="{{ url('/contact/') }}">{{ t.nav_contact }}</a>
-        </div>
-        <div class="footer-col" data-reveal>
-          <h4>{{ t.footer_collections }}</h4>
-          {% for c in collections %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}
-        </div>
-        <div class="footer-col" data-reveal>
-          <h4>{{ t.contact_title }}</h4>
-          {% for key, label, value, href, icon in contact_items %}
-          {% if is_placeholder(value) %}<span class="muted">{{ label }}: {{ t.to_be_added }}</span>
-          {% elif href %}<a href="{{ href }}"{% if key == 'whatsapp' %} target="_blank" rel="noopener"{% endif %}>{{ label }}: <bdi>{{ value }}</bdi></a>
-          {% else %}<span>{{ label }}: {{ value }}</span>{% endif %}
-          {% endfor %}
-        </div>
+    <div class="footer-grid" data-reveal-group>
+      <div class="footer-brand" data-reveal>
+        {{ m.logo() }}
+        <p class="muted">{{ t.footer_about }}</p>
+        <a href="{{ m.enquire_href() }}"{{ m.ext() }} class="chat-pill">{{ t.footer_chat }} {{ m.icon('i-chat') }}</a>
       </div>
-      <div class="footer-bottom">
-        <p>© <span data-year>{{ year }}</span> {{ site.legal_name[lang] }}. {{ t.footer_rights }}</p>
-        <div class="footer-legal">
-          <a href="{{ other_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{{ t.lang_switch }}</a>
-        </div>
+      <div class="footer-col" data-reveal>
+        <h4>{{ t.footer_links }}</h4>
+        <a href="{{ url('/products/') }}">{{ t.nav_products }}</a>
+        <a href="{{ url('/collections/') }}">{{ t.nav_collections }}</a>
+        <a href="{{ url('/about/') }}">{{ t.nav_about }}</a>
+        <a href="{{ url('/contact/') }}">{{ t.nav_contact }}</a>
+      </div>
+      <div class="footer-col footer-colls" data-reveal>
+        <h4>{{ t.footer_collections }}</h4>
+        <div>{% for c in collections %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}</div>
+      </div>
+      <div class="footer-col" data-reveal>
+        <h4>{{ t.contact_title }}</h4>
+        {% for key, label, value, href, ic in contact_items %}
+        {% if is_placeholder(value) %}<span class="muted">{{ label }}: {{ t.to_be_added }}</span>
+        {% elif href %}<a href="{{ href }}"{% if key == 'whatsapp' %} target="_blank" rel="noopener"{% endif %}>{{ label }}: <bdi>{{ value }}</bdi></a>
+        {% else %}<span>{{ label }}: {{ value }}</span>{% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span data-year>{{ year }}</span> {{ site.legal_name[lang] }}. {{ t.footer_rights }}</p>
+      <div class="footer-legal">
+        <a href="{{ other_url }}" hreflang="{{ other_lang }}" lang="{{ other_lang }}">{{ t.lang_switch }}</a>
       </div>
     </div>
   </div>

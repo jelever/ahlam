@@ -1,0 +1,4 @@
+fonttools>=4.60
+uharfbuzz>=0.50
+resvg-py>=0.5
+Pillow>=12

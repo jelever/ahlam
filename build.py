@@ -35,6 +35,8 @@ OUT = ROOT / "_site"
 CACHE = ROOT / ".cache" / "img"
 LANGS = ("ar", "en")
 WIDTHS = (640, 1200, 2000)
+OG_STRIP = ROOT / "brand" / "dist" / "og-strip.png"   # logo strip for share images
+OG_DEFAULT = "static/brand/social/og-default.jpg"      # pages without a photo of their own
 FIELD_ORDER = ("brand", "model", "code", "type", "material", "pattern", "size",
                "contents", "filling", "weight", "origin")
 
@@ -177,7 +179,7 @@ class Images:
                     height = round(h * width / w)
                     im.resize((width, height), Image.LANCZOS).save(cached, "WEBP", quality=84, method=6)
                 variants.append((width, rel))
-            og_rel = f"img/{stem}-og.jpg"
+            og_rel = f"img/{stem}-share.jpg"
             og_cached = CACHE / og_rel
             if not og_cached.exists() or og_cached.stat().st_mtime < path.stat().st_mtime:
                 og_cached.parent.mkdir(parents=True, exist_ok=True)
@@ -204,10 +206,15 @@ class Images:
 
     @staticmethod
     def _og(im: Image.Image) -> Image.Image:
-        canvas = Image.new("RGB", (1200, 630), "white")
+        """Share image (1200x630): the photo on the brand's light band, over
+        the olive logo strip that brand/build_brand.py draws."""
+        strip = Image.open(OG_STRIP).convert("RGB")
+        canvas = Image.new("RGB", (1200, 630), "#f3eee8")
+        area_h = 630 - strip.height
         copy = im.copy()
-        copy.thumbnail((1100, 590), Image.LANCZOS)
-        canvas.paste(copy, ((1200 - copy.width) // 2, (630 - copy.height) // 2))
+        copy.thumbnail((1200 - 2 * 36, area_h - 2 * 28), Image.LANCZOS)
+        canvas.paste(copy, ((1200 - copy.width) // 2, (area_h - copy.height) // 2))
+        canvas.paste(strip, (0, area_h))
         return canvas
 
 
@@ -286,8 +293,27 @@ def make_env(site, strings, images: Images):
     mark = (ROOT / "templates" / "partials" / "mark.svg").read_text(encoding="utf-8")
     mark_g = Markup(mark[mark.index("<g"):mark.rindex("</g>") + 4])
 
+    # Organisation details for search engines. Contact points are added only
+    # once they are real (placeholders are skipped).
+    org = {
+        "@context": "https://schema.org", "@type": "Organization",
+        "name": site["legal_name"]["ar"], "alternateName": site["legal_name"]["en"],
+        "url": site["base_url"] + base + "/",
+        "logo": site["base_url"] + base + "/static/brand/favicon/icon-512.png",
+    }
+    phone, email = site["contact"]["phone"], site["contact"]["email"]
+    if not is_placeholder(phone) or not is_placeholder(email):
+        cp = {"@type": "ContactPoint", "contactType": "sales"}
+        if not is_placeholder(phone):
+            cp["telephone"] = phone
+        if not is_placeholder(email):
+            cp["email"] = email
+        org["contactPoint"] = [cp]
+    org_jsonld = Markup(json.dumps(org, ensure_ascii=False).replace("</", r"<\/"))
+    env.tests["is_cutout"] = lambda src: images.get(src)["cutout"]
+
     whatsapp = site["contact"]["whatsapp"]
-    env.globals.update(asset=asset, img=img, preload=preload, site=site, year=dt.date.today().year,
+    env.globals.update(org_jsonld=org_jsonld, asset=asset, img=img, preload=preload, site=site, year=dt.date.today().year,
                        is_placeholder=is_placeholder, mark_g=mark_g,
                        whatsapp_number=None if is_placeholder(whatsapp) else whatsapp)
     return env
@@ -339,6 +365,8 @@ def quick_view_data(site, strings, products, images: Images, lang: str) -> dict:
             "collection": L(p["coll"]["name"]),
             "summary": L(p["coll"]["summary"]),
             "fields": [[t["field_" + k], L(v)] for k, v in p["fields"]],
+            "thumb": pics[0]["srcset"].split(",")[0].split(" ")[0],
+            "coll": p["coll"]["slug"],
             "images": pics,
             "url": base + page_path(lang, f"/products/{p['slug']}/"),
             "enquire": enquire(p),
@@ -347,7 +375,8 @@ def quick_view_data(site, strings, products, images: Images, lang: str) -> dict:
     return {
         "lang": lang,
         "products": data,
-        "strings": {k: t[k] for k in ("enquire", "view_details", "images_shown", "close", "gallery_open")},
+        "strings": {k: t[k] for k in ("enquire", "view_details", "images_shown", "close", "gallery_open",
+                                      "search_results", "search_empty")},
     }
 
 
@@ -407,9 +436,9 @@ def build(release: bool = False):
                 og_image=None,
             )
             og_src = (ctx["p"]["images"][0]["src"] if "p" in ctx
-                      else ctx["c"]["cover"] if "c" in ctx
-                      else products[home["hero"]]["images"][0]["src"])
-            context["og_image"] = site["base_url"] + env.globals["asset"](images.get(og_src)["og"])
+                      else ctx["c"]["cover"] if "c" in ctx else None)
+            og_rel = images.get(og_src)["og"] if og_src else OG_DEFAULT
+            context["og_image"] = site["base_url"] + env.globals["asset"](og_rel)
             out = OUT / page_path(lang, path).lstrip("/") / "index.html"
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_text(env.get_template(template).render(context), encoding="utf-8")
@@ -452,6 +481,7 @@ class PageScan(HTMLParser):
         self.refs: list[str] = []
         self.imgs: list[dict] = []
         self.text: list[str] = []
+        self.meta: dict[str, str] = {}
         self._skip = 0
 
     def handle_starttag(self, tag, attrs):
@@ -465,6 +495,8 @@ class PageScan(HTMLParser):
             self.refs += [part.strip().split(" ")[0] for part in a["srcset"].split(",")]
         if tag == "img":
             self.imgs.append(a)
+        if tag == "meta" and a.get("property"):
+            self.meta[a["property"]] = a.get("content") or ""
         for key in ("alt", "title", "aria-label", "content"):
             if a.get(key):
                 self.text.append(a[key])
@@ -521,6 +553,14 @@ def check(site) -> list[str]:
                 errors.append(f"{rel}: <img> without alt: {im.get('src')}")
             if not (im.get("width") and im.get("height")) and not im.get("src", "").endswith(".svg"):
                 errors.append(f"{rel}: <img> without width/height: {im.get('src')}")
+        if rel != "404.html" and not scan.meta.get("og:image"):
+            errors.append(f"{rel}: no og:image")
+        for need in ("favicon.ico", "favicon.svg", "apple-touch-icon.png", "site.webmanifest"):
+            if not any(r.endswith(need) for r in scan.refs):
+                errors.append(f"{rel}: no link to {need}")
+        og = scan.meta.get("og:image", "")
+        if og.startswith(site["base_url"]) and not (OUT / og[len(site["base_url"] + base):].lstrip("/")).is_file():
+            errors.append(f"{rel}: og:image missing: {og}")
         text = " ".join(scan.text)
         for pattern in BANNED:
             for m in pattern.finditer(text):
@@ -549,6 +589,10 @@ def check(site) -> list[str]:
                     path = path / "index.html"
                 if not ref.startswith(base + "/") or not path.is_file():
                     errors.append(f"{data_file.name}: {slug}: broken link {ref}")
+    manifest = OUT / "static" / "brand" / "favicon" / "site.webmanifest"
+    for icon in json.loads(manifest.read_text(encoding="utf-8"))["icons"]:
+        if not (manifest.parent / icon["src"]).is_file():
+            errors.append(f"site.webmanifest: missing icon {icon['src']}")
     for lang_root in ("", "en/"):
         if not (OUT / lang_root / "index.html").is_file():
             errors.append(f"missing home page {lang_root or '(ar)'}")

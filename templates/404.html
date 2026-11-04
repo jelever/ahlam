@@ -4,28 +4,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>404 · {{ site.name.ar }}</title>
+  <title>404 | {{ site.name.ar }}</title>
+  <meta name="theme-color" content="#3d4633">
+  <link rel="icon" href="{{ asset('static/brand/favicon/favicon.ico') }}" sizes="32x32">
   <link rel="icon" href="{{ asset('static/brand/favicon/favicon.svg') }}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{{ asset('static/brand/favicon/apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ asset('static/brand/favicon/site.webmanifest') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;700&family=Figtree:wght@400;500;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('static/css/site.css') }}">
 </head>
 <body class="picker-page">
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-logo" viewBox="48 48 189.2 193.5">{{ mark_g }}</symbol></defs></svg>
-  <main class="picker panel notfound">
-    <a href="{{ home_ar }}" class="logo"><svg class="icon logo-mark" aria-hidden="true"><use href="#i-logo"/></svg><span class="logo-text"><span class="logo-name">{{ site.name.ar }}</span><span class="logo-legal">{{ site.legal_name.ar }}</span></span></a>
+  <main class="picker notfound">
+    <a href="{{ home_ar }}" class="logo" aria-label="{{ site.name.ar }}">
+      <svg class="icon logo-mark" viewBox="0 0 48 48" width="40" height="40" aria-hidden="true">{{ mark_g }}</svg>
+      <span class="logo-text"><span class="logo-name">{{ site.name.ar }}</span><span class="logo-sub">{{ t_ar.logo_sub }}</span></span>
+    </a>
     <p class="nf-code">404</p>
     <div class="nf-cols">
       <div>
         <h1 class="h2">{{ t_ar.not_found_title }}</h1>
         <p class="muted">{{ t_ar.not_found_text }}</p>
-        <a href="{{ home_ar }}" class="btn btn-dark">{{ t_ar.back_home }}<svg class="icon btn-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="{{ home_ar }}" class="btn btn-dark">{{ t_ar.back_home }}<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div lang="en" dir="ltr">
         <h2 class="h2">{{ t_en.not_found_title }}</h2>
         <p class="muted">{{ t_en.not_found_text }}</p>
-        <a href="{{ home_en }}" class="btn btn-dark">{{ t_en.back_home }}<svg class="icon btn-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="{{ home_en }}" class="btn btn-dark">{{ t_en.back_home }}<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </main>
