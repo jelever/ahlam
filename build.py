@@ -627,8 +627,13 @@ def serve(port: int, base: str):
                 return
             super().send_error(code, message, explain)
 
+    class Server(http.server.ThreadingHTTPServer):
+        # The default queue (5) refuses connections when a browser fetches a
+        # page's images in parallel, and more so with two test browsers.
+        request_queue_size = 128
+
     print(f"Serving http://localhost:{port}{base}/  (Ctrl+C to stop)")
-    http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
+    Server(("127.0.0.1", port), Handler).serve_forever()
 
 
 def main():

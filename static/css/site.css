@@ -126,7 +126,7 @@ bdi { unicode-bidi: isolate; }
 .btn-ghost:hover { border-color: var(--olive-accent); }
 .btn-sm { height: 40px; padding: 0 20px; font-size: 13px; }
 .btn-block { width: 100%; }
-.btn-grow { flex: 1; }
+.btn-grow { flex: 1 1 auto; } /* auto basis: a basis of 0 collapsed the button's height in a column */
 
 .text-link {
   position: relative; display: inline-flex; align-items: center; gap: 14px;
@@ -349,8 +349,9 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
 
 /* ---------- Feature strip ---------- */
 .features-strip { background: var(--band); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.strip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 34px; padding-bottom: 34px; }
-.strip-item { display: flex; align-items: center; gap: 16px; justify-content: center; }
+.strip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 34px; padding-bottom: 34px; align-items: start; }
+.strip-item { display: flex; align-items: flex-start; gap: 16px; justify-content: center; }
+.strip-item > div { padding-top: 4px; }
 .strip-icon {
   width: 46px; height: 46px; border-radius: 50%; background: var(--white); display: grid; place-items: center; flex: none;
   color: var(--ink-soft); transition: transform .5s var(--ease), background .4s, color .4s;
@@ -363,9 +364,15 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
 :root[lang="ar"] .strip-item p { font-size: 12.5px; }
 
 /* ---------- Collection cards (the reference's room cards) ---------- */
-.rooms-grid { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: center; }
-.rooms-intro .h2 { margin-bottom: 14px; }
-.rooms-intro .muted { margin-bottom: 30px; max-width: 30ch; }
+/* the intro sits above the cards at every width (beside them, ten cards were
+   too narrow for the longer Arabic names): heading and "view all" share a
+   row, the description runs under them */
+.rooms-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 2.6vw, 32px); }
+.rooms-intro { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; column-gap: 24px; }
+.rooms-intro .eyebrow { flex-basis: 100%; }
+.rooms-intro .h2 { order: 1; margin-bottom: 0; }
+.rooms-intro .text-link { order: 2; }
+.rooms-intro .muted { order: 3; flex-basis: 100%; margin: 10px 0 0; }
 /* every collection shows on desktop (five to a row); phones swipe a row */
 .room-cards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(12px, 1.4vw, 18px); }
 .room-cards::-webkit-scrollbar { display: none; }
@@ -439,7 +446,8 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%;
   transform: scale(1.08); transition: transform 6s linear;
 }
-.arrival-slide.is-active .arrival-media img { transform: scale(1); }
+.arrival-slide.is-active .arrival-media img { transform: scale(1.04); } /* trims thin light borders in some client photos */
+.arrival-media img.is-cutout, .arrival-slide.is-active .arrival-media img.is-cutout { transform: none; }
 .arrival-media::after {
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background: linear-gradient(to right, var(--olive-2) 0, rgba(75, 86, 65, .55) 16%, rgba(75, 86, 65, 0) 40%);
@@ -680,8 +688,8 @@ img.is-cutout { object-fit: contain !important; mix-blend-mode: multiply; paddin
 .cta-band p { color: rgba(238, 240, 232, .82); max-width: 60ch; }
 
 /* ---------- Contact ---------- */
-.contact { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3vw, 36px); align-items: start; }
-.contact-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.contact { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(20px, 3vw, 36px); align-items: stretch; }
+.contact-tiles { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 14px; height: 100%; }
 .contact-tile {
   display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 18px; background: var(--white);
   box-shadow: 0 1px 0 var(--line); transition: box-shadow .4s var(--ease), transform .4s var(--ease);
@@ -795,11 +803,9 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
   .main-nav { display: none; }
   .menu-toggle { display: grid; }
   .header-actions { margin-inline-start: auto; }
-  .rooms-grid, .why-grid { grid-template-columns: 1fr; }
-  .rooms-intro, .why-intro { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; column-gap: 24px; }
-  .rooms-intro .eyebrow, .why-intro .eyebrow, .rooms-intro .muted { flex-basis: 100%; }
-  .rooms-intro .muted { margin-bottom: 10px; }
-  .rooms-intro .h2 { margin-bottom: 0; }
+  .why-grid { grid-template-columns: 1fr; }
+  .why-intro { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; column-gap: 24px; }
+  .why-intro .eyebrow { flex-basis: 100%; }
   .room-cards { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .footer-grid { grid-template-columns: repeat(3, 1fr); }
   .footer-brand { grid-column: span 3; }
@@ -813,8 +819,10 @@ a.contact-tile:hover .ct-arrow { transform: translateX(calc(4px * var(--dir))); 
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; min-height: 0; padding-inline: var(--gutter); }
   .hero-copy { padding: 116px 0 36px; }
+  .hero-grid { padding-bottom: 28px; }
   .hero-media { min-height: 440px; }
-  .hero-img-wrap { border-radius: 22px; }
+  /* stacked under the copy, the photo no longer needs to clear the header */
+  .hero-img-wrap { inset: 0; border-radius: 22px; }
   .strip-grid { grid-template-columns: repeat(2, 1fr); row-gap: 26px; }
   .strip-item { justify-content: flex-start; }
   .crafted { grid-template-columns: 1fr 1fr; }
