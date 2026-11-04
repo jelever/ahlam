@@ -146,6 +146,14 @@ def load_content():
     if home["hero"] not in products:
         raise BuildError(f"home.hero: unknown product {home['hero']}")
 
+    redirects = catalog.get("redirects") or {}
+    for old, new in redirects.items():
+        if old in products:
+            raise BuildError(f"redirects: {old} is still a product")
+        if new not in products:
+            raise BuildError(f"redirects: {old} points to unknown product {new}")
+    site["redirects"] = redirects
+
     return site, strings, collections, products, home
 
 
@@ -467,6 +475,24 @@ def build(release: bool = False):
             + json.dumps(quick_view_data(site, strings, products, images, lang), ensure_ascii=False)
             + ";\n", encoding="utf-8")
 
+    # Old product addresses: a page that sends visitors on to the product
+    # that replaced it (GitHub Pages cannot redirect on the server).
+    for old, new in site["redirects"].items():
+        for lang in LANGS:
+            target = site["base_path"] + page_path(lang, f"/products/{new}/")
+            canonical = site["base_url"] + target
+            out = OUT / page_path(lang, f"/products/{old}/").lstrip("/") / "index.html"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            name = html.escape(L(products[new]["name"], lang))
+            out.write_text(
+                "<!doctype html>\n"
+                f'<html lang="{lang}" dir="{"rtl" if lang == "ar" else "ltr"}"><head><meta charset="utf-8">'
+                f'<meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url={target}">'
+                f'<link rel="canonical" href="{canonical}"><title>{name}</title>'
+                f'<script>location.replace("{target}" + location.search + location.hash)</script></head>'
+                f'<body><a href="{target}">{name}</a></body></html>\n',
+                encoding="utf-8")
+
     # 404 page, served by GitHub Pages for any missing path. Arabic first.
     t_ar = {k: v["ar"] for k, v in strings.items()}
     t_en = {k: v["en"] for k, v in strings.items()}
@@ -498,6 +524,7 @@ class PageScan(HTMLParser):
         self.imgs: list[dict] = []
         self.text: list[str] = []
         self.meta: dict[str, str] = {}
+        self.redirect = False
         self._skip = 0
 
     def handle_starttag(self, tag, attrs):
@@ -513,6 +540,8 @@ class PageScan(HTMLParser):
             self.imgs.append(a)
         if tag == "meta" and a.get("property"):
             self.meta[a["property"]] = a.get("content") or ""
+        if tag == "meta" and (a.get("http-equiv") or "").lower() == "refresh":
+            self.redirect = True
         for key in ("alt", "title", "aria-label", "content"):
             if a.get(key):
                 self.text.append(a[key])
@@ -569,6 +598,8 @@ def check(site) -> list[str]:
                 errors.append(f"{rel}: <img> without alt: {im.get('src')}")
             if not (im.get("width") and im.get("height")) and not im.get("src", "").endswith(".svg"):
                 errors.append(f"{rel}: <img> without width/height: {im.get('src')}")
+        if scan.redirect:                    # a redirect page: only its link is checked
+            continue
         if rel != "404.html" and not scan.meta.get("og:image"):
             errors.append(f"{rel}: no og:image")
         for need in ("favicon.ico", "favicon.svg", "apple-touch-icon.png", "site.webmanifest"):

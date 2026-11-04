@@ -293,9 +293,11 @@ products:
 
   # Specs as printed on the client's image. Named by its printed size to tell
   # it apart from the other hotel pillow once the brand was removed.
-  - slug: pillow-hotel-50x70
+  # One product: the lifestyle photo and the packaging box were two entries
+  # until 2026-11-04 (pillow-hotel-50x70 redirects here, see `redirects`).
+  - slug: pillow-hotel
     collection: pillows
-    name: {ar: مخدة فندقية 50×70, en: Hotel pillow 50×70}
+    name: {ar: مخدة فندقية, en: Hotel pillow}
     fields:
       type: {ar: مخدة فندقية, en: Hotel pillow}
       size: {ar: 50 × 70 سم, en: 50 × 70 cm}
@@ -303,14 +305,7 @@ products:
       weight: {ar: 1500 جرام, en: 1500 g}
     images:
       - {src: pillows/hotel-50x70/main.jpg}
-
-  - slug: pillow-hotel
-    collection: pillows
-    name: {ar: مخدة فندقية, en: Hotel pillow}
-    fields:
-      type: {ar: مخدة فندقية, en: Hotel pillow}
-    images:
-      - {src: pillows/hotel/main.jpg}
+      - {src: pillows/hotel/main.jpg, label: {ar: العبوة, en: Packaging}}
 
   - slug: pillow-memory-foam-mesh
     collection: pillows
@@ -602,3 +597,9 @@ home:
   featured: [rt-m101-folding-bed, flint-comforter, chair-waha, rug-ceramic-patterned-230x160,
              prayer-rug-simli-white, blanket-bifi, iron-bunk-bed, round-plastic-table]
   mega: [rt-m101-folding-bed, rug-nano-patterned-230x160]
+
+# Old product addresses that now lead to another product (old slug: new slug).
+# The build writes a page at the old address that sends visitors on, so links
+# already shared keep working.
+redirects:
+  pillow-hotel-50x70: pillow-hotel

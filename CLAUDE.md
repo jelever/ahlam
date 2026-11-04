@@ -227,6 +227,13 @@ with "checks passed".
   is a small version (house and armchair) for icons. Everything is generated
   by `brand/build_brand.py`. The official set is in `archive/brand-2026-10/`,
   with a README on how to restore it.
+- **Merged or renamed products keep their old address working.** List the old
+  slug under `redirects:` at the end of `catalog.yml`. The build writes a
+  noindex page there that forwards to the new product, keeping the query and
+  hash, and leaves it out of the sitemap. GitHub Pages cannot redirect on the
+  server. The build fails if an old slug is still a product. First use
+  (2026-11-04): `pillow-hotel-50x70` was merged into `pillow-hotel` (the
+  lifestyle photo and its box were the same ROSHAN hotel pillow).
 - **No contact form.** A static host cannot send mail; WhatsApp, phone and
   email links instead.
 
