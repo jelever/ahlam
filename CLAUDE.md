@@ -13,20 +13,26 @@ shows collections and products to wholesale customers and partners and sends
 them to contact the company. **It is not a shop.** The client's brief
 forbids prices, cart, payment, invented reviews, client logos, statistics,
 branches and superlative claims, and forbids the crescent as a design
-element. Since the 2026-11 redesign (branch `redesign`), the design follows
+element. Since the 2026-11-04 redesign, the design follows
 `../../references/home-collections/ahlam` (a furniture-store layout): its
 tokens, page structures and motion, with the store features removed. Before
 it, the site was the company's previous site,
-`../../references/home-collections/homely`, which `main` still serves until
-the branch is merged.
+`../../references/home-collections/homely`; that version is kept on the
+branch `homely-design`.
 
 - Languages: Arabic default (RTL) at `/`, English at `/en/`
 - Stack: static HTML from `build.py` (Jinja2, Pillow, PyYAML); vanilla CSS/JS
 - Hosting: GitHub Pages (deployed by `.github/workflows/pages.yml` on every
   push to `main`), no Railway project
-- Domain: https://ahlamalqamar.com (from 2026-10-20; ahlam.elgaily.com
-  before). DNS is at GoDaddy (`ns25/26.domaincontrol.com`): the apex has A
-  records to GitHub Pages, and `www` is a CNAME. The MX and TXT records are
+- Domain: **intended https://ahlamalqamar.com, but GitHub still serves
+  https://ahlam.elgaily.com.** `base_url` has named ahlamalqamar.com since
+  e094096 (2026-10-20), so canonical, sitemap and share images point there.
+  But Settings → Pages still has the custom domain `ahlam.elgaily.com`
+  (checked 2026-11-04 with `gh api repos/jelever/ahlam/pages`), so
+  ahlamalqamar.com gets no site and no certificate. The owner `jelever` must
+  set the custom domain to `ahlamalqamar.com`. DNS is at GoDaddy
+  (`ns25/26.domaincontrol.com`): the apex has A records to GitHub Pages
+  (correct through 8.8.8.8), and `www` is a CNAME. The MX and TXT records are
   the company's Google email: never touch them. The custom domain is set in
   Settings → Pages, which only the owner `jelever` can change.
 - GitHub: `jelever/ahlam` (public; free Pages needs it). `MBajily` is a
@@ -37,7 +43,8 @@ the branch is merged.
 
 ## Status — 2026-11-04
 
-**Redesign on branch `redesign` (not merged, not deployed)**
+**Redesign: live since 2026-11-04** (branch `redesign` merged into `main`
+as 5729915 and deployed; the previous design is on `homely-design`)
 
 - New design after `references/home-collections/ahlam`, in Alexandria and
   Figtree (the owner kept the old fonts). All 127 pages, same URLs, same
@@ -45,8 +52,9 @@ the branch is merged.
   and at 390 px through iframes (the window would not resize), Arabic and
   English; no horizontal overflow; the products filter (`?c=`, the back
   button); quick view with the lightbox above it (Escape closes only the
-  top layer); and a bilingual 404. **Not yet checked on the owner's
-  iPhone.**
+  top layer); and a bilingual 404. Live smoke test on ahlam.elgaily.com:
+  pages, favicons, manifest and share images return 200, and a missing path
+  returns 404. **Not yet checked on the owner's iPhone.**
 - New logo: a redraw of the "Warm Home Collections" emblem the owner chose
   (house with a chimney, lamp, armchair and plant), with a small version
   for icons. It is pending the client's approval. The old crescent identity
@@ -77,25 +85,31 @@ the branch is merged.
 
 **Open work, in priority order**
 
-1. Real contact details from the client (`content/site.yml`). The live site
+1. **Custom domain (owner `jelever`):** Settings → Pages → custom domain
+   `ahlamalqamar.com`, then enforce HTTPS once the certificate is issued.
+   Until then the site answers only on ahlam.elgaily.com, and link previews
+   point at an address that does not serve.
+2. Client approval of the new logo, and of the feature-strip and "how it
+   works" wording (`strip_*`, `step_*` in `strings.yml`).
+3. Check the redesign on the owner's iPhone.
+4. Real contact details from the client (`content/site.yml`). The live site
    shows "سيُضاف قريبًا" until then; `build.py --release` blocks them.
-2. Photos for the six coming-soon collections: chairs, event chairs,
-   blankets, pillows, tablecloths, ready-packed bedding.
-3. Client to confirm: the camp-bag dimension photos (filed in each other's
+5. Photos for the three coming-soon collections: event chairs, tablecloths,
+   ready-packed bedding.
+6. Client to confirm: the camp-bag dimension photos (filed in each other's
    folders again in the 2026-10-20 set, reassigned by material); the
    "صناعة وطنية" label, taken from the folder names; the meaning of "صفت"
    in the heavy-mesh bed's folder.
-4. Brand logos in photos: since 2026-10-20 the site uses the client's new
+7. Brand logos in photos: since 2026-10-20 the site uses the client's new
    set as supplied, with CROWN on the three iron beds and ROSHINA, ROSHAN
    and CROWN on comforters and pillows (owner's choice). The logo-free
    versions are in `archive/product-images-2026-10-20/`.
-5. Real company photos for the about and contact pages (warehouse, stock in
+8. Real company photos for the about and contact pages (warehouse, stock in
    quantity, loading or delivery, office or showroom front). They replace
    the brand panels. Never stock photos: they would present someone else's
    premises as the company's.
-6. Owner's repository settings: protect `main`, and turn on Dependabot
-   alerts and security updates. An uptime monitor, and a custom domain if
-   the client wants one (see README).
+9. Owner's repository settings: protect `main`, and turn on Dependabot
+   alerts and security updates. An uptime monitor.
 
 ---
 
