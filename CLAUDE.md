@@ -13,10 +13,12 @@ shows collections and products to wholesale customers and partners and sends
 them to contact the company. **It is not a shop.** The client's brief
 forbids prices, cart, payment, invented reviews, client logos, statistics,
 branches and superlative claims, and forbids the crescent as a design
-element. The design **is** the company's previous site,
-`../../references/home-collections/homely` (a furniture store), carried over
-unchanged: same stylesheet, scripts, page structures and animations, with
-the store features removed and the new identity, products and content in.
+element. Since the 2026-11 redesign (branch `redesign`), the design follows
+`../../references/home-collections/ahlam` (a furniture-store layout): its
+tokens, page structures and motion, with the store features removed. Before
+it, the site was the company's previous site,
+`../../references/home-collections/homely`, which `main` still serves until
+the branch is merged.
 
 - Languages: Arabic default (RTL) at `/`, English at `/en/`
 - Stack: static HTML from `build.py` (Jinja2, Pillow, PyYAML); vanilla CSS/JS
@@ -33,9 +35,32 @@ the store features removed and the new identity, products and content in.
 
 ---
 
-## Status — 2026-10-01
+## Status — 2026-11-04
 
-**Done and verified**
+**Redesign on branch `redesign` (not merged, not deployed)**
+
+- New design after `references/home-collections/ahlam`, in Alexandria and
+  Figtree (the owner kept the old fonts). All 127 pages, same URLs, same
+  content and build checks. Verified: `build.py` passes; Chrome at 1366 px
+  and at 390 px through iframes (the window would not resize), Arabic and
+  English; no horizontal overflow; the products filter (`?c=`, the back
+  button); quick view with the lightbox above it (Escape closes only the
+  top layer); and a bilingual 404. **Not yet checked on the owner's
+  iPhone.**
+- New logo: a redraw of the "Warm Home Collections" emblem the owner chose
+  (house with a chimney, lamp, armchair and plant), with a small version
+  for icons. It is pending the client's approval. The old crescent identity
+  is in `archive/brand-2026-10/`. Tooling and the full set are in `brand/`
+  (`brand/README.md`, brand sheet `brand/guide.html`).
+- Web assets: favicon (SVG, ICO), apple-touch and Android icons, a bilingual
+  manifest, a default share image, product and collection share images on
+  the brand band with a logo strip, `og:image` size and alt, Twitter tags,
+  and Organization JSON-LD. The new checks were each shown to catch a
+  planted fault.
+- To confirm with the client: the feature-strip and "how it works" wording
+  (`strip_*`, `step_*` in `strings.yml`), and the new logo.
+
+**Done and verified (2026-10-01)**
 
 - Site built: home, collections, collection ×5, products, product ×9,
   about, contact, 404, in both languages (39 pages). `build.py` checks pass;
@@ -81,7 +106,7 @@ the store features removed and the new identity, products and content in.
 ```
 
 Serve on your own port, not 8080 (other sessions use it). The server maps
-`/ahlam/` to `_site/` the way GitHub Pages does.
+`base_path` (now `""`) to `_site/` the way GitHub Pages does.
 
 ## Commands
 
@@ -113,6 +138,8 @@ with "checks passed".
   through `asset()`.
 - Image fit is automatic: photos whose border is at least 70% near-white are
   shown whole on white (`is-cutout`); others fill the frame (`is-photo`).
+- Share images are cached by photo (`.cache/img/…-share.jpg`). After changing
+  `brand/dist/og-strip.png`, delete `.cache/img` so they are redrawn.
 - The source photo folders in `assets/ahlam/products images` contain an
   invisible U+200F in one folder name. The repo copies use ASCII names;
   never read from the Arabic paths in code.
@@ -126,22 +153,33 @@ with "checks passed".
 
 ## Site-specific decisions
 
-- **Design = the old Homely site, by the user's instruction (2026-10-01).**
-  An earlier beige redesign was rejected. `static/css/site.css` was generated
-  once from Homely's `css/styles.css` (store-only rules dropped, Manrope
-  replaced by the brand's Figtree) and is edited directly since. Ahlam
-  additions sit at the end of the file. `static/js/site.js` is Homely's
-  `main.js` without cart, modal and form code. Templates mirror Homely's
-  (`base`, `macros`, pages). When in doubt about a style or motion, match the
-  reference.
-- **Store structures, repurposed:** rating card → company card; "trusted by"
-  logos → collection chips (marquee on phones); set-row price card →
-  "details available" card; features card → enquiry card; newsletter panel →
-  partners panel; add to cart → enquire. Quick view is kept (Homely's
-  modal): `build.py` writes `static/js/data.<lang>.js` (`window.AHLAM`) and
-  `site.js` renders the modal from it, with photo thumbnails, details list,
-  enquire button and a link to the full page. The build checks every path in
-  those files. No invented reviews, stats, journal or partner logos.
+- **Design = the reference `references/home-collections/ahlam`, by the
+  owner's instruction (2026-11-04, branch `redesign`).** `static/css/site.css`
+  was derived once from its `css/styles.css` (store-only rules dropped, its
+  serifs replaced by the brand's Alexandria and Figtree at weight 500) and is
+  edited directly since. `static/js/site.js` combines its `main.js` and
+  `search.js` (no cart, wizard, newsletter or reviews code) with this site's
+  quick view, lightbox and gallery. Templates follow its structures. When in
+  doubt about a style or motion, match the reference. The Homely design
+  before it is in git history (`main` up to e094096).
+- **Departures from the reference, on purpose:** the home hero photo starts
+  below the header (the nav cannot be read over a darker photo); all ten
+  collections show in a 5×2 grid on desktop (the reference shows four rooms);
+  the slider fades its photo with a gradient overlay, not `mask-image` (iOS);
+  the eyebrow bullet is a dot, not the reference's four-point sparkle (it
+  reads as a star).
+- **Store structures, repurposed:** "trusted by" avatars → the range as
+  collection chips; rooms → collection cards; crafted card price and swatches
+  → the product's details list and view and enquire buttons; reviews → the
+  featured products grid; "why" → "how it works" (four steps); newsletter →
+  partners panel (enquire button in place of the e-mail form); add to cart →
+  quick view and enquire. Quick view: `build.py` writes
+  `static/js/data.<lang>.js` (`window.AHLAM`), which `site.js` renders the
+  modal and the header search from. The build checks every path in those
+  files. No invented reviews, stats, journal or partner logos.
+- **Products page filters by collection in place** (chips; the choice is kept
+  in `?c=`, and the back button works). Without JavaScript the chips are
+  links and every product shows. Collection pages link to `/products/?c=…`.
 - **Gallery preview (lightbox):** the product page viewer and quick view open
   the product's photos full size and whole (expand button or a click on the
   photo), with arrows (reading-direction aware), swipe and a counter. It
@@ -149,18 +187,12 @@ with "checks passed".
   keep the old site's crop on purpose; the preview is where the whole photo
   is seen. An edge-to-edge treatment for photos cut by the photographer was
   tried and rejected by the owner (2026-10-01).
-- **About and contact headers use brand panels, not product photos**
-  (`page_hero(..., brand='dark'|'light')`). The about header repeated the home
-  hero, and the contact header's table was unrelated. The panel is the logo
-  mark and the kit's `corner-arcs` (copied to `static/brand/decor/`, drawn
-  through a CSS mask as the kit's own CSS does) over a soft radial light.
-  The kit's dot texture was tried and dropped at the owner's choice: the old
-  site uses no textures.
-  The kit's `pattern-houses` and `ornament-roof` contain the crescent and
-  `rings` reads as a moon halo, so they are not used. This is a stopgap until
-  the client sends real company photos.
+- **The about header and the contact card use a brand panel**, not a
+  product photo: the new mark on olive (`macros.html` `brand_panel`). It is a
+  stopgap until the client sends real company photos.
 - **Product cut-outs** use `mix-blend-mode: multiply` so their white
-  background melts into the grey panels.
+  background melts into the sand panels. Home picks the hero card and slider
+  collections from covers that are real photos (the `is_cutout` test).
 - **One image per product in every listing.** Other colours and real-life
   photos appear only as thumbnails on the product page. This is the client's
   core requirement.
@@ -174,8 +206,13 @@ with "checks passed".
   set is kept in `archive/product-images-2026-10-20/`, with a README on how
   to restore it: the white cut-outs, the logo-free bed shots, the RT-M101
   colour cut-outs. Nothing reads that folder.
-- **The official logo mark is kept although it contains a crescent.** It is
-  the identity. None of the kit's crescent or moon decorations are used.
+- **New logo, pending the client's approval (2026-11-04).** The owner chose
+  to replace the official crescent mark with a redraw of the "Warm Home
+  Collections" emblem (house, chimney, lamp, armchair, plant). The owner
+  supplied it as a raster with a glow, and it was redrawn as vector. There
+  is a small version (house and armchair) for icons. Everything is generated
+  by `brand/build_brand.py`. The official set is in `archive/brand-2026-10/`,
+  with a README on how to restore it.
 - **No contact form.** A static host cannot send mail; WhatsApp, phone and
   email links instead.
 
@@ -185,3 +222,5 @@ with "checks passed".
 |---|---|
 | `README.md` | setup, editing content, deploy |
 | `content/catalog.yml` | catalogue rules in its header comment |
+| `brand/README.md` | the logo, icons and share images, and how to rebuild them |
+| `archive/brand-2026-10/README.md` | the previous official logo, and how to restore it |

@@ -17,13 +17,24 @@ python -m venv .venv
 .venv/Scripts/python build.py --serve 8741
 ```
 
-Open http://localhost:8741/ahlam/. The first build converts every photo and
+Open http://localhost:8741/. The first build converts every photo and
 takes about half a minute; later builds reuse `.cache/`.
 
 `python build.py` builds into `_site/` and runs the checks: every internal
 link resolves, every image has alt text and dimensions, each page exists in
-both languages, and no page uses shop wording (price, cart, buy…). A
-failing check exits non-zero, and CI will not deploy.
+both languages, no page uses shop wording (price, cart, buy…), brand names
+or dashes, and every page has its share image and icons. A failing check
+exits non-zero, and CI will not deploy.
+
+## Design and brand
+
+The design follows the reference in
+`../../references/home-collections/ahlam` (its tokens, layout and motion),
+in the brand's own type, Alexandria for Arabic and Figtree for English.
+The stylesheet and script are `static/css/site.css` and `static/js/site.js`.
+
+The logo, favicons and share images come from `brand/`: see
+`brand/README.md` and the brand sheet `brand/guide.html`.
 
 ## Change the content
 

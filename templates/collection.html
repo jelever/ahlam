@@ -1,32 +1,43 @@
 {% extends 'base.html' %}
 {% block title %}{{ L(c.name) }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ L(c.summary) }}{% endblock %}
+{% block preload %}{{ preload(c.cover, '(max-width: 900px) 100vw, 700px') }}{% endblock %}
 {% block main %}
-{% call m.page_hero(t.nav_collections, L(c.name), L(c.summary), c.cover, [(t.nav_collections, url('/collections/')), (L(c.name), None)], alt=L(c.name)) %}
-<div class="hero-btns load-in" style="--d:.28s">
-  <a href="#products" class="btn btn-dark">{{ t.browse_products }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
-  <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
-</div>
-{% endcall %}
-<section class="section-sm">
+<section class="banner-hero">
   <div class="container">
-    <div class="story panel" data-reveal>
-      <p class="eyebrow">{{ m.count(c) }}</p>
-      <p class="story-text">{{ L(c.summary) }} {{ t.enquire_note }}</p>
+    {{ m.crumbs([(t.nav_collections, url('/collections/')), (L(c.name), None)]) }}
+    <div class="arrival banner-card load-in" style="--d:.05s">
+      <div class="arrival-slides">
+        <div class="arrival-slide is-active">
+          <div class="arrival-copy">
+            {{ m.eyebrow(m.count(c), 'light') }}
+            <h1 class="h2 banner-title">{{ L(c.name) }}</h1>
+            <p>{{ L(c.summary) }}</p>
+            {{ m.text_link(t.browse_products, '#products', 'light') }}
+          </div>
+          <div class="arrival-media">{{ m.picture(c.cover, L(c.name), sizes='(max-width: 900px) 100vw, 700px', lazy=False) }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
-<section class="section" id="products">
+
+<section class="container narrow">
+  <p class="lead-text" data-reveal>{{ t.enquire_note }}</p>
+</section>
+
+<section class="section-tight" id="products">
   <div class="container">
-    {{ m.section_head(L(c.name), t.products_title, '', url('/products/'), t.all_products) }}
+    {{ m.section_head(m.count(c), t.products_title, url('/products/') ~ '?c=' ~ c.slug, t.all_products) }}
     {{ m.product_grid(c.products) }}
   </div>
 </section>
+
 <section class="section">
   <div class="container">
-    {{ m.section_head(t.nav_collections, t.other_collections, '', url('/collections/'), t.view_all) }}
-    <div class="tile-grid tile-grid-3" data-reveal-group>
-      {% for o in collections if o.slug != c.slug %}{% if loop.index <= 3 %}{{ m.tile(o) }}{% endif %}{% endfor %}
+    {{ m.section_head(t.nav_collections, t.other_collections, url('/collections/'), t.view_all) }}
+    <div class="mini-collections" data-reveal-group>
+      {% for o in collections if o.slug != c.slug %}{% if loop.index <= 3 %}{{ m.mini_collection(o) }}{% endif %}{% endfor %}
     </div>
   </div>
 </section>

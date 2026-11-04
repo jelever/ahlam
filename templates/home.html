@@ -1,92 +1,123 @@
 {% extends 'base.html' %}
-{% block preload %}{{ preload(hero_image or hero.images[0].src, '(max-width: 1024px) 100vw, 56vw') }}{% endblock %}
+{% block preload %}{{ preload(hero_image or hero.images[0].src, '(max-width: 900px) 100vw, 60vw') }}{% endblock %}
 {% block main %}
-<section class="section-flush">
-  <div class="container">
-    <div class="hero panel">
-      <div class="hero-copy">
-        <div class="company-card load-in" style="--d:.05s">
-          {{ m.icon('i-logo', 'logo-mark') }}
-          <div><strong>{{ site.legal_name[lang] }}</strong><small>{{ t.hero_card_small }}</small></div>
-        </div>
-        <h1 class="hero-title">
-          <span class="line"><span style="--d:.15s">{{ t.hero_title_1 }}</span></span>
-          <span class="line"><span style="--d:.27s">{{ t.hero_title_2 }}</span></span>
-        </h1>
-        <p class="hero-lead load-in" style="--d:.4s">{{ t.hero_lead }}</p>
-        <div class="hero-btns load-in" style="--d:.5s">
-          <a href="{{ url('/contact/') }}" class="btn btn-light">{{ t.contact_us }}</a>
-          <a href="{{ url('/products/') }}" class="btn btn-dark">{{ t.browse_products }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
-        </div>
-        <div class="trusted load-in" style="--d:.6s">
-          <p>{{ t.hero_ranges }}</p>
-          <div class="trusted-track">
-            <div class="trusted-logos">
-              {% for c in collections %}<a class="tl" href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}
-            </div>
-            <div class="trusted-logos is-clone" aria-hidden="true">
-              {% for c in collections %}<a class="tl" href="{{ url('/collections/' ~ c.slug ~ '/') }}" tabindex="-1">{{ L(c.name) }}</a>{% endfor %}
-            </div>
-          </div>
-        </div>
+{# collections whose cover is a real photo suit the full-bleed frames below;
+   white cut-outs go to the cards, which show them whole #}
+{% set photo_colls = collections | rejectattr('cover', 'is_cutout') | list %}
+{% set card_c = photo_colls[0] if photo_colls else collections[0] %}
+
+<section class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      {{ m.eyebrow(site.legal_name[lang], 'load-in', '.1s') }}
+      <h1 class="hero-title">
+        <span class="line"><span class="load-in" style="--d:.2s">{{ t.hero_l1 }}</span></span>
+        <span class="line"><span class="load-in" style="--d:.32s">{{ t.hero_l2 }}</span></span>
+        <span class="line accent"><span class="load-in" style="--d:.44s">{{ t.hero_l3 }}</span></span>
+      </h1>
+      <p class="hero-text load-in" style="--d:.6s">{{ t.hero_lead }}</p>
+      <div class="hero-ctas load-in" style="--d:.72s">
+        <a href="{{ url('/products/') }}" class="btn btn-dark">{{ t.browse_products }} {{ m.icon('i-arrow') }}</a>
+        <a href="{{ m.enquire_href() }}"{{ m.ext() }} class="play-link"><span class="play-circle">{{ m.icon('i-chat') }}</span>{{ t.hero_enquire }}</a>
       </div>
-      <div class="hero-media load-scale">
-        <div class="hero-img img-zoom" data-parallax>{{ m.picture(hero_image or hero.images[0].src, L(hero.name), sizes='(max-width: 1024px) 100vw, 56vw', lazy=False) }}</div>
+      <div class="hero-ranges load-in" style="--d:.86s">
+        <p>{{ t.hero_ranges }}</p>
+        <div class="range-chips">
+          {% for c in collections %}<a class="chip" href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}
+        </div>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="section-sm">
-  <div class="container">
-    <div class="card-row" data-reveal-group>
-      {% for c in collections[:2] %}
-      <a href="{{ url('/collections/' ~ c.slug ~ '/') }}" class="stay-card" data-reveal>
-        <span class="stay-img img-zoom">{{ m.picture(c.cover, '', sizes='(max-width: 1024px) 50vw, 25vw') }}<span class="star-dot">{{ m.icon('i-arrow-up') }}</span></span>
-        <span class="stay-meta"><strong>{{ L(c.name) }}</strong><span>{{ m.count(c) }}</span></span>
+    <div class="hero-media">
+      <div class="hero-img-wrap" data-parallax>{{ m.picture(hero_image or hero.images[0].src, L(hero.name), sizes='(max-width: 900px) 100vw, 60vw', lazy=False) }}</div>
+      <a href="{{ url('/collections/' ~ card_c.slug ~ '/') }}" class="collection-card">
+        <span class="cc-copy">
+          <span class="cc-kicker">{{ t.hero_card_kicker }}</span>
+          <span class="cc-title">{{ L(card_c.name) }}</span>
+          <span class="cc-link">{{ t.browse_collection }} {{ m.icon('i-arrow') }}</span>
+        </span>
+        <span class="cc-img">{{ m.picture(card_c.cover, '', sizes='96px') }}</span>
       </a>
-      {% endfor %}
-      <div class="feature-panel panel" data-reveal>
-        <div class="fp-copy">
-          <p class="eyebrow">{{ t.partners_title }}</p>
-          <h2 class="fp-title">{{ t.partners_text }}</h2>
-          {{ m.arrow_link(t.contact_us, url('/contact/')) }}
+    </div>
+  </div>
+</section>
+
+{{ m.feature_strip() }}
+
+<section class="rooms section">
+  <div class="container rooms-grid">
+    <div class="rooms-intro" data-reveal>
+      {{ m.eyebrow(t.nav_collections) }}
+      <h2 class="h2">{{ t.collections_title }}</h2>
+      <p class="muted">{{ t.collections_eyebrow }}</p>
+      {{ m.text_link(t.all_collections, url('/collections/')) }}
+    </div>
+    <div class="room-cards" data-reveal-group>
+      {% for c in collections %}{{ m.coll_card(c) }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+{% set fp = featured[0] %}
+<section class="section-tight">
+  <div class="container">
+    <div class="crafted" data-reveal>
+      <div class="crafted-copy">
+        {{ m.eyebrow(t.crafted_eyebrow) }}
+        <h2 class="h2">{{ L(fp.coll.name) }}</h2>
+        <p class="muted">{{ L(fp.coll.summary) }}</p>
+        {{ m.text_link(t.browse_collection, url('/collections/' ~ fp.coll.slug ~ '/')) }}
+      </div>
+      <a href="{{ url('/products/' ~ fp.slug ~ '/') }}" class="crafted-media" tabindex="-1" aria-hidden="true">{{ m.picture(fp.images[0].src, '', sizes='(max-width: 640px) 100vw, 440px') }}</a>
+      <div class="crafted-product">
+        <h3 class="product-name">{{ L(fp.name) }}</h3>
+        <dl class="mini-specs">
+          {% for key, value in fp.fields[:3] %}<div><dt>{{ t['field_' ~ key] }}</dt><dd><bdi>{{ L(value) }}</bdi></dd></div>{% endfor %}
+        </dl>
+        <div class="crafted-btns">
+          <a href="{{ url('/products/' ~ fp.slug ~ '/') }}" class="btn btn-dark">{{ t.view_product }} {{ m.icon('i-arrow') }}</a>
+          <a href="{{ m.enquire_href(fp) }}"{{ m.ext() }} class="text-link">{{ t.enquire_short }} {{ m.icon('i-arrow') }}</a>
         </div>
-        <a href="{{ url('/collections/comforters/') }}" class="fp-img img-zoom" tabindex="-1" aria-hidden="true">{{ m.picture('ambience/flint-room.jpg', '', sizes='(max-width: 1024px) 50vw, 25vw') }}</a>
       </div>
     </div>
   </div>
 </section>
 
-<section class="section" id="collections">
+{% set slides = (photo_colls | reject('equalto', card_c) | list)[:3] %}
+{% if slides %}
+<section class="section-tight">
   <div class="container">
-    <div class="big-head" data-reveal>
-      <p class="eyebrow">{{ t.collections_eyebrow }}</p>
-      <h2 class="h-giant">{{ t.collections_title }}</h2>
-    </div>
-    <div class="tile-grid" data-reveal-group>
-      {% for c in collections %}{{ m.tile(c) }}{% endfor %}
-    </div>
-    {{ m.soon_list() }}
-  </div>
-</section>
-
-<section class="section" id="catalogue">
-  <div class="container">
-    {{ m.section_head(t.catalogue_eyebrow, t.catalogue_title, '', url('/products/'), t.all_products) }}
-    <div class="tabs" data-tabs data-reveal>
-      <div class="tab-list" role="tablist" aria-label="{{ t.nav_collections }}">
-        <span class="tab-pill" aria-hidden="true"></span>
-        {% for c in collections %}
-        <button class="tab-btn" type="button" role="tab" id="tab-{{ c.slug }}" aria-controls="panel-{{ c.slug }}" aria-selected="{{ 'true' if loop.first else 'false' }}"{% if not loop.first %} tabindex="-1"{% endif %}>{{ L(c.name) }}</button>
+    <div class="arrival" data-slider="arrival" data-reveal>
+      <div class="arrival-slides">
+        {% for c in slides %}
+        <div class="arrival-slide{% if loop.first %} is-active{% endif %}"{% if not loop.first %} aria-hidden="true"{% endif %}>
+          <div class="arrival-copy">
+            {{ m.eyebrow(m.count(c), 'light') }}
+            <h2 class="h2">{{ L(c.name) }}</h2>
+            <p>{{ L(c.summary) }}</p>
+            {{ m.text_link(t.browse_collection, url('/collections/' ~ c.slug ~ '/'), 'light') }}
+          </div>
+          <div class="arrival-media">{{ m.picture(c.cover, '', sizes='(max-width: 900px) 100vw, 760px') }}</div>
+        </div>
         {% endfor %}
       </div>
-      {% for c in collections %}
-      <div class="tab-panel{% if loop.first %} is-active{% endif %}" role="tabpanel" id="panel-{{ c.slug }}" aria-labelledby="tab-{{ c.slug }}"{% if not loop.first %} hidden{% endif %}>
-        {% for p in c.products %}{{ m.set_row(p) }}{% endfor %}
+      {% if slides | length > 1 %}
+      <div class="arrival-arrows">
+        <button class="round-btn outline-light" type="button" data-prev aria-label="{{ t.prev }}">{{ m.icon('i-chev-l') }}</button>
+        <button class="round-btn outline-light" type="button" data-next aria-label="{{ t.next }}">{{ m.icon('i-chev-r') }}</button>
       </div>
-      {% endfor %}
+      <div class="arrival-dots" data-dots></div>
+      {% endif %}
     </div>
+  </div>
+</section>
+{% endif %}
+
+{{ m.steps() }}
+
+<section class="section featured-section">
+  <div class="container">
+    {{ m.section_head(t.catalogue_eyebrow, t.featured_title, url('/products/'), t.all_products) }}
+    {{ m.product_grid(featured) }}
   </div>
 </section>
 

@@ -9,12 +9,18 @@ nav_about: {ar: من نحن, en: About us}
 nav_contact: {ar: تواصل معنا, en: Contact us}
 menu_open: {ar: فتح القائمة, en: Open menu}
 menu_close: {ar: إغلاق القائمة, en: Close menu}
-mega_collections: {ar: المجموعات, en: Collections}
-mega_featured: {ar: من الكتالوج, en: From the catalogue}
 all_products: {ar: جميع المنتجات, en: All products}
+all_collections: {ar: عرض كل المجموعات, en: View all collections}
+logo_sub: {ar: للتجارة, en: TRADING}
 skip: {ar: تخطَّ إلى المحتوى, en: Skip to content}
 lang_switch: {ar: English, en: العربية}
 lang_switch_short: {ar: EN, en: ع}
+search_open: {ar: البحث في المنتجات, en: Search products}
+search_label: {ar: البحث في المنتجات, en: Search products}
+search_placeholder: {ar: ابحث عن منتج أو مجموعة, en: Search for a product or collection}
+search_hint: {ar: "جرّب:", en: "Try:"}
+search_results: {ar: النتائج, en: Results}
+search_empty: {ar: لا توجد نتائج لـ, en: No results for}
 language: {ar: اللغة, en: Language}
 
 browse_products: {ar: استعرض المنتجات, en: Browse products}
@@ -32,16 +38,41 @@ gallery_open: {ar: عرض الصور بالحجم الكامل, en: View photos 
 prev: {ar: السابق, en: Previous}
 next: {ar: التالي, en: Next}
 
-hero_title_1: {ar: مستلزمات منزلية وتجارية, en: Household and commercial supplies}
-hero_title_2: {ar: للجملة والشركاء, en: for wholesale and partners}
+hero_l1: {ar: مستلزمات منزلية, en: Household and}
+hero_l2: {ar: وتجارية, en: commercial supplies}
+hero_l3: {ar: للجملة والشركاء, en: for wholesale.}
 hero_lead:
   ar: تشكيلة متنوعة من المستلزمات المنزلية والتجارية، مقدمة للشركاء وعملاء الجملة.
   en: A varied range of household and commercial supplies, offered to partners and wholesale customers.
-hero_card_small: {ar: للشركاء وعملاء الجملة, en: For partners and wholesale customers}
+hero_enquire: {ar: استفسر عبر واتساب, en: Enquire on WhatsApp}
+hero_card_kicker: {ar: من مجموعاتنا, en: From our collections}
 hero_ranges: {ar: "تشمل تشكيلتنا", en: "Our range includes"}
 
+# feature strip under the home hero: plain statements only (the brief
+# forbids statistics and superlatives)
+strip_1_t: {ar: توريد بالجملة, en: Wholesale supply}
+strip_1_d: {ar: للشركاء وعملاء الجملة, en: For partners and wholesale customers}
+strip_2_t: {ar: منزلية وتجارية, en: Household and commercial}
+strip_2_d: {ar: مستلزمات للبيوت والأعمال, en: Supplies for homes and businesses}
+strip_3_t: {ar: تفاصيل كل منتج, en: Details for every product}
+strip_3_d: {ar: صور ومواصفات لكل صنف, en: Photos and specifications for each item}
+strip_4_t: {ar: تواصل مباشر, en: Direct contact}
+strip_4_d: {ar: واتساب والهاتف والبريد, en: "WhatsApp, phone and email"}
+
+# "how it works": four steps from the catalogue to an order (client to confirm)
+steps_eyebrow: {ar: طريقة التعامل, en: How it works}
+steps_title: {ar: من الكتالوج إلى طلبك, en: From the catalogue to your order}
+step_1_t: {ar: تصفح الكتالوج, en: Browse the catalogue}
+step_1_d: {ar: اختر المنتجات من المجموعات., en: Choose products from the collections.}
+step_2_t: {ar: أرسل استفسارك, en: Send your enquiry}
+step_2_d: {ar: عبر واتساب أو الهاتف أو البريد., en: "By WhatsApp, phone or email."}
+step_3_t: {ar: اتفق على التفاصيل, en: Agree the details}
+step_3_d: {ar: الكميات والمقاسات والألوان., en: "Quantities, sizes and colours."}
+step_4_t: {ar: استلم طلبك, en: Receive your order}
+step_4_d: {ar: حسب ما يُتفق عليه مع فريقنا., en: As agreed with our team.}
+
 collections_eyebrow: {ar: تشكيلة متكاملة تلبي احتياجات أعمالكم, en: A complete range for your business needs}
-collections_title: {ar: مجموعاتنا, en: our collections}
+collections_title: {ar: مجموعاتنا, en: Our collections}
 collections_lead:
   ar: صورة واحدة تمثل كل مجموعة، والتشكيلة الكاملة داخلها.
   en: One image stands for each collection; the full range is inside.
@@ -49,12 +80,9 @@ soon_title: {ar: مجموعات قادمة, en: Coming soon}
 soon_tag: {ar: قريبًا, en: Soon}
 
 catalogue_eyebrow: {ar: من كتالوجنا, en: From our catalogue}
-catalogue_title: {ar: تشكيلتنا, en: the range}
-set_info_title: {ar: المعلومات المتوفرة, en: Details available}
-set_enquiry_t: {ar: للاستفسار والتوريد, en: Enquiries and supply}
-set_enquiry_d:
-  ar: نتعامل مع الشركاء وعملاء الجملة مباشرة؛ تواصلوا معنا للاستفسار عن هذا الصنف.
-  en: We deal with partners and wholesale customers directly; contact us about this item.
+featured_title: {ar: مختارات من الكتالوج, en: Selected from the catalogue}
+crafted_eyebrow: {ar: من الكتالوج, en: From the catalogue}
+filter_all: {ar: الكل, en: All}
 
 partners_eyebrow: {ar: شركة أحلام القمر للتجارة, en: Ahlam Alqamar Trading Company}
 partners_title: {ar: للشركاء وعملاء الجملة, en: For partners and wholesale customers}
@@ -100,7 +128,7 @@ about_how_title: {ar: كيف نتعامل, en: How we work}
 about_how_text:
   ar: هذا الموقع معرض رقمي لمنتجاتنا وليس متجرًا إلكترونيًا؛ لا بيع مباشر عبر الموقع. نتعامل مع الشركاء وعملاء الجملة مباشرة، فتواصلوا معنا للاستفسار عن أي منتج.
   en: This site is a digital showcase of our products, not an online shop; nothing is sold through it. We deal with partners and wholesale customers directly, so contact us about any product.
-about_what_title: {ar: ماذا نقدم, en: what we offer}
+about_what_title: {ar: ماذا نقدم, en: What we offer}
 
 contact_eyebrow: {ar: تواصل معنا, en: Contact us}
 contact_title: {ar: تواصل معنا, en: Contact us}
@@ -116,6 +144,10 @@ whatsapp_message: {ar: "مرحبًا، أود الاستفسار عن: ", en: "H
 whatsapp_general: {ar: مرحبًا، أود الاستفسار عن منتجاتكم., en: "Hello, I would like to ask about your products."}
 
 footer_links: {ar: روابط, en: Explore}
+footer_about:
+  ar: معرض رقمي لمنتجات شركة أحلام القمر للتجارة، للشركاء وعملاء الجملة.
+  en: A digital showcase of Ahlam Alqamar Trading Company's products, for partners and wholesale customers.
+footer_chat: {ar: ابدأ محادثة, en: Start a conversation}
 footer_collections: {ar: المجموعات, en: Collections}
 footer_rights: {ar: جميع الحقوق محفوظة., en: All rights reserved.}
 breadcrumb: {ar: مسار التنقل, en: Breadcrumb}

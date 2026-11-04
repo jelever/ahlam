@@ -2,31 +2,37 @@
 {% block title %}{{ t.contact_title }} | {{ site.name[lang] }}{% endblock %}
 {% block description %}{{ t.contact_lead }}{% endblock %}
 {% block main %}
-{{ m.page_hero(t.contact_eyebrow, t.contact_title, t.contact_lead, None, [(t.nav_contact, None)], brand='light') }}
-<section class="section-sm">
-  <div class="container">
-    <div class="contact-cards" data-reveal-group>
-      {% for key, label, value, href, icon in contact_items %}
+{{ m.page_hero(t.contact_eyebrow, t.contact_title, t.contact_lead, None, [(t.nav_contact, None)], 'compact') }}
+<section class="section-tight">
+  <div class="container contact">
+    <div class="contact-tiles" data-reveal-group>
+      {% for key, label, value, href, ic in contact_items %}
       {% set pending = is_placeholder(value) %}
-      <div class="service-tile panel{% if pending %} is-pending{% endif %}" data-reveal>
-        <span class="service-icon">{{ m.icon(icon) }}</span>
-        <div>
-          <h3>{{ label }}</h3>
-          {% if pending %}<p>{{ t.to_be_added }}</p>
-          {% elif href %}<p><a href="{{ href }}"{% if key == 'whatsapp' %} target="_blank" rel="noopener"{% endif %}><bdi>{{ value }}</bdi></a></p>
-          {% else %}<p>{{ value }}</p>{% endif %}
-        </div>
-      </div>
+      {% if href and not pending %}
+      <a class="contact-tile" href="{{ href }}"{% if key == 'whatsapp' %} target="_blank" rel="noopener"{% endif %} data-reveal>
+      {% else %}
+      <div class="contact-tile{% if pending %} is-pending{% endif %}" data-reveal>
+      {% endif %}
+        <span class="strip-icon">{{ m.icon(ic) }}</span>
+        <span class="ct-copy">
+          <strong>{{ label }}</strong>
+          <span>{% if pending %}{{ t.to_be_added }}{% else %}<bdi>{{ value }}</bdi>{% endif %}</span>
+        </span>
+        {% if href and not pending %}{{ m.icon('i-arrow', 'ct-arrow') }}{% endif %}
+      {% if href and not pending %}</a>{% else %}</div>{% endif %}
       {% endfor %}
     </div>
+    <aside class="contact-card" data-reveal>
+      {{ m.brand_panel('brand-panel-card') }}
+      <div class="contact-card-copy">
+        <h2 class="h3">{{ t.about_how_title }}</h2>
+        <p class="muted">{{ t.about_how_text }}</p>
+        {{ m.text_link(t.browse_products, url('/products/')) }}
+      </div>
+    </aside>
   </div>
 </section>
-<section class="section-sm">
-  <div class="container">
-    <div class="cta-band" data-reveal>
-      <div><h2 class="h2">{{ t.partners_title }}</h2><p>{{ t.about_how_text }}</p></div>
-      <a href="{{ url('/products/') }}" class="btn btn-white">{{ t.browse_products }}{{ m.icon('i-arrow', 'btn-arrow') }}</a>
-    </div>
-  </div>
-</section>
+{{ m.steps() }}
+{{ m.cta_band(t.partners_title, t.partners_text, url('/products/'), t.browse_products) }}
+<div class="section-gap"></div>
 {% endblock %}
