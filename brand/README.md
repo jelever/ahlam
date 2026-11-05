@@ -1,15 +1,16 @@
 # Brand: logo, icons and share images
 
-The identity proposed on 2026-11-04 with the redesign. It replaces the
-official crescent-and-house logo, which is kept in `archive/brand-2026-10/`.
-**It is a proposal until the client approves it.**
+The logo is the company name, set as text, with no symbol (the owner's
+decision, 2026-11-05): "أحلام القمر للتجارة" in Alexandria and "AHLAM ALQAMAR
+TRADING" in tracked Figtree capitals, the name heavier and "للتجارة / TRADING"
+lighter. Where the name cannot fit (favicons, app icons), the monogram "أق",
+the initials of أحلام القمر, stands in. The slogan is "مصدرك الأول في جملة
+المفروشات" (Your first source for wholesale furnishings).
 
-The mark is a line-drawn house with a chimney, holding a floor lamp, an
-armchair and a potted plant. It is a clean vector redraw of the "Warm Home
-Collections" emblem the owner chose. For 16 to 32 px (favicons and app icons)
-there is a small version with only the house and the armchair, because the
-lamp and plant cannot be read at that size. No crescent, moon or star
-appears anywhere, as the client's brief asks.
+History: the client's official logo (a house with a crescent) is kept in
+`archive/brand-2026-10/`. The house emblem drawn on 2026-11-04 (`marks.py`,
+the candidates sheet `concepts.py`) was dropped on 2026-11-05. Nothing in
+the build reads `marks.py` any more.
 
 Open `guide.html` (the brand sheet) for the logo variants, colours, type,
 clear space and the rules.
@@ -18,16 +19,15 @@ clear space and the rules.
 
 | Path | What it is | Deployed |
 |---|---|---|
-| `marks.py` | the mark as SVG geometry on a 48-unit grid (`home`, `home-icon`); A to C are the candidates set aside | no |
-| `lockup.py`, `textpath.py` | the mark beside the name; the words outlined from the fonts with HarfBuzz | no |
+| `marks.py` | the dropped house emblems (history; used only by `concepts.py`) | no |
+| `lockup.py`, `textpath.py` | the wordmarks and the monogram; the words outlined from the fonts with HarfBuzz | no |
 | `build_brand.py` | writes everything below | no |
 | `fonts/` | Alexandria and Figtree (SIL Open Font License, from google/fonts) | no |
-| `dist/logo/` | the logo set for the client: mark, small mark, Arabic, English and stacked lockups, in olive, ink and white, as SVG and PNG (1x, 2x) | no |
+| `dist/logo/` | the logo set for the client: Arabic, English and stacked wordmarks and the monogram, in olive, ink and white, as SVG and PNG (1x, 2x) | no |
 | `dist/og-strip.png` | the olive logo strip `build.py` puts under every product and collection share image | no |
 | `guide.html` | the brand sheet | no |
 | `../static/brand/favicon/` | favicon (.svg, .ico 16/32/48), apple-touch icon, Android icons (192, 512, maskable), `site.webmanifest` | yes |
 | `../static/brand/social/og-default.jpg` | the share image for pages without a photo of their own | yes |
-| `../templates/partials/mark.svg` | the mark the site draws inline (header, footer, brand panels, 404) | yes, inlined |
 
 ## Rebuild
 
@@ -38,7 +38,7 @@ clear space and the rules.
 ```
 
 The site build and CI never run `build_brand.py`; its outputs are committed.
-Change the mark in `marks.py` and run both commands. `build.py` caches share
+Change the wordmark in `lockup.py` and run both commands. `build.py` caches share
 images by photo, so delete `.cache/img` after changing `dist/og-strip.png`.
 
 `concepts.py` writes `concepts.html`, a comparison sheet of marks from

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ahlam Alqamar brand sheet</title>
-<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root { --olive:#3d4633; --ink:#2a2a24; --band:#f3eee8; --bg:#faf7f3; --line:#e4ddd3; --muted:#7d776d; }
   * { box-sizing:border-box; }
@@ -11,58 +11,56 @@
   h2 { font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:56px 0 16px; }
   p { margin:0 0 10px; max-width:70ch; }  [lang="ar"] { font-family:Alexandria, sans-serif; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px; }
-  .tile { border-radius:18px; padding:36px; display:grid; place-items:center; border:1px solid var(--line); min-height:180px; }
+  .tile { border-radius:18px; padding:36px; display:grid; place-items:center; border:1px solid var(--line); min-height:160px; }
   .tile img { max-width:100%; }
   .sws { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:14px; }
   .sw span { display:flex; align-items:flex-end; height:110px; border-radius:14px; padding:12px; font:600 13px Figtree; border:1px solid var(--line); }
   .sw b { display:block; margin-top:8px; font-weight:600; }  .sw small { color:var(--muted); }
   .type { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .type div { background:#fff; border:1px solid var(--line); border-radius:18px; padding:28px; }
-  .type .big { font-size:44px; font-weight:500; line-height:1.3; }
+  .type .big { font-size:40px; font-weight:500; line-height:1.4; }
+  .slogan { background:var(--olive); color:#fff; border-radius:18px; padding:32px; text-align:center; }
+  .slogan p { max-width:none; margin:0; }  .slogan .ar { font:400 30px/1.6 Alexandria, sans-serif; }
+  .slogan .en { font-size:13px; letter-spacing:.2em; opacity:.8; }
   .rules { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; }
   .rule { background:#fff; border:1px solid var(--line); border-radius:18px; padding:20px; }
-  .rule .demo { height:120px; display:grid; place-items:center; background:var(--band); border-radius:12px; margin-bottom:12px; overflow:hidden; }
+  .rule .demo { height:110px; display:grid; place-items:center; background:var(--band); border-radius:12px; margin-bottom:12px; overflow:hidden; }
   .rule b { color:#a4553f; }
-  .space { position:relative; display:inline-block; padding:28px; outline:1px dashed var(--olive); outline-offset:0; background:#fff; }
+  .space { display:inline-block; padding:24px 32px; outline:1px dashed var(--olive); background:#fff; }
   .icons { display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap; }
   .icons figure { margin:0; text-align:center; font-size:12px; color:var(--muted); }
   .icons img { display:block; margin:0 auto 8px; }
   @media (max-width:700px) { .type { grid-template-columns:1fr; } }
 </style></head><body><main>
 <h1>Ahlam Alqamar: brand sheet</h1>
-<p class="muted">Logo, colours, type and web icons for شركة أحلام القمر للتجارة. All logo files are in <code>dist/logo/</code>, as SVG (for print and the web) and PNG at 1x and 2x.</p>
-<p><b>Status:</b> a proposal for the client's approval. The mark is a clean redraw of the "Warm Home Collections" emblem the owner chose on 2026-11-04: a house with a chimney holding a floor lamp, an armchair and a potted plant. It has no crescent or moon, as the client's brief asks.</p>
+<p>Logo, slogan, colours, type and web icons for شركة أحلام القمر للتجارة. All logo files are in <code>dist/logo/</code>, as SVG (for print and the web) and PNG at 1x and 2x.</p>
+<p><b>The logo is the company name</b>, set in Alexandria and Figtree, with no symbol (owner's decision, 2026-11-05). Where the name cannot fit, in browser tabs and app icons, the monogram <span lang="ar">أق</span> (the initials of أحلام القمر) stands in.</p>
 
 <h2>Logo</h2>
 <div class="grid">
-  <div class="tile " style="background:#faf7f3"><img src="dist/logo/logo-ar-olive.svg" style="height:72px" alt=""></div>
-  <div class="tile " style="background:#faf7f3"><img src="dist/logo/logo-en-olive.svg" style="height:72px" alt=""></div>
-  <div class="tile " style="background:#fff"><img src="dist/logo/logo-stacked-olive.svg" style="height:150px" alt=""></div>
-  <div class="tile " style="background:#3d4633"><img src="dist/logo/logo-ar-white.svg" style="height:72px" alt=""></div>
-  <div class="tile " style="background:#2a2a24"><img src="dist/logo/logo-en-white.svg" style="height:72px" alt=""></div>
-  <div class="tile " style="background:#f3eee8"><img src="dist/logo/logo-stacked-ink.svg" style="height:150px" alt=""></div>
+  <div class="tile" style="background:#faf7f3"><img src="dist/logo/logo-ar-olive.svg" style="height:52px" alt=""></div>
+  <div class="tile" style="background:#faf7f3"><img src="dist/logo/logo-en-olive.svg" style="height:30px" alt=""></div>
+  <div class="tile" style="background:#fff"><img src="dist/logo/logo-stacked-olive.svg" style="height:110px" alt=""></div>
+  <div class="tile" style="background:#3d4633"><img src="dist/logo/logo-ar-white.svg" style="height:52px" alt=""></div>
+  <div class="tile" style="background:#2a2a24"><img src="dist/logo/logo-en-white.svg" style="height:30px" alt=""></div>
+  <div class="tile" style="background:#f3eee8"><img src="dist/logo/logo-stacked-ink.svg" style="height:110px" alt=""></div>
 </div>
 
-<h2>Mark: full and small</h2>
-<p>Use the full mark from 32 px up. Below that, and for app and browser icons, use the small mark (the house and the armchair only): the lamp and plant cannot be read at 16 px.</p>
-<div class="grid">
-  <div class="tile " style="background:#fff"><img src="dist/logo/mark-olive.svg" style="height:140px" alt=""></div>
-  <div class="tile " style="background:#fff"><img src="dist/logo/icon-olive.svg" style="height:140px" alt=""></div>
-  <div class="tile " style="background:#3d4633"><img src="dist/logo/mark-white.svg" style="height:140px" alt=""></div>
-</div>
+<h2>Slogan</h2>
+<div class="slogan"><p class="ar" lang="ar">مصدرك الأول في جملة المفروشات</p><p class="en">YOUR FIRST SOURCE FOR WHOLESALE FURNISHINGS</p></div>
 
 <h2>Clear space and minimum size</h2>
-<p>Keep a margin of at least a quarter of the mark's height on every side. Minimum sizes: the mark 24 px (6 mm in print), a horizontal lockup 120 px wide (30 mm).</p>
-<div class="space"><img src="dist/logo/logo-ar-olive.svg" style="height:64px;display:block" alt=""></div>
+<p>Keep a margin of at least the height of the name's letters on every side. Minimum widths: the Arabic wordmark 110 px (28 mm in print), the English 140 px (36 mm). Below that, use the monogram.</p>
+<div class="space"><img src="dist/logo/logo-ar-olive.svg" style="height:44px;display:block" alt=""></div>
 
 <h2>Colours</h2>
 <div class="sws"><div class="sw"><span style="background:#3d4633;color:#fff">#3d4633</span><b>Olive</b><small lang="ar">زيتوني</small></div><div class="sw"><span style="background:#2a2a24;color:#fff">#2a2a24</span><b>Ink</b><small lang="ar">حبر</small></div><div class="sw"><span style="background:#f3eee8;color:#2a2a24">#f3eee8</span><b>Sand</b><small lang="ar">رملي</small></div><div class="sw"><span style="background:#faf7f3;color:#2a2a24">#faf7f3</span><b>Ivory</b><small lang="ar">عاجي</small></div><div class="sw"><span style="background:#4b5641;color:#fff">#4b5641</span><b>Olive 2</b><small lang="ar">زيتوني فاتح</small></div><div class="sw"><span style="background:#e4ddd3;color:#2a2a24">#e4ddd3</span><b>Stone</b><small lang="ar">حجري</small></div></div>
-<p style="margin-top:14px">Olive is the brand colour: the logo, buttons and dark panels. Ink is for text. Sand and Ivory are the page and card backgrounds.</p>
+<p style="margin-top:14px">Olive is the brand colour: buttons, dark panels and the icons. Ink is for text and the logo on light backgrounds. Sand and Ivory are the page and card backgrounds.</p>
 
 <h2>Type</h2>
 <div class="type">
-  <div lang="ar"><p class="big">أحلام القمر</p><p>Alexandria: Arabic headings (500) and text (300 to 400).</p></div>
-  <div><p class="big">Ahlam Alqamar</p><p>Figtree: English headings (500), text (400) and the logo's capitals (600 to 700, tracked).</p></div>
+  <div lang="ar"><p class="big">أحلام القمر</p><p>Alexandria: Arabic headings (500 to 600) and text (300 to 400).</p></div>
+  <div><p class="big">Ahlam Alqamar</p><p>Figtree: English headings (500), text (400), and the logo's tracked capitals (700 and 400).</p></div>
 </div>
 <p style="margin-top:14px">Both are free (SIL Open Font License) from Google Fonts; the files are in <code>fonts/</code>.</p>
 
@@ -77,9 +75,9 @@
 
 <h2>Do not</h2>
 <div class="rules">
-  <div class="rule"><div class="demo"><img src="dist/logo/mark-olive.svg" style="height:80px;transform:scaleX(1.5)" alt=""></div><b>Stretch or squash</b> the logo.</div>
-  <div class="rule"><div class="demo"><img src="dist/logo/mark-olive.svg" style="height:80px;filter:drop-shadow(0 0 12px #c08a3e) hue-rotate(160deg)" alt=""></div><b>Add glows, shadows or other colours.</b></div>
-  <div class="rule"><div class="demo" style="background:#8a7f6e"><img src="dist/logo/mark-olive.svg" style="height:80px" alt=""></div><b>Place it on a busy or low-contrast background;</b> use the white version on dark or photo backgrounds.</div>
-  <div class="rule"><div class="demo"><span style="font-size:60px">☾</span></div><b>Add a crescent, moon or stars:</b> the client's brief forbids them.</div>
+  <div class="rule"><div class="demo"><img src="dist/logo/logo-ar-olive.svg" style="height:40px;transform:scaleX(1.5)" alt=""></div><b>Stretch or squash</b> the name.</div>
+  <div class="rule"><div class="demo"><span lang="ar" style="font:italic 700 34px Georgia, serif">أحلام القمر</span></div><b>Retype it in another font;</b> use the logo files.</div>
+  <div class="rule"><div class="demo" style="background:#8a7f6e"><img src="dist/logo/logo-ar-ink.svg" style="height:40px" alt=""></div><b>Place it on a busy or low-contrast background;</b> use the white version on dark or photo backgrounds.</div>
+  <div class="rule"><div class="demo"><span style="font-size:56px">☾</span></div><b>Add a crescent, moon or stars:</b> the client's brief forbids them.</div>
 </div>
 </main></body></html>

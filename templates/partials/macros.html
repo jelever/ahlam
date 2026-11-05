@@ -7,9 +7,9 @@
 {%- endmacro %}
 
 {% macro logo() -%}
-<a href="{{ url('/') }}" class="logo" aria-label="{{ t.nav_home }}: {{ site.name[lang] }}">
-  {{ icon('i-logo', 'logo-mark') }}
-  <span class="logo-text"><span class="logo-name">{{ site.name[lang] }}</span><span class="logo-sub">{{ t.logo_sub }}</span></span>
+{# the logo is the company name, with no symbol (owner, 2026-11-05) #}
+<a href="{{ url('/') }}" class="logo" aria-label="{{ t.nav_home }}: {{ site.name[lang] }} {{ t.logo_sub }}">
+  <span class="logo-name">{{ site.name[lang] }}</span> <span class="logo-sub">{{ t.logo_sub }}</span>
 </a>
 {%- endmacro %}
 
@@ -85,12 +85,15 @@ https://wa.me/{{ whatsapp_number }}?text={{ ((t.whatsapp_message ~ L(p.name) ~ '
 </nav>
 {%- endmacro %}
 
-{# The brand panel: the logo mark on olive, where a page has no fitting photo.
-   Absolutely positioned with explicit SVG sizes: iOS Safari does not stretch
-   a grid row to a height that comes from aspect-ratio. #}
+{# The brand panel: the company name and slogan on olive, where a page has no
+   fitting photo. Centred with absolute positioning: iOS Safari does not
+   stretch a grid row to a height that comes from aspect-ratio. #}
 {% macro brand_panel(cls='') -%}
 <div class="brand-panel {{ cls }}" aria-hidden="true">
-  <svg class="brand-panel-mark" viewBox="0 0 48 48" width="160" height="160" focusable="false">{{ mark_g }}</svg>
+  <div class="brand-panel-text">
+    <span class="bp-name">{{ site.name[lang] }} <span>{{ t.logo_sub }}</span></span>
+    <span class="bp-slogan">{{ t.slogan }}</span>
+  </div>
 </div>
 {%- endmacro %}
 

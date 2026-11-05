@@ -1,53 +1,61 @@
-"""Logo lockups: the mark beside the company name, drawn as outlines.
+"""The logo: the company name as a wordmark, with no symbol (owner's
+decision, 2026-11-05), and the monogram used where the name cannot fit
+(favicons, app icons).
 
-All measurements are in the mark's units (the mark is 48 tall).
+Words are outlined from the fonts, so the files need no fonts installed.
 """
-from marks import mark_g
 from textpath import Text
 
 NAME = {"ar": "أحلام القمر", "en": "AHLAM ALQAMAR"}
 SUB = {"ar": "للتجارة", "en": "TRADING"}
+SLOGAN = {"ar": "مصدرك الأول في جملة المفروشات", "en": "YOUR FIRST SOURCE FOR WHOLESALE FURNISHINGS"}
+MONOGRAM = "أق"   # the initials of أحلام القمر
 
 
-def _texts(lang):
+def _parts(lang, size):
+    """The name and its suffix, set on one line."""
     if lang == "ar":
-        return Text("ar", NAME["ar"], 25, wght=600), Text("ar", SUB["ar"], 12.5, wght=400)
-    return (Text("en", NAME["en"], 17.5, wght=600, tracking=0.12),
-            Text("en", SUB["en"], 8.6, wght=500, tracking=0.42))
+        return Text("ar", NAME["ar"], size, wght=600), Text("ar", SUB["ar"], size, wght=300)
+    return (Text("en", NAME["en"], size * .62, wght=700, tracking=.14),
+            Text("en", SUB["en"], size * .62, wght=400, tracking=.14))
 
 
-def horizontal(key, lang, mark_colour, text_colour, pad=0):
-    """Mark and name side by side. Arabic puts the mark on the right."""
-    name, sub = _texts(lang)
-    gap = 12
-    text_w = max(name.width, sub.width)
-    w = 48 + gap + text_w
-    if lang == "ar":
-        # baselines tuned by eye for Alexandria's tall ascenders and descenders
-        name_y, sub_y = 25, 41
-        tx = w - 48 - gap  # right edge of the text block
-        body = (mark_g(key, colour=mark_colour).replace("<g ", f'<g transform="translate({w - 48:.2f} 0)" ', 1)
-                + name.at(tx - name.width, name_y, text_colour)
-                + sub.at(tx - sub.width, sub_y, text_colour))
+def wordmark_body(lang, colour, size=40, x0=0, baseline=None):
+    """The one-line wordmark as SVG paths; returns (body, width, height)."""
+    name, sub = _parts(lang, size)
+    gap = size * (.24 if lang == "ar" else .42)
+    w = name.width + gap + sub.width
+    h = size * (1.25 if lang == "ar" else .75)
+    y = baseline if baseline is not None else (size * .82 if lang == "ar" else size * .6)
+    if lang == "ar":   # right to left: the name first, at the right
+        body = name.at(x0 + w - name.width, y, colour) + sub.at(x0, y, colour)
     else:
-        name_y, sub_y = 25.5, 39.5
-        tx = 48 + gap
-        body = (mark_g(key, colour=mark_colour)
-                + name.at(tx, name_y, text_colour)
-                + sub.at(tx, sub_y, text_colour))
-    return _svg(body, w, 48, pad)
+        body = name.at(x0, y, colour) + sub.at(x0 + name.width + gap, y, colour)
+    return body, w, h
 
 
-def stacked(key, mark_colour, text_colour, pad=0):
-    """Mark on top, Arabic name, then English name: the bilingual lockup."""
-    ar = Text("ar", NAME["ar"], 25, wght=600)
-    en = Text("en", NAME["en"] + "  " + SUB["en"], 8.4, wght=600, tracking=0.3)
-    w = max(ar.width, en.width, 48)
-    mx = (w - 48) / 2
-    body = (mark_g(key, colour=mark_colour).replace("<g ", f'<g transform="translate({mx:.2f} 0)" ', 1)
-            + ar.at((w - ar.width) / 2, 82, text_colour)
-            + en.at((w - en.width) / 2, 103, text_colour))
-    return _svg(body, w, 106, pad)
+def wordmark(lang, colour, pad=0):
+    body, w, h = wordmark_body(lang, colour)
+    return _svg(body, w, h, pad)
+
+
+def stacked(colour, pad=0):
+    """Bilingual: the Arabic name over the English, centred."""
+    ar, aw, _ = wordmark_body("ar", colour, 40)
+    en_name, en_sub = _parts("en", 26)
+    gap = 26 * .42
+    ew = en_name.width + gap + en_sub.width
+    w = max(aw, ew)
+    ar, aw, _ = wordmark_body("ar", colour, 40, x0=(w - aw) / 2)
+    ex = (w - ew) / 2
+    en = en_name.at(ex, 82, colour) + en_sub.at(ex + en_name.width + gap, 82, colour)
+    return _svg(ar + en, w, 90, pad)
+
+
+def monogram_path(colour, size=26):
+    """The monogram's paths centred in a 48x48 box."""
+    t = Text("ar", MONOGRAM, size, wght=600)
+    return t.at((48 - t.width) / 2, 33, colour)
 
 
 def _svg(body, w, h, pad):

@@ -117,11 +117,12 @@
 
 <footer class="site-footer">
   <div class="container">
+    {# brief by the owner's request (2026-11-05): name and slogan, the pages,
+       the contact details #}
     <div class="footer-grid" data-reveal-group>
       <div class="footer-brand" data-reveal>
         {{ m.logo() }}
-        <p class="muted">{{ t.footer_about }}</p>
-        <a href="{{ m.enquire_href() }}"{{ m.ext() }} class="chat-pill">{{ t.footer_chat }} {{ m.icon('i-chat') }}</a>
+        <p class="muted">{{ t.slogan }}</p>
       </div>
       <div class="footer-col" data-reveal>
         <h4>{{ t.footer_links }}</h4>
@@ -129,10 +130,6 @@
         <a href="{{ url('/collections/') }}">{{ t.nav_collections }}</a>
         <a href="{{ url('/about/') }}">{{ t.nav_about }}</a>
         <a href="{{ url('/contact/') }}">{{ t.nav_contact }}</a>
-      </div>
-      <div class="footer-col footer-colls" data-reveal>
-        <h4>{{ t.footer_collections }}</h4>
-        <div>{% for c in collections %}<a href="{{ url('/collections/' ~ c.slug ~ '/') }}">{{ L(c.name) }}</a>{% endfor %}</div>
       </div>
       <div class="footer-col" data-reveal>
         <h4>{{ t.contact_title }}</h4>

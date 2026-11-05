@@ -312,9 +312,6 @@ def make_env(site, strings, images: Images):
             f'imagesizes="{html.escape(sizes)}" fetchpriority="high">'
         )
 
-    # The logo mark's shapes, used as the <symbol id="i-logo"> of the sprite.
-    mark = (ROOT / "templates" / "partials" / "mark.svg").read_text(encoding="utf-8")
-    mark_g = Markup(mark[mark.index("<g"):mark.rindex("</g>") + 4])
 
     # Organisation details for search engines. Contact points are added only
     # once they are real (placeholders are skipped).
@@ -337,7 +334,7 @@ def make_env(site, strings, images: Images):
 
     whatsapp = site["contact"]["whatsapp"]
     env.globals.update(org_jsonld=org_jsonld, asset=asset, img=img, preload=preload, site=site, year=dt.date.today().year,
-                       is_placeholder=is_placeholder, mark_g=mark_g,
+                       is_placeholder=is_placeholder,
                        whatsapp_number=None if is_placeholder(whatsapp) else whatsapp)
     return env
 

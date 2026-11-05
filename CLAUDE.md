@@ -9,11 +9,13 @@ rules in `../../CLAUDE.md`.
 
 A bilingual product catalogue for شركة أحلام القمر للتجارة (Ahlam Alqamar
 Trading Company), a wholesale supplier of household and commercial goods. It
-shows collections and products to wholesale customers and partners and sends
-them to contact the company. **It is not a shop.** The client's brief
+shows collections and products to businesses and wholesale customers and
+sends them to contact the company. **It is not a shop.** The client's brief
 forbids prices, cart, payment, invented reviews, client logos, statistics,
 branches and superlative claims, and forbids the crescent as a design
-element. Since the 2026-11-04 redesign, the design follows
+element. One exception, at the owner's request (2026-11-05): the brand slogan
+"مصدرك الأول في جملة المفروشات" (Your first source for wholesale
+furnishings). Add no other superlatives. Since the 2026-11-04 redesign, the design follows
 `../../references/home-collections/ahlam` (a furniture-store layout): its
 tokens, page structures and motion, with the store features removed. Before
 it, the site was the company's previous site,
@@ -55,11 +57,16 @@ as 5729915 and deployed; the previous design is on `homely-design`)
   top layer); and a bilingual 404. Live smoke test on ahlam.elgaily.com:
   pages, favicons, manifest and share images return 200, and a missing path
   returns 404. **Not yet checked on the owner's iPhone.**
-- New logo: a redraw of the "Warm Home Collections" emblem the owner chose
-  (house with a chimney, lamp, armchair and plant), with a small version
-  for icons. It is pending the client's approval. The old crescent identity
-  is in `archive/brand-2026-10/`. Tooling and the full set are in `brand/`
+- Logo (owner, 2026-11-05): the company name as text, with no symbol, and
+  the monogram "أق" for the favicon and app icons. It replaces the house
+  emblem of 2026-11-04. The old crescent identity is in
+  `archive/brand-2026-10/`. Tooling and the full set are in `brand/`
   (`brand/README.md`, brand sheet `brand/guide.html`).
+- Owner's changes of 2026-11-05: the slogan "مصدرك الأول في جملة المفروشات"
+  as the home hero title, a hero that states what the company supplies and
+  that the site does not sell, "الشركات" for "الشركاء", "كتالوج" for "معرض
+  رقمي", "رقم الجوال" for "الهاتف", and a shorter footer (name and slogan,
+  pages, contact).
 - Web assets: favicon (SVG, ICO), apple-touch and Android icons, a bilingual
   manifest, a default share image, product and collection share images on
   the brand band with a logo strip, `og:image` size and alt, Twitter tags,
@@ -89,8 +96,8 @@ as 5729915 and deployed; the previous design is on `homely-design`)
    `ahlamalqamar.com`, then enforce HTTPS once the certificate is issued.
    Until then the site answers only on ahlam.elgaily.com, and link previews
    point at an address that does not serve.
-2. Client approval of the new logo, and of the feature-strip and "how it
-   works" wording (`strip_*`, `step_*` in `strings.yml`).
+2. Client approval of the feature-strip and "how it works" wording
+   (`strip_*`, `step_*` in `strings.yml`).
 3. Check the redesign on the owner's iPhone.
 4. Real contact details from the client (`content/site.yml`). The live site
    shows "سيُضاف قريبًا" until then; `build.py --release` blocks them.
@@ -202,11 +209,13 @@ with "checks passed".
   is seen. An edge-to-edge treatment for photos cut by the photographer was
   tried and rejected by the owner (2026-10-01).
 - **The about header and the contact card use a brand panel**, not a
-  product photo: the new mark on olive (`macros.html` `brand_panel`). It is a
-  stopgap until the client sends real company photos.
-- **Product cut-outs** use `mix-blend-mode: multiply` so their white
-  background melts into the sand panels. Home picks the hero card and slider
-  collections from covers that are real photos (the `is_cutout` test).
+  product photo: the company name and slogan on olive (`macros.html`
+  `brand_panel`). It is a stopgap until the client sends real company photos.
+- **Product cut-outs** (photos with a mostly light border: designed cards and
+  studio shots) are shown whole, and the rest of their frame takes the
+  photo's own background tone, sampled by `build.py` as `--edge`. Home picks
+  the hero card and slider collections from covers that are real photos (the
+  `is_cutout` test).
 - **One image per product in every listing.** Other colours and real-life
   photos appear only as thumbnails on the product page. This is the client's
   core requirement.
@@ -220,13 +229,18 @@ with "checks passed".
   set is kept in `archive/product-images-2026-10-20/`, with a README on how
   to restore it: the white cut-outs, the logo-free bed shots, the RT-M101
   colour cut-outs. Nothing reads that folder.
-- **New logo, pending the client's approval (2026-11-04).** The owner chose
-  to replace the official crescent mark with a redraw of the "Warm Home
-  Collections" emblem (house, chimney, lamp, armchair, plant). The owner
-  supplied it as a raster with a glow, and it was redrawn as vector. There
-  is a small version (house and armchair) for icons. Everything is generated
-  by `brand/build_brand.py`. The official set is in `archive/brand-2026-10/`,
-  with a README on how to restore it.
+- **The logo is the company name, with no symbol (owner, 2026-11-05).** The
+  header, footer and 404 show the name as text: "أحلام القمر للتجارة" /
+  "AHLAM ALQAMAR TRADING", the name heavier and "للتجارة" lighter. The house
+  emblem drawn on 2026-11-04 is dropped. Where the name cannot fit (favicon,
+  app icons) the monogram "أق" stands in. The logo files, icons and share
+  images are generated by `brand/build_brand.py` (see `brand/README.md`).
+  The client's official crescent set is in `archive/brand-2026-10/`.
+- **Audience wording (owner, 2026-11-05):** "الشركات وعملاء الجملة" (businesses
+  and wholesale customers), not "الشركاء"; "كتالوج", not "معرض رقمي"; "رقم
+  الجوال" (mobile number), not "الهاتف". The home hero states what the
+  company supplies and that the site displays products and does not sell
+  (`hero_lead`, `hero_note`).
 - **Merged or renamed products keep their old address working.** List the old
   slug under `redirects:` at the end of `catalog.yml`. The build writes a
   noindex page there that forwards to the new product, keeping the query and
