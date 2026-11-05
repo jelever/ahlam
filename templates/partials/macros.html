@@ -6,10 +6,13 @@
 {{ img(src, alt, sizes=sizes, eager=not lazy) }}
 {%- endmacro %}
 
-{% macro logo() -%}
-{# the logo is the company name, with no symbol (owner, 2026-11-05) #}
-<a href="{{ url('/') }}" class="logo" aria-label="{{ t.nav_home }}: {{ site.name[lang] }} {{ t.logo_sub }}">
-  <span class="logo-name">{{ site.name[lang] }}</span> <span class="logo-sub">{{ t.logo_sub }}</span>
+{# The logo is the company name as text, with no symbol (owner, 2026-11-05).
+   The header and drawer show the name alone (owner, 2026-11-06); the footer
+   (full=True) shows the full company name, "شركة أحلام القمر للتجارة". #}
+{% macro logo(full=False) -%}
+{% set label = site.legal_name[lang] if full else site.name[lang] %}
+<a href="{{ url('/') }}" class="logo{% if full %} logo-full{% endif %}" aria-label="{{ t.nav_home }}: {{ label }}">
+  <span class="logo-name">{{ label }}</span>
 </a>
 {%- endmacro %}
 

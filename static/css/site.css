@@ -178,6 +178,9 @@ bdi { unicode-bidi: isolate; }
 :root[lang="ar"] .logo { gap: 7px; }
 :root[lang="ar"] .logo-name { font-size: 22px; font-weight: 600; letter-spacing: 0; }
 :root[lang="ar"] .logo-sub { font-size: 22px; font-weight: 300; letter-spacing: 0; }
+/* the footer shows the full company name, in the header logo's style */
+.logo-full .logo-name { text-transform: uppercase; }
+.logo-full { white-space: normal; }
 
 /* ---------- Header ---------- */
 .site-header {
